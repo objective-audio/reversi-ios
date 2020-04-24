@@ -22,17 +22,17 @@ class BoardView: UIView {
     weak var delegate: BoardViewDelegate?
     
     override init(frame: CGRect) {
-        xRange = 0 ..< width
-        yRange = 0 ..< height
+        self.xRange = 0 ..< self.width
+        self.yRange = 0 ..< self.height
         super.init(frame: frame)
         setUp()
     }
     
     required init?(coder: NSCoder) {
-        xRange = 0 ..< width
-        yRange = 0 ..< height
+        self.xRange = 0 ..< self.width
+        self.yRange = 0 ..< self.height
         super.init(coder: coder)
-        setUp()
+        self.setUp()
     }
     
     private func setUp() {
@@ -57,34 +57,34 @@ class BoardView: UIView {
             cellViews[0].widthAnchor.constraint(equalTo: cellViews[0].heightAnchor),
         ])
         
-        for y in yRange {
-            for x in xRange {
+        for y in self.yRange {
+            for x in self.xRange {
                 let topNeighborAnchor: NSLayoutYAxisAnchor
-                if let cellView = cellViewAt(x: x, y: y - 1) {
+                if let cellView = self.cellViewAt(x: x, y: y - 1) {
                     topNeighborAnchor = cellView.bottomAnchor
                 } else {
                     topNeighborAnchor = self.topAnchor
                 }
                 
                 let leftNeighborAnchor: NSLayoutXAxisAnchor
-                if let cellView = cellViewAt(x: x - 1, y: y) {
+                if let cellView = self.cellViewAt(x: x - 1, y: y) {
                     leftNeighborAnchor = cellView.rightAnchor
                 } else {
                     leftNeighborAnchor = self.leftAnchor
                 }
                 
-                let cellView = cellViewAt(x: x, y: y)!
+                let cellView = self.cellViewAt(x: x, y: y)!
                 NSLayoutConstraint.activate([
                     cellView.topAnchor.constraint(equalTo: topNeighborAnchor, constant: lineWidth),
                     cellView.leftAnchor.constraint(equalTo: leftNeighborAnchor, constant: lineWidth),
                 ])
                 
-                if y == height - 1 {
+                if y == self.height - 1 {
                     NSLayoutConstraint.activate([
                         self.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: lineWidth),
                     ])
                 }
-                if x == width - 1 {
+                if x == self.width - 1 {
                     NSLayoutConstraint.activate([
                         self.rightAnchor.constraint(equalTo: cellView.rightAnchor, constant: lineWidth),
                     ])
@@ -92,13 +92,13 @@ class BoardView: UIView {
             }
         }
         
-        reset()
+        self.reset()
         
-        for y in yRange {
-            for x in xRange {
-                let cellView: CellView = cellViewAt(x: x, y: y)!
+        for y in self.yRange {
+            for x in self.xRange {
+                let cellView: CellView = self.cellViewAt(x: x, y: y)!
                 let action = CellSelectionAction(boardView: self, x: x, y: y)
-                actions.append(action) // To retain the `action`
+                self.actions.append(action) // To retain the `action`
                 cellView.addTarget(action, action: #selector(action.selectCell), for: .touchUpInside)
             }
         }
@@ -106,21 +106,21 @@ class BoardView: UIView {
     
     /// 盤をゲーム開始時に状態に戻します。このメソッドはアニメーションを伴いません。
     func reset() {
-        for y in  yRange {
-            for x in xRange {
-                setDisk(nil, atX: x, y: y, animated: false)
+        for y in  self.yRange {
+            for x in self.xRange {
+                self.setDisk(nil, atX: x, y: y, animated: false)
             }
         }
         
-        setDisk(.light, atX: width / 2 - 1, y: height / 2 - 1, animated: false)
-        setDisk(.dark, atX: width / 2, y: height / 2 - 1, animated: false)
-        setDisk(.dark, atX: width / 2 - 1, y: height / 2, animated: false)
-        setDisk(.light, atX: width / 2, y: height / 2, animated: false)
+        self.setDisk(.light, atX: width / 2 - 1, y: height / 2 - 1, animated: false)
+        self.setDisk(.dark, atX: width / 2, y: height / 2 - 1, animated: false)
+        self.setDisk(.dark, atX: width / 2 - 1, y: height / 2, animated: false)
+        self.setDisk(.light, atX: width / 2, y: height / 2, animated: false)
     }
     
     private func cellViewAt(x: Int, y: Int) -> CellView? {
-        guard xRange.contains(x) && yRange.contains(y) else { return nil }
-        return cellViews[y * width + x]
+        guard self.xRange.contains(x) && self.yRange.contains(y) else { return nil }
+        return self.cellViews[y * width + x]
     }
     
     /// `x`, `y` で指定されたセルの状態を返します。
@@ -129,7 +129,7 @@ class BoardView: UIView {
     /// - Parameter y: セルの行です。
     /// - Returns: セルにディスクが置かれている場合はそのディスクの値を、置かれていない場合は `nil` を返します。
     func diskAt(x: Int, y: Int) -> Disk? {
-        cellViewAt(x: x, y: y)?.disk
+        self.cellViewAt(x: x, y: y)?.disk
     }
     
     /// `x`, `y` で指定されたセルの状態を、与えられた `disk` に変更します。
@@ -143,7 +143,7 @@ class BoardView: UIView {
     ///     `animated` に `false` が指定された場合は状態が変更された後で即座に同期的に呼び出されます。
     ///     ハンドラーが受け取る `Bool` 値は、 `UIView.animate()`  等に準じます。
     func setDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)? = nil) {
-        guard let cellView = cellViewAt(x: x, y: y) else {
+        guard let cellView = self.cellViewAt(x: x, y: y) else {
             preconditionFailure() // FIXME: Add a message.
         }
         cellView.setDisk(disk, animated: animated, completion: completion)
@@ -170,7 +170,7 @@ private class CellSelectionAction: NSObject {
     }
     
     @objc func selectCell() {
-        guard let boardView = boardView else { return }
+        guard let boardView = self.boardView else { return }
         boardView.delegate?.boardView(boardView, didSelectCellAtX: x, y: y)
     }
 }
