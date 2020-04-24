@@ -8,28 +8,28 @@ class DiskView: UIView {
     
     /// Interface Builder からディスクの色を設定するためのプロパティです。 `"dark"` か `"light"` の文字列を設定します。
     @IBInspectable var name: String {
-        get { disk.name }
-        set { disk = .init(name: newValue) }
+        get { self.disk.name }
+        set { self.disk = .init(name: newValue) }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUp()
+        self.setUp()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setUp()
+        self.setUp()
     }
 
     private func setUp() {
-        backgroundColor = .clear
-        isUserInteractionEnabled = false
+        self.backgroundColor = .clear
+        self.isUserInteractionEnabled = false
     }
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setFillColor(disk.cgColor)
+        context.setFillColor(self.disk.cgColor)
         context.fillEllipse(in: bounds)
     }
 }
@@ -43,7 +43,7 @@ extension Disk {
     }
     
     fileprivate var cgColor: CGColor {
-        uiColor.cgColor
+        self.uiColor.cgColor
     }
     
     fileprivate var name: String {
