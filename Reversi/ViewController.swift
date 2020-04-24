@@ -407,25 +407,22 @@ extension ViewController {
     
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
-        var output: String = ""
-        output += self.presenter.turn.symbol
-        for side in Disk.sides {
-            output += self.playerControls[side.index].selectedSegmentIndex.description
-        }
-        output += "\n"
+        guard let darkPlayer = Player(rawValue: self.playerControls[0].selectedSegmentIndex) else { fatalError() }
+        guard let lightPlayer = Player(rawValue: self.playerControls[1].selectedSegmentIndex) else { fatalError() }
         
+        var board: [[Disk?]] = []
         for y in self.boardView.yRange {
+            var line: [Disk?] = []
             for x in self.boardView.xRange {
-                output += self.boardView.diskAt(x: x, y: y).symbol
+                line.append(self.boardView.diskAt(x: x, y: y))
             }
-            output += "\n"
+            board.append(line)
         }
         
-        do {
-            try output.write(toFile: self.path, atomically: true, encoding: .utf8)
-        } catch let error {
-            throw FileIOError.read(path: self.path, cause: error)
-        }
+        try DataStore().save(turn: self.presenter.turn,
+                                 darkPlayer: darkPlayer,
+                                 lightPlayer: lightPlayer,
+                                 board: board)
     }
     
     /// ゲームの状態をファイルから読み込み、復元します。
@@ -532,32 +529,6 @@ extension Disk {
         switch self {
         case .dark: return 0
         case .light: return 1
-        }
-    }
-}
-
-extension Optional where Wrapped == Disk {
-    fileprivate init?<S: StringProtocol>(symbol: S) {
-        switch symbol {
-        case "x":
-            self = .some(.dark)
-        case "o":
-            self = .some(.light)
-        case "-":
-            self = .none
-        default:
-            return nil
-        }
-    }
-    
-    fileprivate var symbol: String {
-        switch self {
-        case .some(.dark):
-            return "x"
-        case .some(.light):
-            return "o"
-        case .none:
-            return "-"
         }
     }
 }
