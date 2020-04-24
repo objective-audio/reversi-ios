@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B659DC88245393D600B5CC0B /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC87245393D600B5CC0B /* Presenter.swift */; };
 		B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC89245394D100B5CC0B /* DataStore.swift */; };
+		B659DC8C24539B6700B5CC0B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8B24539B6700B5CC0B /* Player.swift */; };
 		B6BF4203245330E8008676C9 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF4202245330E8008676C9 /* Interactor.swift */; };
 		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
@@ -36,6 +37,7 @@
 /* Begin PBXFileReference section */
 		B659DC87245393D600B5CC0B /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		B659DC89245394D100B5CC0B /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		B659DC8B24539B6700B5CC0B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		B6BF4202245330E8008676C9 /* Interactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				D642BDD723AA0B5700396732 /* Disk.swift */,
+				B659DC8B24539B6700B5CC0B /* Player.swift */,
 			);
 			name = DataTypes;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B659DC8C24539B6700B5CC0B /* Player.swift in Sources */,
 				B659DC88245393D600B5CC0B /* Presenter.swift in Sources */,
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
