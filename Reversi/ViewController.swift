@@ -494,13 +494,6 @@ extension ViewController {
 
 // MARK: Additional types
 
-extension ViewController {
-    enum Player: Int {
-        case manual = 0
-        case computer = 1
-    }
-}
-
 final class Canceller {
     private(set) var isCancelled: Bool = false
     private let body: (() -> Void)?
