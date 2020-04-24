@@ -433,7 +433,7 @@ extension ViewController {
     /// ゲームの状態をファイルから読み込み、復元します。
     func loadGame() throws {
         let input = try String(contentsOfFile: self.path, encoding: .utf8)
-        var lines: ArraySlice<Substring> = input.split(separator: "\n")[...]
+        var lines = input.split(separator: "\n")[...]
         
         guard var line = lines.popFirst() else {
             throw FileIOError.read(path: self.path, cause: nil)
