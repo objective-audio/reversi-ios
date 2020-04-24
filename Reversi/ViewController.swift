@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet private var countLabels: [UILabel]!
     @IBOutlet private var playerActivityIndicators: [UIActivityIndicatorView]!
     
-    private let interactor: Interactor = .init()
+    private let presenter: Presenter = .init()
     
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
@@ -225,7 +225,7 @@ extension ViewController {
     /// ゲームの状態を初期化し、新しいゲームを開始します。
     func newGame() {
         self.boardView.reset()
-        self.interactor.turn = .dark
+        self.presenter.turn = .dark
         
         for playerControl in self.playerControls {
             playerControl.selectedSegmentIndex = Player.manual.rawValue
@@ -239,7 +239,7 @@ extension ViewController {
     
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
-        guard let turn = self.interactor.turn else { return }
+        guard let turn = self.presenter.turn else { return }
         switch Player(rawValue: playerControls[turn.index].selectedSegmentIndex)! {
         case .manual:
             break
@@ -252,16 +252,16 @@ extension ViewController {
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     func nextTurn() {
-        guard var turn = self.interactor.turn else { return }
+        guard var turn = self.presenter.turn else { return }
 
         turn.flip()
         
         if self.validMoves(for: turn).isEmpty {
             if self.validMoves(for: turn.flipped).isEmpty {
-                self.interactor.turn = nil
+                self.presenter.turn = nil
                 self.updateMessageViews()
             } else {
-                self.interactor.turn = turn
+                self.presenter.turn = turn
                 self.updateMessageViews()
                 
                 let alertController = UIAlertController(
@@ -275,7 +275,7 @@ extension ViewController {
                 present(alertController, animated: true)
             }
         } else {
-            self.interactor.turn = turn
+            self.presenter.turn = turn
             self.updateMessageViews()
             self.waitForPlayer()
         }
@@ -283,7 +283,7 @@ extension ViewController {
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
-        guard let turn = self.interactor.turn else { preconditionFailure() }
+        guard let turn = self.presenter.turn else { preconditionFailure() }
         let (x, y) = self.validMoves(for: turn).randomElement()!
 
         self.playerActivityIndicators[turn.index].startAnimating()
@@ -320,7 +320,7 @@ extension ViewController {
     
     /// 現在の状況に応じてメッセージを表示します。
     func updateMessageViews() {
-        switch self.interactor.turn {
+        switch self.presenter.turn {
         case .some(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
             self.messageDiskView.disk = side
@@ -378,7 +378,7 @@ extension ViewController {
             canceller.cancel()
         }
         
-        if !self.isAnimating, side == self.interactor.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
+        if !self.isAnimating, side == self.presenter.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
             self.playTurnOfComputer()
         }
     }
@@ -390,7 +390,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
-        guard let turn = self.interactor.turn else { return }
+        guard let turn = self.presenter.turn else { return }
         if self.isAnimating { return }
         guard case .manual = Player(rawValue: self.playerControls[turn.index].selectedSegmentIndex)! else { return }
         // try? because doing nothing when an error occurs
@@ -410,7 +410,7 @@ extension ViewController {
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
         var output: String = ""
-        output += self.interactor.turn.symbol
+        output += self.presenter.turn.symbol
         for side in Disk.sides {
             output += self.playerControls[side.index].selectedSegmentIndex.description
         }
@@ -446,7 +446,7 @@ extension ViewController {
             else {
                 throw FileIOError.read(path: self.path, cause: nil)
             }
-            self.interactor.turn = disk
+            self.presenter.turn = disk
         }
 
         // players
