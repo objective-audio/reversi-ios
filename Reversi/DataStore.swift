@@ -16,7 +16,12 @@ class DataStore {
         output += String(lightPlayer.rawValue)
         output += "\n"
         
-        board.flatMap { $0 }.forEach { output += $0.symbol }
+        for line in board {
+            for disk in line {
+                output += disk.symbol
+            }
+            output += "\n"
+        }
         
         do {
             try output.write(toFile: self.path, atomically: true, encoding: .utf8)
