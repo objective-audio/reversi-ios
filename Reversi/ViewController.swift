@@ -73,7 +73,7 @@ extension ViewController {
             (x: -1, y:  1),
         ]
         
-        guard self.boardView.diskAt(x: x, y: y) == nil else {
+        guard self.presenter.diskAt(x: x, y: y) == nil else {
             return []
         }
         
@@ -88,7 +88,7 @@ extension ViewController {
                 x += direction.x
                 y += direction.y
                 
-                switch (disk, self.boardView.diskAt(x: x, y: y)) { // Uses tuples to make patterns exhaustive
+                switch (disk, self.presenter.diskAt(x: x, y: y)) { // Uses tuples to make patterns exhaustive
                 case (.dark, .some(.dark)), (.light, .some(.light)):
                     diskCoordinates.append(contentsOf: diskCoordinatesInLine)
                     break flipping
@@ -117,8 +117,8 @@ extension ViewController {
     func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
         var coordinates: [(Int, Int)] = []
         
-        for y in self.boardView.yRange {
-            for x in self.boardView.xRange {
+        for y in Board.yRange {
+            for x in Board.xRange {
                 if self.canPlaceDisk(side, atX: x, y: y) {
                     coordinates.append((x, y))
                 }
