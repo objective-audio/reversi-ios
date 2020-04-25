@@ -76,6 +76,10 @@ class Presenter {
         return self.interactor.board.canPlaceDisk(disk, atX: x, y: y)
     }
     
+    func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
+        return self.interactor.board.validMoves(for: side)
+    }
+    
     func loadOrNewGame() {
         do {
             try self.load()

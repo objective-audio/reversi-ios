@@ -51,17 +51,7 @@ extension ViewController {
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
     func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
-        var coordinates: [(Int, Int)] = []
-        
-        for y in Board.yRange {
-            for x in Board.xRange {
-                if self.presenter.canPlaceDisk(side, atX: x, y: y) {
-                    coordinates.append((x, y))
-                }
-            }
-        }
-        
-        return coordinates
+        return self.presenter.validMoves(for: side)
     }
 
     /// `x`, `y` で指定されたセルに `disk` を置きます。
