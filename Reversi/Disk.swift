@@ -20,6 +20,7 @@ extension Disk {
     }
 }
 
+#warning("置き場所は再考")
 extension Disk: CaseIterable {
     init(index: Int) {
         precondition(index < Disk.allCases.count)
