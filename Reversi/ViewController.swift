@@ -367,17 +367,7 @@ extension ViewController {
     
     /// ゲームの状態をファイルから読み込み、復元します。
     func loadGame() throws {
-        let parameters = try DataStore().load()
-        
-        self.presenter.turn = parameters.turn
-        
-        self.presenter.darkPlayer = parameters.darkPlayer
-        self.presenter.lightPlayer = parameters.lightPlayer
-        
-        self.presenter.setDisks(parameters.board)
-        
-        #warning("通知で呼び出す")
-        self.updateAll()
+        try self.presenter.load()
     }
 }
 

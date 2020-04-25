@@ -60,6 +60,13 @@ class Presenter {
         self.interactor.board.resetDisks()
     }
     
+    func load() throws {
+        try self.interactor.load()
+        
+        #warning("通知で呼び出す")
+        self.displayer?.updateAll()
+    }
+    
     func save() throws {
         try self.interactor.save()
     }

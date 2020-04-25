@@ -11,6 +11,15 @@ class Interactor {
     #warning("init時にdiskをセットする")
     var board: Board = .init()
     
+    func load() throws {
+        let parameters = try DataStore().load()
+        
+        self.turn = parameters.turn
+        self.darkPlayer = parameters.darkPlayer
+        self.lightPlayer = parameters.lightPlayer
+        self.board.setDisks(parameters.board)
+    }
+    
     func save() throws {
         try DataStore().save(.init(turn: self.turn,
                                    darkPlayer: self.darkPlayer,
