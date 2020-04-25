@@ -455,20 +455,3 @@ struct DiskPlacementError: Error {
     let x: Int
     let y: Int
 }
-
-// MARK: File-private extensions
-
-extension Disk {
-    init(index: Int) {
-        precondition(index < Disk.allCases.count)
-        self = Disk.allCases[index]
-    }
-    
-    var index: Int {
-        if let index = Disk.allCases.firstIndex(of: self) {
-            return index
-        } else {
-            fatalError()
-        }
-    }
-}

@@ -1,4 +1,4 @@
-enum Disk: CaseIterable {
+enum Disk {
     case dark
     case light
 }
@@ -17,5 +17,20 @@ extension Disk {
     /// 自身の値を、現在の値が `.dark` なら `.light` に、 `.light` なら `.dark` に反転させます。
     mutating func flip() {
         self = flipped
+    }
+}
+
+extension Disk: CaseIterable {
+    init(index: Int) {
+        precondition(index < Disk.allCases.count)
+        self = Disk.allCases[index]
+    }
+    
+    var index: Int {
+        if let index = Disk.allCases.firstIndex(of: self) {
+            return index
+        } else {
+            fatalError()
+        }
     }
 }
