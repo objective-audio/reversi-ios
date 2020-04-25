@@ -427,55 +427,16 @@ extension ViewController {
     
     /// ゲームの状態をファイルから読み込み、復元します。
     func loadGame() throws {
-        let input = try String(contentsOfFile: self.path, encoding: .utf8)
-        var lines = input.split(separator: "\n")[...]
+        let parameters = try DataStore().load()
         
-        guard var line = lines.popFirst() else {
-            throw FileIOError.read(path: self.path, cause: nil)
-        }
+        self.presenter.turn = parameters.turn
+        #warning("playerControlsのindexの扱い")
+        self.playerControls[0].selectedSegmentIndex = parameters.darkPlayer.rawValue
+        self.playerControls[1].selectedSegmentIndex = parameters.lightPlayer.rawValue
         
-        do { // turn
-            guard
-                let diskSymbol = line.popFirst(),
-                let disk = Optional<Disk>(symbol: diskSymbol.description)
-            else {
-                throw FileIOError.read(path: self.path, cause: nil)
-            }
-            self.presenter.turn = disk
-        }
-
-        // players
-        for side in Disk.sides {
-            guard
-                let playerSymbol = line.popFirst(),
-                let playerNumber = Int(playerSymbol.description),
-                let player = Player(rawValue: playerNumber)
-            else {
-                throw FileIOError.read(path: self.path, cause: nil)
-            }
-            playerControls[side.index].selectedSegmentIndex = player.rawValue
-        }
-
-        do { // board
-            guard lines.count == self.boardView.height else {
-                throw FileIOError.read(path: self.path, cause: nil)
-            }
-            
-            var y = 0
-            while let line = lines.popFirst() {
-                var x = 0
-                for character in line {
-                    let disk = Disk?(symbol: "\(character)").flatMap { $0 }
-                    self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-                    x += 1
-                }
-                guard x == self.boardView.width else {
-                    throw FileIOError.read(path: self.path, cause: nil)
-                }
-                y += 1
-            }
-            guard y == self.boardView.height else {
-                throw FileIOError.read(path: self.path, cause: nil)
+        for (y, boardLine) in parameters.board.enumerated() {
+            for (x, disk) in boardLine.enumerated() {
+                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
             }
         }
 
