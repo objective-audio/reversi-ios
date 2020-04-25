@@ -8,26 +8,18 @@ class BoardView: UIView {
     
     let width: Int = Board.width
     let height: Int = Board.height
-    
-    /// 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。
-    let xRange: Range<Int>
-    
-    /// 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。
-    let yRange: Range<Int>
+    let xRange: Range<Int> = Board.xRange
+    let yRange: Range<Int> = Board.yRange
     
     /// セルがタップされたときの挙動を移譲するためのオブジェクトです。
     weak var delegate: BoardViewDelegate?
     
     override init(frame: CGRect) {
-        self.xRange = 0 ..< self.width
-        self.yRange = 0 ..< self.height
         super.init(frame: frame)
         self.setUp()
     }
     
     required init?(coder: NSCoder) {
-        self.xRange = 0 ..< self.width
-        self.yRange = 0 ..< self.height
         super.init(coder: coder)
         self.setUp()
     }
