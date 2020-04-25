@@ -112,9 +112,9 @@ private extension Optional where Wrapped == Disk {
     init?<S: StringProtocol>(symbol: S) {
         switch symbol {
         case "x":
-            self = .some(.dark)
+            self = .dark
         case "o":
-            self = .some(.light)
+            self = .light
         case "-":
             self = .none
         default:
@@ -124,9 +124,9 @@ private extension Optional where Wrapped == Disk {
     
     var symbol: String {
         switch self {
-        case .some(.dark):
+        case .dark:
             return "x"
-        case .some(.light):
+        case .light:
             return "o"
         case .none:
             return "-"
