@@ -224,13 +224,13 @@ extension ViewController {
     /// ゲームの状態を初期化し、新しいゲームを開始します。
     func newGame() {
         self.presenter.resetDisks()
-        self.boardView.reset()
         self.presenter.turn = .dark
         
         self.presenter.darkPlayer = .manual
         self.presenter.lightPlayer = .manual
         
         #warning("通知で呼び出す")
+        self.updateBoardView()
         self.updateAll()
         
         try? self.saveGame()
