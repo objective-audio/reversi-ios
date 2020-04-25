@@ -20,9 +20,6 @@ class ViewController: UIViewController {
     
     private let presenter: Presenter = .init()
     
-    private var animationCanceller: Canceller?
-    private var isAnimating: Bool { animationCanceller != nil }
-    
     private var playerCancellers: [Disk: Canceller] = [:]
     
     override func viewDidLoad() {
@@ -164,12 +161,12 @@ extension ViewController {
         
         if isAnimated {
             let cleanUp: () -> Void = { [weak self] in
-                self?.animationCanceller = nil
+                self?.presenter.animationCanceller = nil
             }
-            self.animationCanceller = Canceller(cleanUp)
+            self.presenter.animationCanceller = Canceller(cleanUp)
             self.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
                 guard let self = self else { return }
-                guard let canceller = self.animationCanceller else { return }
+                guard let canceller = self.presenter.animationCanceller else { return }
                 if canceller.isCancelled { return }
                 cleanUp()
 
@@ -203,7 +200,7 @@ extension ViewController {
             return
         }
         
-        let animationCanceller = self.animationCanceller!
+        let animationCanceller = self.presenter.animationCanceller!
         self.boardView.setDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
             if animationCanceller.isCancelled { return }
@@ -350,8 +347,8 @@ private extension ViewController {
             guard let self = self else { return }
             
             #warning("以下、presenter側に移動する")
-            self.animationCanceller?.cancel()
-            self.animationCanceller = nil
+            self.presenter.animationCanceller?.cancel()
+            self.presenter.animationCanceller = nil
             
             for side in Disk.allCases {
                 self.playerCancellers[side]?.cancel()
@@ -384,7 +381,7 @@ extension ViewController {
             canceller.cancel()
         }
         
-        if !self.isAnimating, side == self.presenter.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
+        if !self.presenter.isAnimating, side == self.presenter.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
             self.playTurnOfComputer()
         }
     }
@@ -397,7 +394,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         guard let turn = self.presenter.turn else { return }
-        if self.isAnimating { return }
+        if self.presenter.isAnimating { return }
         guard case .manual = Player(rawValue: self.playerControls[turn.index].selectedSegmentIndex) else { return }
         // try? because doing nothing when an error occurs
         try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
