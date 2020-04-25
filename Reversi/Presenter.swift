@@ -16,4 +16,16 @@ class Presenter {
         get { self.interactor.turn }
         set { self.interactor.turn = newValue }
     }
+    
+    func setDisks(_ disks: [[Disk?]]) {
+        self.interactor.board.setDisks(disks)
+    }
+    
+    func setDisk(_ disk: Disk?, atX x: Int, y: Int) {
+        self.interactor.board.setDisk(disk, atX: x, y: y)
+    }
+    
+    func diskAt(x: Int, y: Int) -> Disk? {
+        self.interactor.board.diskAt(x: x, y: y)
+    }
 }
