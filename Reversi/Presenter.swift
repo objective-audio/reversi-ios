@@ -47,4 +47,8 @@ class Presenter {
     func diskAt(x: Int, y: Int) -> Disk? {
         self.interactor.board.diskAt(x: x, y: y)
     }
+    
+    func resetDisks() {
+        self.interactor.board.resetDisks()
+    }
 }
