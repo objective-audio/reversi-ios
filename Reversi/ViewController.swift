@@ -44,29 +44,16 @@ class ViewController: UIViewController {
 // MARK: Reversi logics
 
 extension ViewController {
-    /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
-    /// - Parameter side: 数えるディスクの色です。
-    /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
-    func countDisks(of side: Disk) -> Int {
-        var count = 0
-        
-        for y in self.boardView.yRange {
-            for x in self.boardView.xRange {
-                if self.boardView.diskAt(x: x, y: y) == side {
-                    count +=  1
-                }
-            }
-        }
-        
-        return count
+    func diskCount(of side: Disk) -> Int {
+        return self.presenter.diskCount(of: side)
     }
     
     /// 盤上に置かれたディスクの枚数が多い方の色を返します。
     /// 引き分けの場合は `nil` が返されます。
     /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
     func sideWithMoreDisks() -> Disk? {
-        let darkCount = self.countDisks(of: .dark)
-        let lightCount = self.countDisks(of: .light)
+        let darkCount = self.diskCount(of: .dark)
+        let lightCount = self.diskCount(of: .light)
         if darkCount == lightCount {
             return nil
         } else {
@@ -384,7 +371,7 @@ private extension ViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
         for side in Disk.allCases {
-            self.countLabels[side.index].text = "\(self.countDisks(of: side))"
+            self.countLabels[side.index].text = "\(self.diskCount(of: side))"
         }
     }
     

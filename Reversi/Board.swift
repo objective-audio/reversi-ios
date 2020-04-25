@@ -41,6 +41,13 @@ struct Board {
         self.setDisk(.dark, atX: Self.width / 2 - 1, y: Self.height / 2)
         self.setDisk(.light, atX: Self.width / 2, y: Self.height / 2)
     }
+    
+    /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
+    /// - Parameter side: 数えるディスクの色です。
+    /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
+    func diskCount(of side: Disk) -> Int {
+        return self.disks.flatMap { $0 }.filter { $0 == side }.count
+    }
 }
 
 extension Board {

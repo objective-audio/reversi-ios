@@ -60,6 +60,10 @@ class Presenter {
         self.interactor.board.resetDisks()
     }
     
+    func diskCount(of side: Disk) -> Int {
+        return self.interactor.board.diskCount(of: side)
+    }
+    
     func loadOrNewGame() {
         do {
             try self.load()
