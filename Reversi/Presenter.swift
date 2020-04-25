@@ -80,14 +80,6 @@ class Presenter {
         return self.interactor.board.validMoves(for: side)
     }
     
-    func loadOrNewGame() {
-        do {
-            try self.load()
-        } catch _ {
-            self.newGame()
-        }
-    }
-    
     func newGame() {
         self.interactor.newGame()
         
