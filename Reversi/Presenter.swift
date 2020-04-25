@@ -36,6 +36,8 @@ class Presenter {
         }
     }
     
+    var disks: [[Disk?]] { self.interactor.board.disks }
+    
     func setDisks(_ disks: [[Disk?]]) {
         self.interactor.board.setDisks(disks)
     }
