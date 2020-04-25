@@ -403,8 +403,6 @@ extension ViewController: BoardViewDelegate {
 // MARK: Save and Load
 
 extension ViewController {
-    private var path: String { DataStore().path }
-    
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
         guard let darkPlayer = Player(rawValue: self.playerControls[0].selectedSegmentIndex) else { fatalError() }

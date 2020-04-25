@@ -8,10 +8,6 @@ class DataStore {
         let board: [[Disk?]]
     }
     
-    var path: String {
-        (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first! as NSString).appendingPathComponent("Game")
-    }
-    
     /// ゲームの状態をファイルに書き出し、保存します。
     func save(_ parameters: Parameters) throws {
         var output: String = ""
@@ -27,19 +23,22 @@ class DataStore {
             output += "\n"
         }
         
+        let path = Self.path
+        
         do {
-            try output.write(toFile: self.path, atomically: true, encoding: .utf8)
+            try output.write(toFile: path, atomically: true, encoding: .utf8)
         } catch let error {
-            throw FileIOError.read(path: self.path, cause: error)
+            throw FileIOError.read(path: path, cause: error)
         }
     }
     
     func load() throws -> Parameters {
-        let input = try String(contentsOfFile: self.path, encoding: .utf8)
+        let path = Self.path
+        let input = try String(contentsOfFile: path, encoding: .utf8)
         var lines = input.split(separator: "\n")[...]
         
         guard var line = lines.popFirst() else {
-            throw FileIOError.read(path: self.path, cause: nil)
+            throw FileIOError.read(path: path, cause: nil)
         }
         
         let turn: Disk?
@@ -48,7 +47,7 @@ class DataStore {
                 let diskSymbol = line.popFirst(),
                 let disk = Optional<Disk>(symbol: diskSymbol.description)
             else {
-                throw FileIOError.read(path: self.path, cause: nil)
+                throw FileIOError.read(path: path, cause: nil)
             }
             turn = disk
         }
@@ -62,7 +61,7 @@ class DataStore {
                     let playerNumber = Int(playerSymbol.description),
                     let player = Player(rawValue: playerNumber)
                 else {
-                    throw FileIOError.read(path: self.path, cause: nil)
+                    throw FileIOError.read(path: path, cause: nil)
                 }
                 players.append(player)
             }
@@ -71,7 +70,7 @@ class DataStore {
         var board: [[Disk?]] = []
         do { // board
             guard lines.count == 8 else {
-                throw FileIOError.read(path: self.path, cause: nil)
+                throw FileIOError.read(path: path, cause: nil)
             }
             
             var y = 0
@@ -84,13 +83,13 @@ class DataStore {
                     x += 1
                 }
                 guard x == 8 else {
-                    throw FileIOError.read(path: self.path, cause: nil)
+                    throw FileIOError.read(path: path, cause: nil)
                 }
                 board.append(boardLine)
                 y += 1
             }
             guard y == 8 else {
-                throw FileIOError.read(path: self.path, cause: nil)
+                throw FileIOError.read(path: path, cause: nil)
             }
         }
 
@@ -99,14 +98,17 @@ class DataStore {
 }
 
 private extension DataStore {
+    static var path: String {
+        (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first! as NSString).appendingPathComponent("Game")
+    }
+    
     enum FileIOError: Error {
         case write(path: String, cause: Error?)
         case read(path: String, cause: Error?)
     }
 }
 
-#warning("fileprivateにする?")
-extension Optional where Wrapped == Disk {
+private extension Optional where Wrapped == Disk {
     init?<S: StringProtocol>(symbol: S) {
         switch symbol {
         case "x":
