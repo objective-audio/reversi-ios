@@ -1,22 +1,26 @@
 import Foundation
 
 class DataStore {
+    struct Parameters {
+        let turn: Disk?
+        let darkPlayer: Player
+        let lightPlayer: Player
+        let board: [[Disk?]]
+    }
+    
     var path: String {
         (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first! as NSString).appendingPathComponent("Game")
     }
     
     /// ゲームの状態をファイルに書き出し、保存します。
-    func save(turn: Disk?,
-              darkPlayer: Player,
-              lightPlayer: Player,
-              board: [[Disk?]]) throws {
+    func save(_ parameters: Parameters) throws {
         var output: String = ""
-        output += turn.symbol
-        output += String(darkPlayer.rawValue)
-        output += String(lightPlayer.rawValue)
+        output += parameters.turn.symbol
+        output += String(parameters.darkPlayer.rawValue)
+        output += String(parameters.lightPlayer.rawValue)
         output += "\n"
         
-        for line in board {
+        for line in parameters.board {
             for disk in line {
                 output += disk.symbol
             }

@@ -419,10 +419,10 @@ extension ViewController {
             board.append(line)
         }
         
-        try DataStore().save(turn: self.presenter.turn,
-                                 darkPlayer: darkPlayer,
-                                 lightPlayer: lightPlayer,
-                                 board: board)
+        try DataStore().save(.init(turn: self.presenter.turn,
+                                   darkPlayer: darkPlayer,
+                                   lightPlayer: lightPlayer,
+                                   board: board))
     }
     
     /// ゲームの状態をファイルから読み込み、復元します。
