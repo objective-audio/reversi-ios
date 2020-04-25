@@ -60,6 +60,14 @@ class Presenter {
         self.interactor.board.resetDisks()
     }
     
+    func loadOrNewGame() {
+        do {
+            try self.load()
+        } catch _ {
+            self.newGame()
+        }
+    }
+    
     func newGame() {
         self.interactor.newGame()
         

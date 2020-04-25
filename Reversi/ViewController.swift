@@ -28,11 +28,7 @@ class ViewController: UIViewController {
         self.boardView.delegate = self
         self.messageDiskSize = self.messageDiskSizeConstraint.constant
         
-        do {
-            try self.loadGame()
-        } catch _ {
-            self.newGame()
-        }
+        self.presenter.loadOrNewGame()
     }
     
     private var viewHasAppeared: Bool = false
