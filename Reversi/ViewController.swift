@@ -230,7 +230,6 @@ extension ViewController {
         self.presenter.lightPlayer = .manual
         
         #warning("通知で呼び出す")
-        self.updateBoardView()
         self.updateAll()
         
         try? self.saveGame()
@@ -380,13 +379,13 @@ extension ViewController {
         self.presenter.setDisks(parameters.board)
         
         #warning("通知で呼び出す")
-        self.updateBoardView()
         self.updateAll()
     }
 }
 
 private extension ViewController {
     func updateAll() {
+        self.updateBoardView()
         self.updatePlayerControls()
         self.updateMessageViews()
         self.updateCountLabels()
