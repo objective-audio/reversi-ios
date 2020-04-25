@@ -30,6 +30,7 @@ struct Board {
     }
     
     func diskAt(x: Int, y: Int) -> Disk? {
+        guard Self.xRange.contains(x) && Self.yRange.contains(y) else { return nil }
         return self.disks[y][x]
     }
     
