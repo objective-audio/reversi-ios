@@ -6,6 +6,7 @@ class Presenter {
     #warning("privateにする")
     var animationCanceller: Canceller?
     var isAnimating: Bool { animationCanceller != nil }
+    var playerCancellers: [Disk: Canceller] = [:]
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor

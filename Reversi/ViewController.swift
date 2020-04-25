@@ -20,8 +20,6 @@ class ViewController: UIViewController {
     
     private let presenter: Presenter = .init()
     
-    private var playerCancellers: [Disk: Canceller] = [:]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -288,7 +286,7 @@ extension ViewController {
         let cleanUp: () -> Void = { [weak self] in
             guard let self = self else { return }
             self.playerActivityIndicators[turn.index].stopAnimating()
-            self.playerCancellers[turn] = nil
+            self.presenter.playerCancellers[turn] = nil
         }
         let canceller = Canceller(cleanUp)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
@@ -301,7 +299,7 @@ extension ViewController {
             }
         }
         
-        self.playerCancellers[turn] = canceller
+        self.presenter.playerCancellers[turn] = canceller
     }
 }
 
@@ -351,8 +349,8 @@ private extension ViewController {
             self.presenter.animationCanceller = nil
             
             for side in Disk.allCases {
-                self.playerCancellers[side]?.cancel()
-                self.playerCancellers.removeValue(forKey: side)
+                self.presenter.playerCancellers[side]?.cancel()
+                self.presenter.playerCancellers.removeValue(forKey: side)
             }
             
             self.newGame()
@@ -377,7 +375,7 @@ extension ViewController {
         
         try? self.saveGame()
         
-        if let canceller = playerCancellers[side] {
+        if let canceller = self.presenter.playerCancellers[side] {
             canceller.cancel()
         }
         
