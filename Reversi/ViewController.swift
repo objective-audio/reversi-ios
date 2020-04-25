@@ -258,11 +258,6 @@ extension ViewController {
     func saveGame() throws {
         try self.presenter.save()
     }
-    
-    /// ゲームの状態をファイルから読み込み、復元します。
-    func loadGame() throws {
-        try self.presenter.load()
-    }
 }
 
 extension ViewController: Displayable {
