@@ -222,10 +222,11 @@ extension ViewController {
         self.boardView.reset()
         self.presenter.turn = .dark
         
-        for playerControl in self.playerControls {
-            playerControl.selectedSegmentIndex = Player.manual.rawValue
-        }
-
+        self.presenter.darkPlayer = .manual
+        self.presenter.lightPlayer = .manual
+        
+        #warning("通知で呼び出す")
+        self.updatePlayerControls()
         self.updateMessageViews()
         self.updateCountLabels()
         
@@ -235,7 +236,7 @@ extension ViewController {
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
         guard let turn = self.presenter.turn else { return }
-        switch Player(rawValue: playerControls[turn.index].selectedSegmentIndex)! {
+        switch self.presenter.player(for: turn) {
         case .manual:
             break
         case .computer:
@@ -371,7 +372,16 @@ extension ViewController {
     
     /// プレイヤーのモードが変更された場合に呼ばれるハンドラーです。
     @IBAction func changePlayerControlSegment(_ sender: UISegmentedControl) {
-        let side: Disk = Disk(index: playerControls.firstIndex(of: sender)!)
+        guard let sideIndex = self.playerControls.firstIndex(of: sender) else { fatalError() }
+        let side: Disk = Disk(index: sideIndex)
+        guard let player = Player(rawValue: sender.selectedSegmentIndex) else { fatalError() }
+        
+        switch side {
+        case .dark:
+            self.presenter.darkPlayer = player
+        case .light:
+            self.presenter.lightPlayer = player
+        }
         
         try? self.saveGame()
         
@@ -379,7 +389,7 @@ extension ViewController {
             canceller.cancel()
         }
         
-        if !self.presenter.isAnimating, side == self.presenter.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
+        if !self.presenter.isAnimating, side == self.presenter.turn, case .computer = player {
             self.playTurnOfComputer()
         }
     }
@@ -393,7 +403,7 @@ extension ViewController: BoardViewDelegate {
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         guard let turn = self.presenter.turn else { return }
         if self.presenter.isAnimating { return }
-        guard case .manual = Player(rawValue: self.playerControls[turn.index].selectedSegmentIndex) else { return }
+        guard case .manual = self.presenter.player(for: turn) else { return }
         // try? because doing nothing when an error occurs
         try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
             self?.nextTurn()
@@ -406,8 +416,8 @@ extension ViewController: BoardViewDelegate {
 extension ViewController {
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
-        guard let darkPlayer = Player(rawValue: self.playerControls[Disk.dark.index].selectedSegmentIndex) else { fatalError() }
-        guard let lightPlayer = Player(rawValue: self.playerControls[Disk.light.index].selectedSegmentIndex) else { fatalError() }
+        let darkPlayer = self.presenter.darkPlayer
+        let lightPlayer = self.presenter.lightPlayer
         
         var board: [[Disk?]] = []
         for y in self.boardView.yRange {
@@ -430,8 +440,11 @@ extension ViewController {
         
         self.presenter.turn = parameters.turn
         
-        self.playerControls[Disk.dark.index].selectedSegmentIndex = parameters.darkPlayer.rawValue
-        self.playerControls[Disk.light.index].selectedSegmentIndex = parameters.lightPlayer.rawValue
+        self.presenter.darkPlayer = parameters.darkPlayer
+        self.presenter.lightPlayer = parameters.lightPlayer
+        
+        #warning("通知で呼び出す")
+        self.updatePlayerControls()
         
         for (y, boardLine) in parameters.board.enumerated() {
             for (x, disk) in boardLine.enumerated() {
@@ -446,5 +459,12 @@ extension ViewController {
     enum FileIOError: Error {
         case write(path: String, cause: Error?)
         case read(path: String, cause: Error?)
+    }
+}
+
+private extension ViewController {
+    func updatePlayerControls() {
+        self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
+        self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
     }
 }
