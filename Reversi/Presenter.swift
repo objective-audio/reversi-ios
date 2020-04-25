@@ -27,6 +27,15 @@ class Presenter {
         set { self.interactor.lightPlayer = newValue }
     }
     
+    func player(for side: Disk) -> Player {
+        switch side {
+        case .dark:
+            return self.darkPlayer
+        case .light:
+            return self.lightPlayer
+        }
+    }
+    
     func setDisks(_ disks: [[Disk?]]) {
         self.interactor.board.setDisks(disks)
     }
