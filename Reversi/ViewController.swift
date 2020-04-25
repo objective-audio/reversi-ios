@@ -44,10 +44,6 @@ class ViewController: UIViewController {
 // MARK: Reversi logics
 
 extension ViewController {
-    func diskCount(of side: Disk) -> Int {
-        return self.presenter.diskCount(of: side)
-    }
-    
     private func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
         return self.presenter.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
     }
@@ -311,7 +307,7 @@ private extension ViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
         for side in Disk.allCases {
-            self.countLabels[side.index].text = "\(self.diskCount(of: side))"
+            self.countLabels[side.index].text = "\(self.presenter.diskCount(of: side))"
         }
     }
     
