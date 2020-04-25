@@ -64,6 +64,10 @@ class Presenter {
         return self.interactor.board.diskCount(of: side)
     }
     
+    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
+        return self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
+    }
+    
     func loadOrNewGame() {
         do {
             try self.load()

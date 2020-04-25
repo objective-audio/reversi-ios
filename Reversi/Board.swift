@@ -49,6 +49,48 @@ struct Board {
     func diskCount(of side: Disk) -> Int {
         return self.disks.flatMap { $0 }.filter { $0 == side }.count
     }
+    
+    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
+        let directions = [
+            (x: -1, y: -1),
+            (x:  0, y: -1),
+            (x:  1, y: -1),
+            (x:  1, y:  0),
+            (x:  1, y:  1),
+            (x:  0, y:  1),
+            (x: -1, y:  0),
+            (x: -1, y:  1),
+        ]
+        
+        guard self.diskAt(x: x, y: y) == nil else {
+            return []
+        }
+        
+        var diskCoordinates: [(Int, Int)] = []
+        
+        for direction in directions {
+            var x = x
+            var y = y
+            
+            var diskCoordinatesInLine: [(Int, Int)] = []
+            flipping: while true {
+                x += direction.x
+                y += direction.y
+                
+                switch (disk, self.diskAt(x: x, y: y)) { // Uses tuples to make patterns exhaustive
+                case (.dark, .some(.dark)), (.light, .some(.light)):
+                    diskCoordinates.append(contentsOf: diskCoordinatesInLine)
+                    break flipping
+                case (.dark, .some(.light)), (.light, .some(.dark)):
+                    diskCoordinatesInLine.append((x, y))
+                case (_, .none):
+                    break flipping
+                }
+            }
+        }
+        
+        return diskCoordinates
+    }
 }
 
 extension Board {
