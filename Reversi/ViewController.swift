@@ -378,7 +378,8 @@ extension ViewController {
         self.presenter.lightPlayer = parameters.lightPlayer
         
         self.presenter.setDisks(parameters.board)
-        for (y, boardLine) in parameters.board.enumerated() {
+        
+        for (y, boardLine) in self.presenter.disks.enumerated() {
             for (x, disk) in boardLine.enumerated() {
                 self.boardView.setDisk(disk, atX: x, y: y, animated: false)
             }
