@@ -32,6 +32,15 @@ struct Board {
     func diskAt(x: Int, y: Int) -> Disk? {
         return self.disks[y][x]
     }
+    
+    mutating func resetDisks() {
+        self.disks = Self.emptyDisks()
+        
+        self.setDisk(.light, atX: Self.width / 2 - 1, y: Self.height / 2 - 1)
+        self.setDisk(.dark, atX: Self.width / 2, y: Self.height / 2 - 1)
+        self.setDisk(.dark, atX: Self.width / 2 - 1, y: Self.height / 2)
+        self.setDisk(.light, atX: Self.width / 2, y: Self.height / 2)
+    }
 }
 
 extension Board {
