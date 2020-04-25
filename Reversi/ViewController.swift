@@ -362,12 +362,9 @@ extension ViewController: BoardViewDelegate {
 extension ViewController {
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
-        let darkPlayer = self.presenter.darkPlayer
-        let lightPlayer = self.presenter.lightPlayer
-        
         try DataStore().save(.init(turn: self.presenter.turn,
-                                   darkPlayer: darkPlayer,
-                                   lightPlayer: lightPlayer,
+                                   darkPlayer: self.presenter.darkPlayer,
+                                   lightPlayer: self.presenter.lightPlayer,
                                    board: self.presenter.disks))
     }
     
