@@ -455,11 +455,6 @@ extension ViewController {
         self.updateMessageViews()
         self.updateCountLabels()
     }
-    
-    enum FileIOError: Error {
-        case write(path: String, cause: Error?)
-        case read(path: String, cause: Error?)
-    }
 }
 
 private extension ViewController {
