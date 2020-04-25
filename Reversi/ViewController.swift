@@ -448,9 +448,6 @@ extension ViewController {
         self.presenter.darkPlayer = parameters.darkPlayer
         self.presenter.lightPlayer = parameters.lightPlayer
         
-        #warning("通知で呼び出す")
-        self.updatePlayerControls()
-        
         self.presenter.setDisks(parameters.board)
         for (y, boardLine) in parameters.board.enumerated() {
             for (x, disk) in boardLine.enumerated() {
@@ -458,6 +455,8 @@ extension ViewController {
             }
         }
 
+        #warning("通知で呼び出す")
+        self.updatePlayerControls()
         self.updateMessageViews()
         self.updateCountLabels()
     }
