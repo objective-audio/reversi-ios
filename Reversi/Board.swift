@@ -16,9 +16,9 @@ struct Board {
         self.disks = disks
     }
     
-    #warning("後で消す")
+    #warning("後で消す?")
     init() {
-        self.init(disks: [])
+        self.init(disks: Self.emptyDisks())
     }
     
     mutating func setDisks(_ disks: [[Disk?]]) {
@@ -31,5 +31,12 @@ struct Board {
     
     func diskAt(x: Int, y: Int) -> Disk? {
         return self.disks[y][x]
+    }
+}
+
+extension Board {
+    static func emptyDisks() -> [[Disk?]] {
+        let line = [Disk?](repeating: nil, count: Self.width)
+        return [[Disk?]](repeating: line, count: Self.height)
     }
 }
