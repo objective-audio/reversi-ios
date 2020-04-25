@@ -53,4 +53,8 @@ class Presenter {
     func resetDisks() {
         self.interactor.board.resetDisks()
     }
+    
+    func save() throws {
+        try self.interactor.save()
+    }
 }

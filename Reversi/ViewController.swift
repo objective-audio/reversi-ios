@@ -359,12 +359,8 @@ extension ViewController: BoardViewDelegate {
 // MARK: Save and Load
 
 extension ViewController {
-    /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
-        try DataStore().save(.init(turn: self.presenter.turn,
-                                   darkPlayer: self.presenter.darkPlayer,
-                                   lightPlayer: self.presenter.lightPlayer,
-                                   board: self.presenter.disks))
+        try self.presenter.save()
     }
     
     /// ゲームの状態をファイルから読み込み、復元します。
