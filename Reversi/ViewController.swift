@@ -225,16 +225,7 @@ extension ViewController {
 extension ViewController {
     /// ゲームの状態を初期化し、新しいゲームを開始します。
     func newGame() {
-        self.presenter.resetDisks()
-        self.presenter.turn = .dark
-        
-        self.presenter.darkPlayer = .manual
-        self.presenter.lightPlayer = .manual
-        
-        #warning("通知で呼び出す")
-        self.updateAll()
-        
-        try? self.saveGame()
+        self.presenter.newGame()
     }
     
     /// プレイヤーの行動を待ちます。
