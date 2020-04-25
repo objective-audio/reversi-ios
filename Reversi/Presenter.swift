@@ -17,6 +17,16 @@ class Presenter {
         set { self.interactor.turn = newValue }
     }
     
+    var darkPlayer: Player {
+        get { self.interactor.darkPlayer }
+        set { self.interactor.darkPlayer = newValue }
+    }
+    
+    var lightPlayer: Player {
+        get { self.interactor.lightPlayer }
+        set { self.interactor.lightPlayer = newValue }
+    }
+    
     func setDisks(_ disks: [[Disk?]]) {
         self.interactor.board.setDisks(disks)
     }
