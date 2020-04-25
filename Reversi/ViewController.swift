@@ -310,7 +310,7 @@ extension ViewController {
 
 // MARK: Views
 
-extension ViewController {
+private extension ViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
         for side in Disk.allCases {
