@@ -72,6 +72,10 @@ class Presenter {
         return self.interactor.board.sideWithMoreDisks()
     }
     
+    func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
+        return self.interactor.board.canPlaceDisk(disk, atX: x, y: y)
+    }
+    
     func loadOrNewGame() {
         do {
             try self.load()

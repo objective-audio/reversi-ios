@@ -52,15 +52,6 @@ extension ViewController {
         return self.presenter.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
     }
     
-    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
-    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
-    /// - Parameter x: セルの列です。
-    /// - Parameter y: セルの行です。
-    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
-    func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
-        !self.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y).isEmpty
-    }
-    
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
     func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
@@ -68,7 +59,7 @@ extension ViewController {
         
         for y in Board.yRange {
             for x in Board.xRange {
-                if self.canPlaceDisk(side, atX: x, y: y) {
+                if self.presenter.canPlaceDisk(side, atX: x, y: y) {
                     coordinates.append((x, y))
                 }
             }
