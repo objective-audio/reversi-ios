@@ -343,6 +343,7 @@ extension ViewController {
 extension ViewController {
     /// リセットボタンが押された場合に呼ばれるハンドラーです。
     @IBAction func pressResetButton(_ sender: UIButton) {
+        #warning("presenter経由にする")
         self.presentConfirmationView()
     }
     
@@ -375,6 +376,7 @@ private extension ViewController {
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             guard let self = self else { return }
             
+            #warning("以下、presenter側に移動する")
             self.animationCanceller?.cancel()
             self.animationCanceller = nil
             
