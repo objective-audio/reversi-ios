@@ -68,6 +68,10 @@ class Presenter {
         return self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
     }
     
+    func sideWithMoreDisks() -> Disk? {
+        return self.interactor.board.sideWithMoreDisks()
+    }
+    
     func loadOrNewGame() {
         do {
             try self.load()

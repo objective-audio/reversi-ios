@@ -91,6 +91,19 @@ struct Board {
         
         return diskCoordinates
     }
+    
+    /// 盤上に置かれたディスクの枚数が多い方の色を返します。
+    /// 引き分けの場合は `nil` が返されます。
+    /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
+    func sideWithMoreDisks() -> Disk? {
+        let darkCount = self.diskCount(of: .dark)
+        let lightCount = self.diskCount(of: .light)
+        if darkCount == lightCount {
+            return nil
+        } else {
+            return darkCount > lightCount ? .dark : .light
+        }
+    }
 }
 
 extension Board {

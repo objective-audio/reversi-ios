@@ -48,19 +48,6 @@ extension ViewController {
         return self.presenter.diskCount(of: side)
     }
     
-    /// 盤上に置かれたディスクの枚数が多い方の色を返します。
-    /// 引き分けの場合は `nil` が返されます。
-    /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
-    func sideWithMoreDisks() -> Disk? {
-        let darkCount = self.diskCount(of: .dark)
-        let lightCount = self.diskCount(of: .light)
-        if darkCount == lightCount {
-            return nil
-        } else {
-            return darkCount > lightCount ? .dark : .light
-        }
-    }
-    
     private func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
         return self.presenter.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
     }
@@ -345,7 +332,7 @@ private extension ViewController {
             self.messageDiskView.disk = side
             self.messageLabel.text = "'s turn"
         case .none:
-            if let winner = self.sideWithMoreDisks() {
+            if let winner = self.presenter.sideWithMoreDisks() {
                 self.messageDiskSizeConstraint.constant = self.messageDiskSize
                 self.messageDiskView.disk = winner
                 self.messageLabel.text = " won"
