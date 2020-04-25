@@ -1,7 +1,13 @@
 import Foundation
 
+protocol Displayable: class {
+    func updateAll()
+}
+
 class Presenter {
     private let interactor: Interactor
+    
+    weak var displayer: Displayable?
     
     #warning("privateにする")
     var animationCanceller: Canceller?

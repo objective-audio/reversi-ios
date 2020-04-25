@@ -23,6 +23,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.presenter.displayer = self
+        
         self.boardView.delegate = self
         self.messageDiskSize = self.messageDiskSizeConstraint.constant
         
@@ -379,14 +381,16 @@ extension ViewController {
     }
 }
 
-private extension ViewController {
+extension ViewController: Displayable {
     func updateAll() {
         self.updateBoardView()
         self.updatePlayerControls()
         self.updateMessageViews()
         self.updateCountLabels()
     }
-    
+}
+
+private extension ViewController {
     func updateBoardView() {
         for (y, boardLine) in self.presenter.disks.enumerated() {
             for (x, disk) in boardLine.enumerated() {
