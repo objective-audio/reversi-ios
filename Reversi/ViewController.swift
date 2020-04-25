@@ -406,8 +406,8 @@ extension ViewController: BoardViewDelegate {
 extension ViewController {
     /// ゲームの状態をファイルに書き出し、保存します。
     func saveGame() throws {
-        guard let darkPlayer = Player(rawValue: self.playerControls[0].selectedSegmentIndex) else { fatalError() }
-        guard let lightPlayer = Player(rawValue: self.playerControls[1].selectedSegmentIndex) else { fatalError() }
+        guard let darkPlayer = Player(rawValue: self.playerControls[Disk.dark.index].selectedSegmentIndex) else { fatalError() }
+        guard let lightPlayer = Player(rawValue: self.playerControls[Disk.light.index].selectedSegmentIndex) else { fatalError() }
         
         var board: [[Disk?]] = []
         for y in self.boardView.yRange {
@@ -429,9 +429,9 @@ extension ViewController {
         let parameters = try DataStore().load()
         
         self.presenter.turn = parameters.turn
-        #warning("playerControlsのindexの扱い")
-        self.playerControls[0].selectedSegmentIndex = parameters.darkPlayer.rawValue
-        self.playerControls[1].selectedSegmentIndex = parameters.lightPlayer.rawValue
+        
+        self.playerControls[Disk.dark.index].selectedSegmentIndex = parameters.darkPlayer.rawValue
+        self.playerControls[Disk.light.index].selectedSegmentIndex = parameters.lightPlayer.rawValue
         
         for (y, boardLine) in parameters.board.enumerated() {
             for (x, disk) in boardLine.enumerated() {
