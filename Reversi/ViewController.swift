@@ -307,63 +307,6 @@ extension ViewController {
     }
 }
 
-// MARK: Views
-
-private extension ViewController {
-    /// 各プレイヤーの獲得したディスクの枚数を表示します。
-    func updateCountLabels() {
-        for side in Disk.allCases {
-            self.countLabels[side.index].text = "\(self.countDisks(of: side))"
-        }
-    }
-    
-    /// 現在の状況に応じてメッセージを表示します。
-    func updateMessageViews() {
-        switch self.presenter.turn {
-        case .some(let side):
-            self.messageDiskSizeConstraint.constant = self.messageDiskSize
-            self.messageDiskView.disk = side
-            self.messageLabel.text = "'s turn"
-        case .none:
-            if let winner = self.sideWithMoreDisks() {
-                self.messageDiskSizeConstraint.constant = self.messageDiskSize
-                self.messageDiskView.disk = winner
-                self.messageLabel.text = " won"
-            } else {
-                self.messageDiskSizeConstraint.constant = 0
-                self.messageLabel.text = "Tied"
-            }
-        }
-    }
-    
-    /// アラートを表示して、ゲームを初期化して良いか確認し、
-    /// "OK" が選択された場合ゲームを初期化します。
-    func presentConfirmationView() {
-        let alertController = UIAlertController(
-            title: "Confirmation",
-            message: "Do you really want to reset the game?",
-            preferredStyle: .alert
-        )
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            #warning("以下、presenter側に移動する")
-            self.presenter.animationCanceller?.cancel()
-            self.presenter.animationCanceller = nil
-            
-            for side in Disk.allCases {
-                self.presenter.playerCancellers[side]?.cancel()
-                self.presenter.playerCancellers.removeValue(forKey: side)
-            }
-            
-            self.newGame()
-            self.waitForPlayer()
-        })
-        present(alertController, animated: true)
-    }
-}
-
 // MARK: Inputs
 
 extension ViewController {
@@ -468,5 +411,58 @@ private extension ViewController {
     func updatePlayerControls() {
         self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
         self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
+    }
+    
+    /// 各プレイヤーの獲得したディスクの枚数を表示します。
+    func updateCountLabels() {
+        for side in Disk.allCases {
+            self.countLabels[side.index].text = "\(self.countDisks(of: side))"
+        }
+    }
+    
+    /// 現在の状況に応じてメッセージを表示します。
+    func updateMessageViews() {
+        switch self.presenter.turn {
+        case .some(let side):
+            self.messageDiskSizeConstraint.constant = self.messageDiskSize
+            self.messageDiskView.disk = side
+            self.messageLabel.text = "'s turn"
+        case .none:
+            if let winner = self.sideWithMoreDisks() {
+                self.messageDiskSizeConstraint.constant = self.messageDiskSize
+                self.messageDiskView.disk = winner
+                self.messageLabel.text = " won"
+            } else {
+                self.messageDiskSizeConstraint.constant = 0
+                self.messageLabel.text = "Tied"
+            }
+        }
+    }
+    
+    /// アラートを表示して、ゲームを初期化して良いか確認し、
+    /// "OK" が選択された場合ゲームを初期化します。
+    func presentConfirmationView() {
+        let alertController = UIAlertController(
+            title: "Confirmation",
+            message: "Do you really want to reset the game?",
+            preferredStyle: .alert
+        )
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
+        alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            
+            #warning("以下、presenter側に移動する")
+            self.presenter.animationCanceller?.cancel()
+            self.presenter.animationCanceller = nil
+            
+            for side in Disk.allCases {
+                self.presenter.playerCancellers[side]?.cancel()
+                self.presenter.playerCancellers.removeValue(forKey: side)
+            }
+            
+            self.newGame()
+            self.waitForPlayer()
+        })
+        present(alertController, animated: true)
     }
 }
