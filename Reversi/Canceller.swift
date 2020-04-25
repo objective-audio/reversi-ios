@@ -4,7 +4,7 @@ final class Canceller {
     private(set) var isCancelled: Bool = false
     private let body: (() -> Void)?
     
-    init(_ body: (() -> Void)?) {
+    init(_ body: @escaping (() -> Void)) {
         self.body = body
     }
     
