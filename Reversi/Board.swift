@@ -5,6 +5,10 @@ struct Board {
     static let width = 8
     /// 盤の高さ（ `8` ）を返します。
     static let height = 8
+    /// 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。
+    static let xRange: Range<Int> = 0..<width
+    /// 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。
+    static let yRange: Range<Int> = 0..<height
     
     private(set) var disks: [[Disk?]]
     
