@@ -6,11 +6,6 @@ enum Disk: CaseIterable {
 extension Disk: Hashable {}
 
 extension Disk {
-    /// `Disk` のすべての値を列挙した `Array` 、 `[.dark, .light]` を返します。
-    static var sides: [Disk] {
-        Disk.allCases
-    }
-    
     /// 自身の値を反転させた値（ `.dark` なら `.light` 、 `.light` なら `.dark` ）を返します。
     var flipped: Disk {
         switch self {

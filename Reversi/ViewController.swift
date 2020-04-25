@@ -313,7 +313,7 @@ extension ViewController {
 extension ViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
-        for side in Disk.sides {
+        for side in Disk.allCases {
             self.countLabels[side.index].text = "\(self.countDisks(of: side))"
         }
     }
@@ -357,7 +357,7 @@ extension ViewController {
             self.animationCanceller?.cancel()
             self.animationCanceller = nil
             
-            for side in Disk.sides {
+            for side in Disk.allCases {
                 self.playerCancellers[side]?.cancel()
                 self.playerCancellers.removeValue(forKey: side)
             }
@@ -460,7 +460,7 @@ struct DiskPlacementError: Error {
 
 extension Disk {
     init(index: Int) {
-        for side in Disk.sides {
+        for side in Disk.allCases {
             if index == side.index {
                 self = side
                 return
