@@ -175,8 +175,10 @@ extension ViewController {
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                self.presenter.setDisk(disk, atX: x, y: y)
                 self.boardView.setDisk(disk, atX: x, y: y, animated: false)
                 for (x, y) in diskCoordinates {
+                    self.presenter.setDisk(disk, atX: x, y: y)
                     self.boardView.setDisk(disk, atX: x, y: y, animated: false)
                 }
                 completion?(true)
@@ -199,6 +201,7 @@ extension ViewController {
         }
         
         let animationCanceller = self.presenter.animationCanceller!
+        self.presenter.setDisk(disk, atX: x, y: y)
         self.boardView.setDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
             if animationCanceller.isCancelled { return }
@@ -206,6 +209,7 @@ extension ViewController {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
                 for (x, y) in coordinates {
+                    self.presenter.setDisk(disk, atX: x, y: y)
                     self.boardView.setDisk(disk, atX: x, y: y, animated: false)
                 }
                 completion(false)
@@ -219,6 +223,7 @@ extension ViewController {
 extension ViewController {
     /// ゲームの状態を初期化し、新しいゲームを開始します。
     func newGame() {
+        self.presenter.resetDisks()
         self.boardView.reset()
         self.presenter.turn = .dark
         
@@ -446,6 +451,7 @@ extension ViewController {
         #warning("通知で呼び出す")
         self.updatePlayerControls()
         
+        self.presenter.setDisks(parameters.board)
         for (y, boardLine) in parameters.board.enumerated() {
             for (x, disk) in boardLine.enumerated() {
                 self.boardView.setDisk(disk, atX: x, y: y, animated: false)
