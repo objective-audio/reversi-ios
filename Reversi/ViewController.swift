@@ -365,19 +365,10 @@ extension ViewController {
         let darkPlayer = self.presenter.darkPlayer
         let lightPlayer = self.presenter.lightPlayer
         
-        var board: [[Disk?]] = []
-        for y in self.boardView.yRange {
-            var line: [Disk?] = []
-            for x in self.boardView.xRange {
-                line.append(self.boardView.diskAt(x: x, y: y))
-            }
-            board.append(line)
-        }
-        
         try DataStore().save(.init(turn: self.presenter.turn,
                                    darkPlayer: darkPlayer,
                                    lightPlayer: lightPlayer,
-                                   board: board))
+                                   board: self.presenter.disks))
     }
     
     /// ゲームの状態をファイルから読み込み、復元します。
