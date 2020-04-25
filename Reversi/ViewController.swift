@@ -231,9 +231,7 @@ extension ViewController {
         self.presenter.lightPlayer = .manual
         
         #warning("通知で呼び出す")
-        self.updatePlayerControls()
-        self.updateMessageViews()
-        self.updateCountLabels()
+        self.updateAll()
         
         try? self.saveGame()
     }
@@ -456,13 +454,17 @@ extension ViewController {
         }
 
         #warning("通知で呼び出す")
-        self.updatePlayerControls()
-        self.updateMessageViews()
-        self.updateCountLabels()
+        self.updateAll()
     }
 }
 
 private extension ViewController {
+    func updateAll() {
+        self.updatePlayerControls()
+        self.updateMessageViews()
+        self.updateCountLabels()
+    }
+    
     func updatePlayerControls() {
         self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
         self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
