@@ -6,11 +6,8 @@ class BoardView: UIView {
     private var cellViews: [CellView] = []
     private var actions: [CellSelectionAction] = []
     
-    /// 盤の幅（ `8` ）を表します。
-    let width: Int = 8
-    
-    /// 盤の高さ（ `8` ）を返します。
-    let height: Int = 8
+    let width: Int = Board.width
+    let height: Int = Board.height
     
     /// 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。
     let xRange: Range<Int>

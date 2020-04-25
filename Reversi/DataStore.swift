@@ -69,8 +69,7 @@ class DataStore {
         
         var board: [[Disk?]] = []
         do { // board
-            #warning("8はどこかで定義する")
-            guard lines.count == 8 else {
+            guard lines.count == Board.height else {
                 throw FileIOError.read(path: path, cause: nil)
             }
             
@@ -83,14 +82,14 @@ class DataStore {
                     boardLine.append(disk)
                     x += 1
                 }
-                guard x == 8 else {
+                guard x == Board.width else {
                     throw FileIOError.read(path: path, cause: nil)
                 }
                 board.append(boardLine)
                 y += 1
             }
-            #warning("8はどこかで定義する")
-            guard y == 8 else {
+            
+            guard y == Board.height else {
                 throw FileIOError.read(path: path, cause: nil)
             }
         }
