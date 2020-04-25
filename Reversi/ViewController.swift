@@ -447,11 +447,3 @@ extension ViewController {
         case read(path: String, cause: Error?)
     }
 }
-
-// MARK: Additional types
-
-struct DiskPlacementError: Error {
-    let disk: Disk
-    let x: Int
-    let y: Int
-}
