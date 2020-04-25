@@ -1,16 +1,16 @@
 import Foundation
 
 final class Canceller {
-    private(set) var isCancelled: Bool = false
-    private let body: (() -> Void)?
+    var isCancelled: Bool { self.body == nil }
+    
+    private var body: (() -> Void)?
     
     init(_ body: @escaping (() -> Void)) {
         self.body = body
     }
     
     func cancel() {
-        if self.isCancelled { return }
-        self.isCancelled = true
         self.body?()
+        self.body = nil
     }
 }
