@@ -460,19 +460,15 @@ struct DiskPlacementError: Error {
 
 extension Disk {
     init(index: Int) {
-        for side in Disk.allCases {
-            if index == side.index {
-                self = side
-                return
-            }
-        }
-        preconditionFailure("Illegal index: \(index)")
+        precondition(index < Disk.allCases.count)
+        self = Disk.allCases[index]
     }
     
     var index: Int {
-        switch self {
-        case .dark: return 0
-        case .light: return 1
+        if let index = Disk.allCases.firstIndex(of: self) {
+            return index
+        } else {
+            fatalError()
         }
     }
 }
