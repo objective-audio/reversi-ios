@@ -22,7 +22,7 @@ class BoardView: UIView {
         self.xRange = 0 ..< self.width
         self.yRange = 0 ..< self.height
         super.init(frame: frame)
-        setUp()
+        self.setUp()
     }
     
     required init?(coder: NSCoder) {
