@@ -12,6 +12,11 @@ struct Board {
         self.disks = disks
     }
     
+    #warning("後で消す")
+    init() {
+        self.init(disks: [])
+    }
+    
     mutating func setDisks(_ disks: [[Disk?]]) {
         self.disks = disks
     }
