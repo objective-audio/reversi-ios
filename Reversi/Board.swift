@@ -30,17 +30,17 @@ struct Board {
         self.disks = disks
     }
     
-    mutating func setDisk(_ disk: Disk?, atX x: Int, y: Int) {
-        self.disks[y][x] = disk
+    mutating func setDisk(_ disk: Disk?, at position: Position) {
+        self.disks[position.y][position.x] = disk
     }
     
     mutating func resetDisks() {
         self.disks = Self.emptyDisks()
         
-        self.setDisk(.light, atX: Self.width / 2 - 1, y: Self.height / 2 - 1)
-        self.setDisk(.dark, atX: Self.width / 2, y: Self.height / 2 - 1)
-        self.setDisk(.dark, atX: Self.width / 2 - 1, y: Self.height / 2)
-        self.setDisk(.light, atX: Self.width / 2, y: Self.height / 2)
+        self.setDisk(.light, at: .init(x: Self.width / 2 - 1, y: Self.height / 2 - 1))
+        self.setDisk(.dark, at: .init(x: Self.width / 2, y: Self.height / 2 - 1))
+        self.setDisk(.dark, at: .init(x: Self.width / 2 - 1, y: Self.height / 2))
+        self.setDisk(.light, at: .init(x: Self.width / 2, y: Self.height / 2))
     }
     
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。

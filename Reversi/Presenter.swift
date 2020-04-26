@@ -151,7 +151,7 @@ private extension Presenter {
         }
         
         let animationCanceller = self.animationCanceller!
-        self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
+        self.interactor.board.setDisk(disk, at: position)
         
         self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
@@ -160,7 +160,7 @@ private extension Presenter {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
                 for position in coordinates {
-                    self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
+                    self.interactor.board.setDisk(disk, at: position)
                     self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: false, completion: nil)
                 }
                 completion(false)
@@ -200,10 +200,10 @@ private extension Presenter {
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.interactor.board.setDisk(disk, atX: x, y: y)
+                self.interactor.board.setDisk(disk, at: .init(x: x, y: y))
                 self.displayer?.setBoardDisk(disk, atX: x, y: y)
                 for position in diskCoordinates {
-                    self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
+                    self.interactor.board.setDisk(disk, at: position)
                     self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y)
                 }
                 completion?(true)
