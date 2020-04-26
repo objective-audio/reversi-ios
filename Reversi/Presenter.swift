@@ -21,9 +21,9 @@ class Presenter {
     weak var displayer: Displayable?
     
     #warning("privateにする")
-    var animationCanceller: Canceller?
+    private var animationCanceller: Canceller?
     var isAnimating: Bool { animationCanceller != nil }
-    var playerCancellers: [Disk: Canceller] = [:]
+    private var playerCancellers: [Disk: Canceller] = [:]
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
