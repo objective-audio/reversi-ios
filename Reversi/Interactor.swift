@@ -142,6 +142,23 @@ class Interactor {
         self.newGame()
         self.waitForPlayer()
     }
+    
+    func changePlayer(_ player: Player, side: Side) {
+        switch side {
+        case .dark:
+            self.darkPlayer = player
+        case .light:
+            self.lightPlayer = player
+        }
+        
+        if let canceller = self.playerCancellers[side] {
+            canceller.cancel()
+        }
+        
+        if !self.isAnimating, side == self.turn, case .computer = player {
+            self.playTurnOfComputer()
+        }
+    }
 }
 
 private extension Interactor {

@@ -62,20 +62,7 @@ class Presenter {
     }
     
     func changePlayer(_ player: Player, side: Side) {
-        switch side {
-        case .dark:
-            self.interactor.darkPlayer = player
-        case .light:
-            self.interactor.lightPlayer = player
-        }
-        
-        if let canceller = self.interactor.playerCancellers[side] {
-            canceller.cancel()
-        }
-        
-        if !self.interactor.isAnimating, side == self.interactor.turn, case .computer = player {
-            self.interactor.playTurnOfComputer()
-        }
+        self.interactor.changePlayer(player, side: side)
     }
     
     func selectBoard(position: Board.Position) {
