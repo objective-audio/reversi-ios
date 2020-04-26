@@ -60,15 +60,7 @@ extension ViewController {
                 self.presenter.turn = turn
                 self.updateMessageViews()
                 
-                let alertController = UIAlertController(
-                    title: "Pass",
-                    message: "Cannot place a disk.",
-                    preferredStyle: .alert
-                )
-                alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
-                    self?.nextTurn()
-                })
-                present(alertController, animated: true)
+                self.presentPassView()
             }
         } else {
             self.presenter.turn = turn
@@ -203,6 +195,18 @@ private extension ViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.presenter.comfirmationOK()
+        })
+        present(alertController, animated: true)
+    }
+    
+    func presentPassView() {
+        let alertController = UIAlertController(
+            title: "Pass",
+            message: "Cannot place a disk.",
+            preferredStyle: .alert
+        )
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
+            self?.nextTurn()
         })
         present(alertController, animated: true)
     }
