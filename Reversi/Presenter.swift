@@ -274,6 +274,16 @@ class Presenter {
         }
     }
     
+    func selectBoard(x: Int, y: Int) {
+        guard let turn = self.turn else { return }
+        if self.isAnimating { return }
+        guard case .manual = self.player(for: turn) else { return }
+        // try? because doing nothing when an error occurs
+        try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+            self?.nextTurn()
+        }
+    }
+    
     func comfirmationOK() {
         #warning("interactorに移動したい？")
         self.animationCanceller?.cancel()

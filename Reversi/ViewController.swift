@@ -61,13 +61,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
-        guard let turn = self.presenter.turn else { return }
-        if self.presenter.isAnimating { return }
-        guard case .manual = self.presenter.player(for: turn) else { return }
-        // try? because doing nothing when an error occurs
-        try? self.presenter.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
-            self?.presenter.nextTurn()
-        }
+        self.presenter.selectBoard(x: x, y: y)
     }
 }
 
