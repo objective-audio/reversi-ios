@@ -4,10 +4,10 @@ protocol InteractorDelegate: class {
     func didChangeTurn()
     func willBeginComputerWaiting(side: Side)
     func didEndComputerWaiting(side: Side)
+    func noPlaceToPutDisk()
     
     #warning("残すつもりはない")
     func placeDisk(_ disk: Disk, at position: Board.Position, animated isAnimated: Bool, completion: ((Bool) -> Void)?) throws
-    func nextTurn()
 }
 
 class Interactor {
@@ -78,7 +78,7 @@ class Interactor {
             cleanUp()
             
             try! self.delegate?.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
-                self?.delegate?.nextTurn()
+                self?.nextTurn()
             }
         }
         
@@ -102,6 +102,28 @@ class Interactor {
             return self.darkPlayer
         case .light:
             return self.lightPlayer
+        }
+    }
+    
+    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
+    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
+    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
+    func nextTurn() {
+        guard let currentSide = self.turn else { return }
+
+        let nextSide = currentSide.flipped
+        
+        if self.board.validMoves(for: nextSide).isEmpty {
+            if self.board.validMoves(for: currentSide).isEmpty {
+                self.turn = nil
+            } else {
+                self.turn = nextSide
+                
+                self.delegate?.noPlaceToPutDisk()
+            }
+        } else {
+            self.turn = nextSide
+            self.waitForPlayer()
         }
     }
 }

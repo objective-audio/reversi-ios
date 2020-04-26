@@ -84,7 +84,7 @@ class Presenter {
         guard case .manual = self.interactor.player(for: side) else { return }
         // try? because doing nothing when an error occurs
         try? self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
-            self?.nextTurn()
+            self?.interactor.nextTurn()
         }
     }
     
@@ -103,7 +103,7 @@ class Presenter {
     }
     
     func pass() {
-        self.nextTurn()
+        self.interactor.nextTurn()
     }
 }
 
@@ -158,6 +158,10 @@ extension Presenter: InteractorDelegate {
     func didEndComputerWaiting(side: Side) {
         self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
     }
+    
+    func noPlaceToPutDisk() {
+        self.displayer?.presentPassView()
+    }
 }
 
 #warning("Interactorに移動する")
@@ -204,28 +208,6 @@ extension Presenter {
                 self.interactor.save()
                 self.displayer?.updateCountLabels()
             }
-        }
-    }
-    
-    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
-    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
-    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    func nextTurn() {
-        guard let currentSide = self.interactor.turn else { return }
-
-        let nextSide = currentSide.flipped
-        
-        if self.interactor.board.validMoves(for: nextSide).isEmpty {
-            if self.interactor.board.validMoves(for: currentSide).isEmpty {
-                self.interactor.turn = nil
-            } else {
-                self.interactor.turn = nextSide
-                
-                self.displayer?.presentPassView()
-            }
-        } else {
-            self.interactor.turn = nextSide
-            self.interactor.waitForPlayer()
         }
     }
 }
