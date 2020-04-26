@@ -68,7 +68,7 @@ class Presenter {
         case .some(let side):
             return .turn(side: side)
         case .none:
-            if let winner = self.sideWithMoreDisks() {
+            if let winner = self.interactor.board.sideWithMoreDisks() {
                 return .won(side: winner)
             } else {
                 return .tied
@@ -76,24 +76,8 @@ class Presenter {
         }
     }
     
-    func setDisk(_ disk: Disk?, atX x: Int, y: Int) {
-        self.interactor.board.setDisk(disk, atX: x, y: y)
-    }
-    
     func diskCount(of side: Disk) -> Int {
         return self.interactor.board.diskCount(of: side)
-    }
-    
-    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
-        return self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
-    }
-    
-    func sideWithMoreDisks() -> Disk? {
-        return self.interactor.board.sideWithMoreDisks()
-    }
-    
-    func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
-        return self.interactor.board.validMoves(for: side)
     }
     
     private var _began: Bool = false
@@ -140,7 +124,7 @@ class Presenter {
         }
         
         let animationCanceller = self.animationCanceller!
-        self.setDisk(disk, atX: x, y: y)
+        self.interactor.board.setDisk(disk, atX: x, y: y)
         
         self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
@@ -149,7 +133,7 @@ class Presenter {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
                 for (x, y) in coordinates {
-                    self.setDisk(disk, atX: x, y: y)
+                    self.interactor.board.setDisk(disk, atX: x, y: y)
                     self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
                 }
                 completion(false)
@@ -166,7 +150,7 @@ class Presenter {
     ///     もし `animated` が `false` の場合、このクロージャは次の run loop サイクルの初めに実行されます。
     /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
     func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
-        let diskCoordinates = self.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
+        let diskCoordinates = self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
         if diskCoordinates.isEmpty {
             throw DiskPlacementError(disk: disk, x: x, y: y)
         }
@@ -189,10 +173,10 @@ class Presenter {
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.setDisk(disk, atX: x, y: y)
+                self.interactor.board.setDisk(disk, atX: x, y: y)
                 self.displayer?.setBoardDisk(disk, atX: x, y: y)
                 for (x, y) in diskCoordinates {
-                    self.setDisk(disk, atX: x, y: y)
+                    self.interactor.board.setDisk(disk, atX: x, y: y)
                     self.displayer?.setBoardDisk(disk, atX: x, y: y)
                 }
                 completion?(true)
@@ -205,7 +189,7 @@ class Presenter {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
-        let (x, y) = self.validMoves(for: turn).randomElement()!
+        let (x, y) = self.interactor.board.validMoves(for: turn).randomElement()!
 
         self.displayer?.startPlayerActivityIndicatorAnimating(side: turn)
         
@@ -236,8 +220,8 @@ class Presenter {
 
         turn.flip()
         
-        if self.validMoves(for: turn).isEmpty {
-            if self.validMoves(for: turn.flipped).isEmpty {
+        if self.interactor.board.validMoves(for: turn).isEmpty {
+            if self.interactor.board.validMoves(for: turn.flipped).isEmpty {
                 self.turn = nil
             } else {
                 self.turn = turn
