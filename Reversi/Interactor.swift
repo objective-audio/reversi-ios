@@ -8,7 +8,7 @@ protocol InteractorDelegate: class {
     func noPlaceToPutDisk()
     
     #warning("残すつもりはない")
-    func placeDisk(_ disk: Disk, at position: Board.Position, animated isAnimated: Bool, completion: ((Bool) -> Void)?) throws
+    func placeDisk(_ disk: Disk, at position: Board.Position, completion: ((Bool) -> Void)?) throws
 }
 
 class Interactor {
@@ -80,7 +80,7 @@ class Interactor {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.delegate?.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
+            try! self.delegate?.placeDisk(side.disk, at: position) { [weak self] _ in
                 self?.nextTurn()
             }
         }

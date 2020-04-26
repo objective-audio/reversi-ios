@@ -70,7 +70,7 @@ class Presenter {
         if self.interactor.isAnimating { return }
         guard case .manual = self.interactor.player(for: side) else { return }
         // try? because doing nothing when an error occurs
-        try? self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
+        try? self.placeDisk(side.disk, at: position) { [weak self] _ in
             self?.interactor.nextTurn()
         }
     }
@@ -148,40 +148,25 @@ extension Presenter {
     ///     このクロージャは値を返さず、アニメーションが完了したかを示す真偽値を受け取ります。
     ///     もし `animated` が `false` の場合、このクロージャは次の run loop サイクルの初めに実行されます。
     /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
-    func placeDisk(_ disk: Disk, at position: Board.Position, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
+    func placeDisk(_ disk: Disk, at position: Board.Position, completion: ((Bool) -> Void)? = nil) throws {
         let diskCoordinates = self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
         if diskCoordinates.isEmpty {
             throw DiskPlacementError(disk: disk, position: position)
         }
         
-        if isAnimated {
-            let cleanUp: () -> Void = { [weak self] in
-                self?.interactor.animationCanceller = nil
-            }
-            self.interactor.animationCanceller = Canceller(cleanUp)
-            self.animateSettingDisks(at: [position] + diskCoordinates, to: disk) { [weak self] isFinished in
-                guard let self = self else { return }
-                guard let canceller = self.interactor.animationCanceller else { return }
-                if canceller.isCancelled { return }
-                cleanUp()
+        let cleanUp: () -> Void = { [weak self] in
+            self?.interactor.animationCanceller = nil
+        }
+        self.interactor.animationCanceller = Canceller(cleanUp)
+        self.animateSettingDisks(at: [position] + diskCoordinates, to: disk) { [weak self] isFinished in
+            guard let self = self else { return }
+            guard let canceller = self.interactor.animationCanceller else { return }
+            if canceller.isCancelled { return }
+            cleanUp()
 
-                completion?(isFinished)
-                self.interactor.save()
-                self.displayer?.updateCountLabels()
-            }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.interactor.board.setDisk(disk, at: position)
-                self.displayer?.setBoardDisk(disk, at: position)
-                for position in diskCoordinates {
-                    self.interactor.board.setDisk(disk, at: position)
-                    self.displayer?.setBoardDisk(disk, at: position)
-                }
-                completion?(true)
-                self.interactor.save()
-                self.displayer?.updateCountLabels()
-            }
+            completion?(isFinished)
+            self.interactor.save()
+            self.displayer?.updateCountLabels()
         }
     }
 }
