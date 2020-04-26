@@ -55,7 +55,7 @@ struct Board {
         return self.disks.flatMap { $0 }.filter { $0 == side }.count
     }
     
-    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
+    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, at position: Position) -> [(Int, Int)] {
         let directions = [
             (x: -1, y: -1),
             (x:  0, y: -1),
@@ -67,15 +67,15 @@ struct Board {
             (x: -1, y:  1),
         ]
         
-        guard self.diskAt(x: x, y: y) == nil else {
+        guard self.diskAt(x: position.x, y: position.y) == nil else {
             return []
         }
         
         var diskCoordinates: [(Int, Int)] = []
         
         for direction in directions {
-            var x = x
-            var y = y
+            var x = position.x
+            var y = position.y
             
             var diskCoordinatesInLine: [(Int, Int)] = []
             flipping: while true {
@@ -116,7 +116,7 @@ struct Board {
     /// - Parameter y: セルの行です。
     /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
     func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
-        !self.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y).isEmpty
+        !self.flippedDiskCoordinatesByPlacingDisk(disk, at: .init(x: x, y: y)).isEmpty
     }
     
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
