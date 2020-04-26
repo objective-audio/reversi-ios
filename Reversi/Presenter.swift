@@ -31,7 +31,10 @@ class Presenter {
     
     var turn: Disk? {
         get { self.interactor.turn }
-        set { self.interactor.turn = newValue }
+        set {
+            self.interactor.turn = newValue
+            self.displayer?.updateMessageViews()
+        }
     }
     
     var darkPlayer: Player {
@@ -233,16 +236,13 @@ class Presenter {
         if self.validMoves(for: turn).isEmpty {
             if self.validMoves(for: turn.flipped).isEmpty {
                 self.turn = nil
-                self.displayer?.updateMessageViews()
             } else {
                 self.turn = turn
-                self.displayer?.updateMessageViews()
                 
                 self.displayer?.presentPassView()
             }
         } else {
             self.turn = turn
-            self.displayer?.updateMessageViews()
             self.waitForPlayer()
         }
     }
