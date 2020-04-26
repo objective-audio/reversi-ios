@@ -129,6 +129,19 @@ class Interactor {
             self.waitForPlayer()
         }
     }
+    
+    func reset() {
+        self.animationCanceller?.cancel()
+        self.animationCanceller = nil
+        
+        for side in Side.allCases {
+            self.playerCancellers[side]?.cancel()
+            self.playerCancellers.removeValue(forKey: side)
+        }
+        
+        self.newGame()
+        self.waitForPlayer()
+    }
 }
 
 private extension Interactor {

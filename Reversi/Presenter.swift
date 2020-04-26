@@ -89,17 +89,7 @@ class Presenter {
     }
     
     func reset() {
-        #warning("interactorに移動したい？")
-        self.interactor.animationCanceller?.cancel()
-        self.interactor.animationCanceller = nil
-        
-        for side in Side.allCases {
-            self.interactor.playerCancellers[side]?.cancel()
-            self.interactor.playerCancellers.removeValue(forKey: side)
-        }
-        
-        self.interactor.newGame()
-        self.interactor.waitForPlayer()
+        self.interactor.reset()
     }
     
     func pass() {
