@@ -82,23 +82,60 @@ class Presenter {
         self.waitForPlayer()
     }
     
+    func changePlayer(_ player: Player, side: Disk) {
+        switch side {
+        case .dark:
+            self.interactor.darkPlayer = player
+        case .light:
+            self.interactor.lightPlayer = player
+        }
+        
+        self.interactor.save()
+        
+        if let canceller = self.playerCancellers[side] {
+            canceller.cancel()
+        }
+        
+        if !self.isAnimating, side == self.turn, case .computer = player {
+            self.playTurnOfComputer()
+        }
+    }
+    
+    func selectBoard(x: Int, y: Int) {
+        guard let turn = self.turn else { return }
+        if self.isAnimating { return }
+        guard case .manual = self.player(for: turn) else { return }
+        // try? because doing nothing when an error occurs
+        try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+            self?.nextTurn()
+        }
+    }
+    
+    func comfirmationOK() {
+        #warning("interactorに移動したい？")
+        self.animationCanceller?.cancel()
+        self.animationCanceller = nil
+        
+        for side in Disk.allCases {
+            self.playerCancellers[side]?.cancel()
+            self.playerCancellers.removeValue(forKey: side)
+        }
+        
+        self.newGame()
+        self.waitForPlayer()
+    }
+    
+    func pass() {
+        self.nextTurn()
+    }
+}
+
+private extension Presenter {
     func newGame() {
         self.interactor.newGame()
         
         #warning("通知で呼び出す")
         self.displayer?.updateAll()
-    }
-    
-    #warning("interactorに移動したい")
-    /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        guard let turn = self.turn else { return }
-        switch self.player(for: turn) {
-        case .manual:
-            break
-        case .computer:
-            self.playTurnOfComputer()
-        }
     }
     
     /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
@@ -202,55 +239,6 @@ class Presenter {
         self.playerCancellers[turn] = canceller
     }
     
-    func changePlayer(_ player: Player, side: Disk) {
-        switch side {
-        case .dark:
-            self.interactor.darkPlayer = player
-        case .light:
-            self.interactor.lightPlayer = player
-        }
-        
-        self.interactor.save()
-        
-        if let canceller = self.playerCancellers[side] {
-            canceller.cancel()
-        }
-        
-        if !self.isAnimating, side == self.turn, case .computer = player {
-            self.playTurnOfComputer()
-        }
-    }
-    
-    func selectBoard(x: Int, y: Int) {
-        guard let turn = self.turn else { return }
-        if self.isAnimating { return }
-        guard case .manual = self.player(for: turn) else { return }
-        // try? because doing nothing when an error occurs
-        try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
-            self?.nextTurn()
-        }
-    }
-    
-    func comfirmationOK() {
-        #warning("interactorに移動したい？")
-        self.animationCanceller?.cancel()
-        self.animationCanceller = nil
-        
-        for side in Disk.allCases {
-            self.playerCancellers[side]?.cancel()
-            self.playerCancellers.removeValue(forKey: side)
-        }
-        
-        self.newGame()
-        self.waitForPlayer()
-    }
-    
-    func pass() {
-        self.nextTurn()
-    }
-}
-
-private extension Presenter {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
@@ -270,6 +258,18 @@ private extension Presenter {
         } else {
             self.turn = turn
             self.waitForPlayer()
+        }
+    }
+    
+    #warning("interactorに移動したい")
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer() {
+        guard let turn = self.turn else { return }
+        switch self.player(for: turn) {
+        case .manual:
+            break
+        case .computer:
+            self.playTurnOfComputer()
         }
     }
 }
