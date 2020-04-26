@@ -291,19 +291,7 @@ private extension ViewController {
         )
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            #warning("以下、presenter側に移動する")
-            self.presenter.animationCanceller?.cancel()
-            self.presenter.animationCanceller = nil
-            
-            for side in Disk.allCases {
-                self.presenter.playerCancellers[side]?.cancel()
-                self.presenter.playerCancellers.removeValue(forKey: side)
-            }
-            
-            self.presenter.newGame()
-            self.presenter.waitForPlayer()
+            self?.presenter.comfirmationOK()
         })
         present(alertController, animated: true)
     }

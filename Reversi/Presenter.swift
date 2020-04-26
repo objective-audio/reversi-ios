@@ -112,4 +112,18 @@ class Presenter {
             self.displayer?.playTurnOfComputer()
         }
     }
+    
+    func comfirmationOK() {
+        #warning("interactorに移動したい？")
+        self.animationCanceller?.cancel()
+        self.animationCanceller = nil
+        
+        for side in Disk.allCases {
+            self.playerCancellers[side]?.cancel()
+            self.playerCancellers.removeValue(forKey: side)
+        }
+        
+        self.newGame()
+        self.waitForPlayer()
+    }
 }
