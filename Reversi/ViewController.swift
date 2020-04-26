@@ -124,13 +124,7 @@ extension ViewController {
 extension ViewController {
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
-        guard let turn = self.presenter.turn else { return }
-        switch self.presenter.player(for: turn) {
-        case .manual:
-            break
-        case .computer:
-            self.playTurnOfComputer()
-        }
+        self.presenter.waitForPlayer()
     }
     
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。

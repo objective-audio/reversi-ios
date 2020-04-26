@@ -2,6 +2,9 @@ import Foundation
 
 protocol Displayable: class {
     func updateAll()
+    
+    #warning("残すつもりはない")
+    func playTurnOfComputer()
 }
 
 class Presenter {
@@ -96,5 +99,17 @@ class Presenter {
     
     func save() {
         self.interactor.save()
+    }
+    
+    #warning("interactorに移動したい")
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer() {
+        guard let turn = self.turn else { return }
+        switch self.player(for: turn) {
+        case .manual:
+            break
+        case .computer:
+            self.displayer?.playTurnOfComputer()
+        }
     }
 }
