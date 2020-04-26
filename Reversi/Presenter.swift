@@ -98,7 +98,7 @@ class Presenter {
             self.interactor.playerCancellers.removeValue(forKey: side)
         }
         
-        self.newGame()
+        self.interactor.newGame()
         self.interactor.waitForPlayer()
     }
     
@@ -108,13 +108,6 @@ class Presenter {
 }
 
 private extension Presenter {
-    func newGame() {
-        self.interactor.newGame()
-        
-        #warning("通知で呼び出す")
-        self.displayer?.updateAll()
-    }
-    
     /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
     /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
     /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
@@ -147,6 +140,10 @@ private extension Presenter {
 }
 
 extension Presenter: InteractorDelegate {
+    func didBeginNewGame() {
+        self.displayer?.updateAll()
+    }
+    
     func didChangeTurn() {
         self.displayer?.updateMessageViews()
     }

@@ -1,6 +1,7 @@
 import Foundation
 
 protocol InteractorDelegate: class {
+    func didBeginNewGame()
     func didChangeTurn()
     func willBeginComputerWaiting(side: Side)
     func didEndComputerWaiting(side: Side)
@@ -50,6 +51,8 @@ class Interactor {
         self.lightPlayer = .manual
         
         self.save()
+        
+        self.delegate?.didBeginNewGame()
     }
     
     func save() {
