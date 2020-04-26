@@ -82,21 +82,18 @@ extension ViewController: Displayable {
     
     /// 現在の状況に応じてメッセージを表示します。
     func updateMessageViews() {
-        #warning("presenter側で整理して取得する")
-        switch self.presenter.turn {
-        case .some(let side):
+        switch self.presenter.status {
+        case .turn(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
             self.messageDiskView.disk = side
             self.messageLabel.text = "'s turn"
-        case .none:
-            if let winner = self.presenter.sideWithMoreDisks() {
-                self.messageDiskSizeConstraint.constant = self.messageDiskSize
-                self.messageDiskView.disk = winner
-                self.messageLabel.text = " won"
-            } else {
-                self.messageDiskSizeConstraint.constant = 0
-                self.messageLabel.text = "Tied"
-            }
+        case .won(let side):
+            self.messageDiskSizeConstraint.constant = self.messageDiskSize
+            self.messageDiskView.disk = side
+            self.messageLabel.text = " won"
+        case .tied:
+            self.messageDiskSizeConstraint.constant = 0
+            self.messageLabel.text = "Tied"
         }
     }
     

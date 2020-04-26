@@ -16,6 +16,12 @@ protocol Displayable: class {
 }
 
 class Presenter {
+    enum Status {
+        case turn(side: Disk)
+        case won(side: Disk)
+        case tied
+    }
+    
     private let interactor: Interactor
     
     weak var displayer: Displayable?
@@ -56,6 +62,19 @@ class Presenter {
     }
     
     var disks: [[Disk?]] { self.interactor.board.disks }
+    
+    var status: Status {
+        switch self.turn {
+        case .some(let side):
+            return .turn(side: side)
+        case .none:
+            if let winner = self.sideWithMoreDisks() {
+                return .won(side: winner)
+            } else {
+                return .tied
+            }
+        }
+    }
     
     func setDisk(_ disk: Disk?, atX x: Int, y: Int) {
         self.interactor.board.setDisk(disk, atX: x, y: y)
