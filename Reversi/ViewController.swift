@@ -120,7 +120,7 @@ extension ViewController: Displayable {
             preferredStyle: .alert
         )
         alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
-            self?.presenter.nextTurn()
+            self?.presenter.pass()
         })
         present(alertController, animated: true)
     }

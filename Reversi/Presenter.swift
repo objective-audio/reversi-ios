@@ -266,4 +266,8 @@ class Presenter {
         self.newGame()
         self.waitForPlayer()
     }
+    
+    func pass() {
+        self.nextTurn()
+    }
 }
