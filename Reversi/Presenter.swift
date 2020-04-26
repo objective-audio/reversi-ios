@@ -98,7 +98,6 @@ private extension Presenter {
         }
         
         let animationCanceller = self.interactor.animationCanceller!
-        self.interactor.board.setDisk(disk, at: position)
         
         self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
@@ -107,7 +106,6 @@ private extension Presenter {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
                 for position in coordinates {
-                    self.interactor.board.setDisk(disk, at: position)
                     self.displayer?.setBoardDisk(disk, at: position, animated: false, completion: nil)
                 }
                 completion(false)
@@ -154,11 +152,15 @@ extension Presenter {
             throw DiskPlacementError(disk: disk, position: position)
         }
         
+        let positions = [position] + diskCoordinates
+        
+        positions.forEach { self.interactor.board.setDisk(disk, at: $0) }
+        
         let cleanUp: () -> Void = { [weak self] in
             self?.interactor.animationCanceller = nil
         }
         self.interactor.animationCanceller = Canceller(cleanUp)
-        self.animateSettingDisks(at: [position] + diskCoordinates, to: disk) { [weak self] isFinished in
+        self.animateSettingDisks(at: positions, to: disk) { [weak self] isFinished in
             guard let self = self else { return }
             guard let canceller = self.interactor.animationCanceller else { return }
             if canceller.isCancelled { return }
