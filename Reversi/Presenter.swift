@@ -101,12 +101,12 @@ class Presenter {
         }
     }
     
-    func selectBoard(x: Int, y: Int) {
+    func selectBoard(position: Board.Position) {
         guard let turn = self.turn else { return }
         if self.isAnimating { return }
         guard case .manual = self.player(for: turn) else { return }
         // try? because doing nothing when an error occurs
-        try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+        try? self.placeDisk(turn, atX: position.x, y: position.y, animated: true) { [weak self] _ in
             self?.nextTurn()
         }
     }
