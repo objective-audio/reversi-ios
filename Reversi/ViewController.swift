@@ -41,55 +41,6 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: Reversi logics
-
-extension ViewController {
-    /// `x`, `y` で指定されたセルに `disk` を置きます。
-    /// - Parameter x: セルの列です。
-    /// - Parameter y: セルの行です。
-    /// - Parameter isAnimated: ディスクを置いたりひっくり返したりするアニメーションを表示するかどうかを指定します。
-    /// - Parameter completion: アニメーション完了時に実行されるクロージャです。
-    ///     このクロージャは値を返さず、アニメーションが完了したかを示す真偽値を受け取ります。
-    ///     もし `animated` が `false` の場合、このクロージャは次の run loop サイクルの初めに実行されます。
-    /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
-    func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
-        let diskCoordinates = self.presenter.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
-        if diskCoordinates.isEmpty {
-            throw DiskPlacementError(disk: disk, x: x, y: y)
-        }
-        
-        if isAnimated {
-            let cleanUp: () -> Void = { [weak self] in
-                self?.presenter.animationCanceller = nil
-            }
-            self.presenter.animationCanceller = Canceller(cleanUp)
-            self.presenter.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
-                guard let self = self else { return }
-                guard let canceller = self.presenter.animationCanceller else { return }
-                if canceller.isCancelled { return }
-                cleanUp()
-
-                completion?(isFinished)
-                self.presenter.save()
-                self.updateCountLabels()
-            }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.presenter.setDisk(disk, atX: x, y: y)
-                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-                for (x, y) in diskCoordinates {
-                    self.presenter.setDisk(disk, atX: x, y: y)
-                    self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-                }
-                completion?(true)
-                self.presenter.save()
-                self.updateCountLabels()
-            }
-        }
-    }
-}
-
 // MARK: Game management
 
 extension ViewController {
@@ -144,7 +95,7 @@ extension ViewController {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+            try! self.presenter.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
                 self?.nextTurn()
             }
         }
@@ -196,7 +147,7 @@ extension ViewController: BoardViewDelegate {
         if self.presenter.isAnimating { return }
         guard case .manual = self.presenter.player(for: turn) else { return }
         // try? because doing nothing when an error occurs
-        try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+        try? self.presenter.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
             self?.nextTurn()
         }
     }
@@ -210,8 +161,19 @@ extension ViewController: Displayable {
         self.updateCountLabels()
     }
     
+    /// 各プレイヤーの獲得したディスクの枚数を表示します。
+    func updateCountLabels() {
+        for side in Disk.allCases {
+            self.countLabels[side.index].text = "\(self.presenter.diskCount(of: side))"
+        }
+    }
+    
     func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?) {
         self.boardView.setDisk(disk, atX: x, y: y, animated: animated, completion: completion)
+    }
+    
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int) {
+        self.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
     }
 }
 
@@ -227,13 +189,6 @@ private extension ViewController {
     func updatePlayerControls() {
         self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
         self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
-    }
-    
-    /// 各プレイヤーの獲得したディスクの枚数を表示します。
-    func updateCountLabels() {
-        for side in Disk.allCases {
-            self.countLabels[side.index].text = "\(self.presenter.diskCount(of: side))"
-        }
     }
     
     /// 現在の状況に応じてメッセージを表示します。

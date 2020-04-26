@@ -2,9 +2,11 @@ import Foundation
 
 protocol Displayable: class {
     func updateAll()
+    func updateCountLabels()
     
     #warning("completionを無くしたい?")
     func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?)
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int)
     
     #warning("残すつもりはない")
     func playTurnOfComputer()
@@ -142,6 +144,51 @@ class Presenter {
                     self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
                 }
                 completion(false)
+            }
+        }
+    }
+    
+    /// `x`, `y` で指定されたセルに `disk` を置きます。
+    /// - Parameter x: セルの列です。
+    /// - Parameter y: セルの行です。
+    /// - Parameter isAnimated: ディスクを置いたりひっくり返したりするアニメーションを表示するかどうかを指定します。
+    /// - Parameter completion: アニメーション完了時に実行されるクロージャです。
+    ///     このクロージャは値を返さず、アニメーションが完了したかを示す真偽値を受け取ります。
+    ///     もし `animated` が `false` の場合、このクロージャは次の run loop サイクルの初めに実行されます。
+    /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
+    func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
+        let diskCoordinates = self.flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
+        if diskCoordinates.isEmpty {
+            throw DiskPlacementError(disk: disk, x: x, y: y)
+        }
+        
+        if isAnimated {
+            let cleanUp: () -> Void = { [weak self] in
+                self?.animationCanceller = nil
+            }
+            self.animationCanceller = Canceller(cleanUp)
+            self.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
+                guard let self = self else { return }
+                guard let canceller = self.animationCanceller else { return }
+                if canceller.isCancelled { return }
+                cleanUp()
+
+                completion?(isFinished)
+                self.save()
+                self.displayer?.updateCountLabels()
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.setDisk(disk, atX: x, y: y)
+                self.displayer?.setBoardDisk(disk, atX: x, y: y)
+                for (x, y) in diskCoordinates {
+                    self.setDisk(disk, atX: x, y: y)
+                    self.displayer?.setBoardDisk(disk, atX: x, y: y)
+                }
+                completion?(true)
+                self.save()
+                self.displayer?.updateCountLabels()
             }
         }
     }
