@@ -1,7 +1,7 @@
 import XCTest
 @testable import Reversi
 
-class DiskTests: XCTestCase {
+class SideTests: XCTestCase {
     func testAllCases() {
         XCTAssertEqual(Disk.allCases, [.dark, .light])
     }
