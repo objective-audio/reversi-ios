@@ -69,21 +69,19 @@ struct Board {
         var diskCoordinates: [Position] = []
         
         for direction in directions {
-            #warning("Positionを一次変数に使えるようにする?")
-            var x = position.x
-            var y = position.y
+            var position = position
             
             var diskCoordinatesInLine: [Position] = []
             flipping: while true {
-                x += direction.x
-                y += direction.y
+                position.x += direction.x
+                position.y += direction.y
                 
-                switch (disk, self.diskAt(.init(x: x, y: y))) { // Uses tuples to make patterns exhaustive
+                switch (disk, self.diskAt(position)) { // Uses tuples to make patterns exhaustive
                 case (.dark, .some(.dark)), (.light, .some(.light)):
                     diskCoordinates.append(contentsOf: diskCoordinatesInLine)
                     break flipping
                 case (.dark, .some(.light)), (.light, .some(.dark)):
-                    diskCoordinatesInLine.append(.init(x: x, y: y))
+                    diskCoordinatesInLine.append(position)
                 case (_, .none):
                     break flipping
                 }
