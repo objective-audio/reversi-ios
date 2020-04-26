@@ -2,6 +2,12 @@ import Foundation
 
 protocol InteractorDelegate: class {
     func didChangeTurn()
+    func willBeginComputerWaiting(side: Side)
+    func didEndComputerWaiting(side: Side)
+    
+    #warning("残すつもりはない")
+    func placeDisk(_ disk: Disk, at position: Board.Position, animated isAnimated: Bool, completion: ((Bool) -> Void)?) throws
+    func nextTurn()
 }
 
 class Interactor {
@@ -51,6 +57,32 @@ class Interactor {
                                     darkPlayer: self.darkPlayer,
                                     lightPlayer: self.lightPlayer,
                                     board: self.board.disks))
+    }
+    
+    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    func playTurnOfComputer() {
+        guard let side = self.turn else { preconditionFailure() }
+        let position = self.board.validMoves(for: side).randomElement()!
+
+        self.delegate?.willBeginComputerWaiting(side: side)
+        
+        let cleanUp: () -> Void = { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.didEndComputerWaiting(side: side)
+            self.playerCancellers[side] = nil
+        }
+        let canceller = Canceller(cleanUp)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            if canceller.isCancelled { return }
+            cleanUp()
+            
+            try! self.delegate?.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
+                self?.delegate?.nextTurn()
+            }
+        }
+        
+        self.playerCancellers[side] = canceller
     }
 }
 

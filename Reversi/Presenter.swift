@@ -74,7 +74,7 @@ class Presenter {
         }
         
         if !self.interactor.isAnimating, side == self.interactor.turn, case .computer = player {
-            self.playTurnOfComputer()
+            self.interactor.playTurnOfComputer()
         }
     }
     
@@ -154,6 +154,35 @@ private extension Presenter {
         }
     }
     
+    #warning("interactorに移動したい")
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer() {
+        guard let side = self.interactor.turn else { return }
+        switch self.player(for: side) {
+        case .manual:
+            break
+        case .computer:
+            self.interactor.playTurnOfComputer()
+        }
+    }
+}
+
+extension Presenter: InteractorDelegate {
+    func didChangeTurn() {
+        self.displayer?.updateMessageViews()
+    }
+    
+    func willBeginComputerWaiting(side: Side) {
+        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
+    }
+    
+    func didEndComputerWaiting(side: Side) {
+        self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
+    }
+}
+
+#warning("Interactorに移動する")
+extension Presenter {
     /// `x`, `y` で指定されたセルに `disk` を置きます。
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
@@ -199,32 +228,6 @@ private extension Presenter {
         }
     }
     
-    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    func playTurnOfComputer() {
-        guard let side = self.interactor.turn else { preconditionFailure() }
-        let position = self.interactor.board.validMoves(for: side).randomElement()!
-
-        self.willBeginComputerWaiting(side: side)
-        
-        let cleanUp: () -> Void = { [weak self] in
-            guard let self = self else { return }
-            self.didEndComputerWaiting(side: side)
-            self.interactor.playerCancellers[side] = nil
-        }
-        let canceller = Canceller(cleanUp)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-            if canceller.isCancelled { return }
-            cleanUp()
-            
-            try! self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
-                self?.nextTurn()
-            }
-        }
-        
-        self.interactor.playerCancellers[side] = canceller
-    }
-    
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
@@ -245,31 +248,5 @@ private extension Presenter {
             self.interactor.turn = nextSide
             self.waitForPlayer()
         }
-    }
-    
-    #warning("interactorに移動したい")
-    /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        guard let side = self.interactor.turn else { return }
-        switch self.player(for: side) {
-        case .manual:
-            break
-        case .computer:
-            self.playTurnOfComputer()
-        }
-    }
-}
-
-extension Presenter: InteractorDelegate {
-    func didChangeTurn() {
-        self.displayer?.updateMessageViews()
-    }
-    
-    func willBeginComputerWaiting(side: Side) {
-        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
-    }
-    
-    func didEndComputerWaiting(side: Side) {
-        self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
     }
 }
