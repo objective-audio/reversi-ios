@@ -4,12 +4,15 @@ protocol Displayable: class {
     func updateAll()
     func updateCountLabels()
     
+    func startPlayerActivityIndicatorAnimating(side: Disk)
+    func stopPlayerActivityIndicatorAnimating(side: Disk)
+    
     #warning("completionを無くしたい?")
     func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?)
     func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int)
     
     #warning("残すつもりはない")
-    func playTurnOfComputer()
+    func nextTurn()
 }
 
 class Presenter {
@@ -114,7 +117,7 @@ class Presenter {
         case .manual:
             break
         case .computer:
-            self.displayer?.playTurnOfComputer()
+            self.playTurnOfComputer()
         }
     }
     
@@ -191,6 +194,32 @@ class Presenter {
                 self.displayer?.updateCountLabels()
             }
         }
+    }
+    
+    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    func playTurnOfComputer() {
+        guard let turn = self.turn else { preconditionFailure() }
+        let (x, y) = self.validMoves(for: turn).randomElement()!
+
+        self.displayer?.startPlayerActivityIndicatorAnimating(side: turn)
+        
+        let cleanUp: () -> Void = { [weak self] in
+            guard let self = self else { return }
+            self.displayer?.stopPlayerActivityIndicatorAnimating(side: turn)
+            self.playerCancellers[turn] = nil
+        }
+        let canceller = Canceller(cleanUp)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            if canceller.isCancelled { return }
+            cleanUp()
+            
+            try! self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+                self?.displayer?.nextTurn()
+            }
+        }
+        
+        self.playerCancellers[turn] = canceller
     }
     
     func comfirmationOK() {

@@ -76,32 +76,6 @@ extension ViewController {
             self.presenter.waitForPlayer()
         }
     }
-    
-    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    func playTurnOfComputer() {
-        guard let turn = self.presenter.turn else { preconditionFailure() }
-        let (x, y) = self.presenter.validMoves(for: turn).randomElement()!
-
-        self.playerActivityIndicators[turn.index].startAnimating()
-        
-        let cleanUp: () -> Void = { [weak self] in
-            guard let self = self else { return }
-            self.playerActivityIndicators[turn.index].stopAnimating()
-            self.presenter.playerCancellers[turn] = nil
-        }
-        let canceller = Canceller(cleanUp)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-            if canceller.isCancelled { return }
-            cleanUp()
-            
-            try! self.presenter.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
-                self?.nextTurn()
-            }
-        }
-        
-        self.presenter.playerCancellers[turn] = canceller
-    }
 }
 
 // MARK: Inputs
@@ -132,7 +106,7 @@ extension ViewController {
         }
         
         if !self.presenter.isAnimating, side == self.presenter.turn, case .computer = player {
-            self.playTurnOfComputer()
+            self.presenter.playTurnOfComputer()
         }
     }
 }
@@ -174,6 +148,14 @@ extension ViewController: Displayable {
     
     func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int) {
         self.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
+    }
+    
+    func startPlayerActivityIndicatorAnimating(side: Disk) {
+        self.playerActivityIndicators[side.index].startAnimating()
+    }
+    
+    func stopPlayerActivityIndicatorAnimating(side: Disk) {
+        self.playerActivityIndicators[side.index].stopAnimating()
     }
 }
 
