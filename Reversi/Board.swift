@@ -121,13 +121,13 @@ struct Board {
     
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
-    func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
-        var coordinates: [(Int, Int)] = []
+    func validMoves(for side: Disk) -> [Position] {
+        var coordinates: [Position] = []
         
         for y in Board.yRange {
             for x in Board.xRange {
                 if self.canPlaceDisk(side, atX: x, y: y) {
-                    coordinates.append((x, y))
+                    coordinates.append(.init(x: x, y: y))
                 }
             }
         }

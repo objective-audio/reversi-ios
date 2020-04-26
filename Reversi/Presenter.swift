@@ -216,7 +216,7 @@ private extension Presenter {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
-        let (x, y) = self.interactor.board.validMoves(for: turn).randomElement()!
+        let position = self.interactor.board.validMoves(for: turn).randomElement()!
 
         self.displayer?.startPlayerActivityIndicatorAnimating(side: turn)
         
@@ -231,7 +231,7 @@ private extension Presenter {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+            try! self.placeDisk(turn, atX: position.x, y: position.y, animated: true) { [weak self] _ in
                 self?.nextTurn()
             }
         }
