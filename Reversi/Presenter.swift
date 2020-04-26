@@ -11,8 +11,8 @@ protocol Displayable: class {
     func presentPassView()
     
     #warning("completionを無くしたい?")
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?)
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int)
+    func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
+    func setBoardDisk(_ disk: Disk?, at position: Board.Position)
 }
 
 class Presenter {
@@ -153,7 +153,7 @@ private extension Presenter {
         let animationCanceller = self.animationCanceller!
         self.interactor.board.setDisk(disk, at: position)
         
-        self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: true) { [weak self] isFinished in
+        self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
             if animationCanceller.isCancelled { return }
             if isFinished {
@@ -161,7 +161,7 @@ private extension Presenter {
             } else {
                 for position in coordinates {
                     self.interactor.board.setDisk(disk, at: position)
-                    self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: false, completion: nil)
+                    self.displayer?.setBoardDisk(disk, at: position, animated: false, completion: nil)
                 }
                 completion(false)
             }
@@ -201,10 +201,10 @@ private extension Presenter {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.interactor.board.setDisk(disk, at: .init(x: x, y: y))
-                self.displayer?.setBoardDisk(disk, atX: x, y: y)
+                self.displayer?.setBoardDisk(disk, at: .init(x: x, y: y))
                 for position in diskCoordinates {
                     self.interactor.board.setDisk(disk, at: position)
-                    self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y)
+                    self.displayer?.setBoardDisk(disk, at: position)
                 }
                 completion?(true)
                 self.interactor.save()

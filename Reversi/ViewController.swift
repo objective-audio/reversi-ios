@@ -97,12 +97,12 @@ extension ViewController: Displayable {
         }
     }
     
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?) {
-        self.boardView.setDisk(disk, atX: x, y: y, animated: animated, completion: completion)
+    func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?) {
+        self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animated, completion: completion)
     }
     
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int) {
-        self.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
+    func setBoardDisk(_ disk: Disk?, at position: Board.Position) {
+        self.setBoardDisk(disk, at: position, animated: false, completion: nil)
     }
     
     func startPlayerActivityIndicatorAnimating(side: Disk) {
