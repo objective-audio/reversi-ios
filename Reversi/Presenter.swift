@@ -22,7 +22,7 @@ class Presenter {
     
     #warning("privateにする")
     private var animationCanceller: Canceller?
-    var isAnimating: Bool { animationCanceller != nil }
+    private var isAnimating: Bool { animationCanceller != nil }
     private var playerCancellers: [Disk: Canceller] = [:]
     
     init(interactor: Interactor = .init()) {
