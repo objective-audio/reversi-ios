@@ -88,7 +88,7 @@ class Presenter {
         }
     }
     
-    func comfirmationOK() {
+    func reset() {
         #warning("interactorに移動したい？")
         self.interactor.animationCanceller?.cancel()
         self.interactor.animationCanceller = nil

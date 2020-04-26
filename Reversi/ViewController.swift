@@ -150,7 +150,7 @@ private extension ViewController {
         )
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            self?.presenter.comfirmationOK()
+            self?.presenter.reset()
         })
         present(alertController, animated: true)
     }
