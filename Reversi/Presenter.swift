@@ -202,28 +202,6 @@ class Presenter {
         self.playerCancellers[turn] = canceller
     }
     
-    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
-    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
-    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    func nextTurn() {
-        guard var turn = self.turn else { return }
-
-        turn.flip()
-        
-        if self.interactor.board.validMoves(for: turn).isEmpty {
-            if self.interactor.board.validMoves(for: turn.flipped).isEmpty {
-                self.turn = nil
-            } else {
-                self.turn = turn
-                
-                self.displayer?.presentPassView()
-            }
-        } else {
-            self.turn = turn
-            self.waitForPlayer()
-        }
-    }
-    
     func changePlayer(_ player: Player, side: Disk) {
         switch side {
         case .dark:
@@ -269,5 +247,29 @@ class Presenter {
     
     func pass() {
         self.nextTurn()
+    }
+}
+
+private extension Presenter {
+    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
+    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
+    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
+    func nextTurn() {
+        guard var turn = self.turn else { return }
+
+        turn.flip()
+        
+        if self.interactor.board.validMoves(for: turn).isEmpty {
+            if self.interactor.board.validMoves(for: turn.flipped).isEmpty {
+                self.turn = nil
+            } else {
+                self.turn = turn
+                
+                self.displayer?.presentPassView()
+            }
+        } else {
+            self.turn = turn
+            self.waitForPlayer()
+        }
     }
 }
