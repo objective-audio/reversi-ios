@@ -204,11 +204,11 @@ private extension Presenter {
         guard let side = self.interactor.turn else { preconditionFailure() }
         let position = self.interactor.board.validMoves(for: side).randomElement()!
 
-        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
+        self.willBeginComputerWaiting(side: side)
         
         let cleanUp: () -> Void = { [weak self] in
             guard let self = self else { return }
-            self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
+            self.didEndComputerWaiting(side: side)
             self.interactor.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
@@ -263,5 +263,13 @@ private extension Presenter {
 extension Presenter: InteractorDelegate {
     func didChangeTurn() {
         self.displayer?.updateMessageViews()
+    }
+    
+    func willBeginComputerWaiting(side: Side) {
+        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
+    }
+    
+    func didEndComputerWaiting(side: Side) {
+        self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
     }
 }
