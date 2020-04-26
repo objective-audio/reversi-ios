@@ -1,8 +1,16 @@
 import Foundation
 
+protocol InteractorDelegate: class {
+    func didChangeTurn()
+}
+
 class Interactor {
+    weak var delegate: InteractorDelegate?
+    
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    var turn: Side? = .dark
+    var turn: Side? = .dark {
+        didSet { self.delegate?.didChangeTurn() }
+    }
     
     #warning("init時に読み込んだ値をセットする")
     var darkPlayer: Player = .manual {

@@ -32,6 +32,7 @@ class Presenter {
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
+        interactor.delegate = self
     }
     
     var darkPlayer: Player { self.interactor.darkPlayer }
@@ -115,8 +116,6 @@ private extension Presenter {
         get { self.interactor.turn }
         set {
             self.interactor.turn = newValue
-            #warning("interactor経由にする")
-            self.displayer?.updateMessageViews()
         }
     }
     
@@ -269,5 +268,11 @@ private extension Presenter {
         case .computer:
             self.playTurnOfComputer()
         }
+    }
+}
+
+extension Presenter: InteractorDelegate {
+    func didChangeTurn() {
+        self.displayer?.updateMessageViews()
     }
 }
