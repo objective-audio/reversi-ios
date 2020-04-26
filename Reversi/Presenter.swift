@@ -26,10 +26,6 @@ class Presenter {
     
     weak var displayer: Displayable?
     
-    private var animationCanceller: Canceller?
-    private var isAnimating: Bool { animationCanceller != nil }
-    private var playerCancellers: [Side: Canceller] = [:]
-    
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
         interactor.delegate = self
@@ -73,18 +69,18 @@ class Presenter {
             self.interactor.lightPlayer = player
         }
         
-        if let canceller = self.playerCancellers[side] {
+        if let canceller = self.interactor.playerCancellers[side] {
             canceller.cancel()
         }
         
-        if !self.isAnimating, side == self.interactor.turn, case .computer = player {
+        if !self.interactor.isAnimating, side == self.interactor.turn, case .computer = player {
             self.playTurnOfComputer()
         }
     }
     
     func selectBoard(position: Board.Position) {
         guard let side = self.interactor.turn else { return }
-        if self.isAnimating { return }
+        if self.interactor.isAnimating { return }
         guard case .manual = self.player(for: side) else { return }
         // try? because doing nothing when an error occurs
         try? self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
@@ -94,12 +90,12 @@ class Presenter {
     
     func comfirmationOK() {
         #warning("interactorに移動したい？")
-        self.animationCanceller?.cancel()
-        self.animationCanceller = nil
+        self.interactor.animationCanceller?.cancel()
+        self.interactor.animationCanceller = nil
         
         for side in Side.allCases {
-            self.playerCancellers[side]?.cancel()
-            self.playerCancellers.removeValue(forKey: side)
+            self.interactor.playerCancellers[side]?.cancel()
+            self.interactor.playerCancellers.removeValue(forKey: side)
         }
         
         self.newGame()
@@ -140,7 +136,7 @@ private extension Presenter {
             return
         }
         
-        let animationCanceller = self.animationCanceller!
+        let animationCanceller = self.interactor.animationCanceller!
         self.interactor.board.setDisk(disk, at: position)
         
         self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
@@ -174,12 +170,12 @@ private extension Presenter {
         
         if isAnimated {
             let cleanUp: () -> Void = { [weak self] in
-                self?.animationCanceller = nil
+                self?.interactor.animationCanceller = nil
             }
-            self.animationCanceller = Canceller(cleanUp)
+            self.interactor.animationCanceller = Canceller(cleanUp)
             self.animateSettingDisks(at: [position] + diskCoordinates, to: disk) { [weak self] isFinished in
                 guard let self = self else { return }
-                guard let canceller = self.animationCanceller else { return }
+                guard let canceller = self.interactor.animationCanceller else { return }
                 if canceller.isCancelled { return }
                 cleanUp()
 
@@ -213,7 +209,7 @@ private extension Presenter {
         let cleanUp: () -> Void = { [weak self] in
             guard let self = self else { return }
             self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
-            self.playerCancellers[side] = nil
+            self.interactor.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
@@ -226,7 +222,7 @@ private extension Presenter {
             }
         }
         
-        self.playerCancellers[side] = canceller
+        self.interactor.playerCancellers[side] = canceller
     }
     
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。

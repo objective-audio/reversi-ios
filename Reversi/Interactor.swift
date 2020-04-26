@@ -23,6 +23,11 @@ class Interactor {
     #warning("init時にdiskをセットする")
     var board: Board = .init()
     
+    #warning("privateにする")
+    var animationCanceller: Canceller?
+    var isAnimating: Bool { animationCanceller != nil }
+    var playerCancellers: [Side: Canceller] = [:]
+    
     init() {
         do {
             try self.load()
