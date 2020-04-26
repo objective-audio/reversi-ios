@@ -38,11 +38,11 @@ class Interactor {
         self.board.setDisks(parameters.board)
     }
     
-    func save() throws {
-        try DataStore().save(.init(turn: self.turn,
-                                   darkPlayer: self.darkPlayer,
-                                   lightPlayer: self.lightPlayer,
-                                   board: self.board.disks))
+    func save() {
+        try? DataStore().save(.init(turn: self.turn,
+                                    darkPlayer: self.darkPlayer,
+                                    lightPlayer: self.lightPlayer,
+                                    board: self.board.disks))
     }
 }
 

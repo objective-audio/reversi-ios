@@ -94,7 +94,7 @@ class Presenter {
         self.displayer?.updateAll()
     }
     
-    func save() throws {
-        try self.interactor.save()
+    func save() {
+        self.interactor.save()
     }
 }
