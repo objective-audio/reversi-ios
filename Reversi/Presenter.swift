@@ -28,7 +28,7 @@ class Presenter {
         self.interactor = interactor
     }
     
-    var turn: Disk? {
+    private(set) var turn: Disk? {
         get { self.interactor.turn }
         set {
             self.interactor.turn = newValue
@@ -36,12 +36,12 @@ class Presenter {
         }
     }
     
-    var darkPlayer: Player {
+    private(set) var darkPlayer: Player {
         get { self.interactor.darkPlayer }
         set { self.interactor.darkPlayer = newValue }
     }
     
-    var lightPlayer: Player {
+    private(set) var lightPlayer: Player {
         get { self.interactor.lightPlayer }
         set { self.interactor.lightPlayer = newValue }
     }
