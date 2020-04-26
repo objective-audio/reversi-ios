@@ -41,7 +41,7 @@ class Presenter {
     var disks: [[Disk?]] { self.interactor.board.disks }
     
     var status: Status {
-        switch self.turn {
+        switch self.interactor.turn {
         case .some(let side):
             return .turn(side: side)
         case .none:
@@ -77,13 +77,13 @@ class Presenter {
             canceller.cancel()
         }
         
-        if !self.isAnimating, side == self.turn, case .computer = player {
+        if !self.isAnimating, side == self.interactor.turn, case .computer = player {
             self.playTurnOfComputer()
         }
     }
     
     func selectBoard(position: Board.Position) {
-        guard let side = self.turn else { return }
+        guard let side = self.interactor.turn else { return }
         if self.isAnimating { return }
         guard case .manual = self.player(for: side) else { return }
         // try? because doing nothing when an error occurs
@@ -112,13 +112,6 @@ class Presenter {
 }
 
 private extension Presenter {
-    var turn: Side? {
-        get { self.interactor.turn }
-        set {
-            self.interactor.turn = newValue
-        }
-    }
-    
     func player(for side: Side) -> Player {
         switch side {
         case .dark:
@@ -212,7 +205,7 @@ private extension Presenter {
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
-        guard let side = self.turn else { preconditionFailure() }
+        guard let side = self.interactor.turn else { preconditionFailure() }
         let position = self.interactor.board.validMoves(for: side).randomElement()!
 
         self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
@@ -240,20 +233,20 @@ private extension Presenter {
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     func nextTurn() {
-        guard let currentSide = self.turn else { return }
+        guard let currentSide = self.interactor.turn else { return }
 
         let nextSide = currentSide.flipped
         
         if self.interactor.board.validMoves(for: nextSide).isEmpty {
             if self.interactor.board.validMoves(for: currentSide).isEmpty {
-                self.turn = nil
+                self.interactor.turn = nil
             } else {
-                self.turn = nextSide
+                self.interactor.turn = nextSide
                 
                 self.displayer?.presentPassView()
             }
         } else {
-            self.turn = nextSide
+            self.interactor.turn = nextSide
             self.waitForPlayer()
         }
     }
@@ -261,7 +254,7 @@ private extension Presenter {
     #warning("interactorに移動したい")
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
-        guard let side = self.turn else { return }
+        guard let side = self.interactor.turn else { return }
         switch self.player(for: side) {
         case .manual:
             break
