@@ -55,7 +55,7 @@ struct Board {
         return self.disks.flatMap { $0 }.filter { $0 == side }.count
     }
     
-    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, at position: Position) -> [(Int, Int)] {
+    func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, at position: Position) -> [Position] {
         let directions = [
             (x: -1, y: -1),
             (x:  0, y: -1),
@@ -71,13 +71,13 @@ struct Board {
             return []
         }
         
-        var diskCoordinates: [(Int, Int)] = []
+        var diskCoordinates: [Position] = []
         
         for direction in directions {
             var x = position.x
             var y = position.y
             
-            var diskCoordinatesInLine: [(Int, Int)] = []
+            var diskCoordinatesInLine: [Position] = []
             flipping: while true {
                 x += direction.x
                 y += direction.y
@@ -87,7 +87,7 @@ struct Board {
                     diskCoordinates.append(contentsOf: diskCoordinatesInLine)
                     break flipping
                 case (.dark, .some(.light)), (.light, .some(.dark)):
-                    diskCoordinatesInLine.append((x, y))
+                    diskCoordinatesInLine.append(.init(x: x, y: y))
                 case (_, .none):
                     break flipping
                 }

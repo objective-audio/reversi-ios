@@ -143,25 +143,25 @@ private extension Presenter {
     /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
     /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
     func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping (Bool) -> Void)
-        where C.Element == (Int, Int)
+        where C.Element == Board.Position
     {
-        guard let (x, y) = coordinates.first else {
+        guard let position = coordinates.first else {
             completion(true)
             return
         }
         
         let animationCanceller = self.animationCanceller!
-        self.interactor.board.setDisk(disk, atX: x, y: y)
+        self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
         
-        self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
+        self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
             if animationCanceller.isCancelled { return }
             if isFinished {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
-                for (x, y) in coordinates {
-                    self.interactor.board.setDisk(disk, atX: x, y: y)
-                    self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
+                for position in coordinates {
+                    self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
+                    self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y, animated: false, completion: nil)
                 }
                 completion(false)
             }
@@ -187,7 +187,7 @@ private extension Presenter {
                 self?.animationCanceller = nil
             }
             self.animationCanceller = Canceller(cleanUp)
-            self.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
+            self.animateSettingDisks(at: [.init(x: x, y: y)] + diskCoordinates, to: disk) { [weak self] isFinished in
                 guard let self = self else { return }
                 guard let canceller = self.animationCanceller else { return }
                 if canceller.isCancelled { return }
@@ -202,9 +202,9 @@ private extension Presenter {
                 guard let self = self else { return }
                 self.interactor.board.setDisk(disk, atX: x, y: y)
                 self.displayer?.setBoardDisk(disk, atX: x, y: y)
-                for (x, y) in diskCoordinates {
-                    self.interactor.board.setDisk(disk, atX: x, y: y)
-                    self.displayer?.setBoardDisk(disk, atX: x, y: y)
+                for position in diskCoordinates {
+                    self.interactor.board.setDisk(disk, atX: position.x, y: position.y)
+                    self.displayer?.setBoardDisk(disk, atX: position.x, y: position.y)
                 }
                 completion?(true)
                 self.interactor.save()
