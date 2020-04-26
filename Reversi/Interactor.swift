@@ -50,6 +50,5 @@ private extension Interactor {
 
 struct DiskPlacementError: Error {
     let disk: Disk
-    let x: Int
-    let y: Int
+    let position: Board.Position
 }

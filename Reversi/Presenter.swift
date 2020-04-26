@@ -179,7 +179,7 @@ private extension Presenter {
     func placeDisk(_ disk: Disk, at position: Board.Position, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
         let diskCoordinates = self.interactor.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
         if diskCoordinates.isEmpty {
-            throw DiskPlacementError(disk: disk, x: position.x, y: position.y)
+            throw DiskPlacementError(disk: disk, position: position)
         }
         
         if isAnimated {
