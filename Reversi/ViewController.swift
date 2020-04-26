@@ -44,10 +44,6 @@ class ViewController: UIViewController {
 // MARK: Reversi logics
 
 extension ViewController {
-    func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
-        return self.presenter.validMoves(for: side)
-    }
-
     /// `x`, `y` で指定されたセルに `disk` を置きます。
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
@@ -150,8 +146,8 @@ extension ViewController {
 
         turn.flip()
         
-        if self.validMoves(for: turn).isEmpty {
-            if self.validMoves(for: turn.flipped).isEmpty {
+        if self.presenter.validMoves(for: turn).isEmpty {
+            if self.presenter.validMoves(for: turn.flipped).isEmpty {
                 self.presenter.turn = nil
                 self.updateMessageViews()
             } else {
@@ -178,7 +174,7 @@ extension ViewController {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
         guard let turn = self.presenter.turn else { preconditionFailure() }
-        let (x, y) = self.validMoves(for: turn).randomElement()!
+        let (x, y) = self.presenter.validMoves(for: turn).randomElement()!
 
         self.playerActivityIndicators[turn.index].startAnimating()
         
