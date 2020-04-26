@@ -110,15 +110,6 @@ struct Board {
         }
     }
     
-    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
-    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
-    /// - Parameter x: セルの列です。
-    /// - Parameter y: セルの行です。
-    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
-    func canPlaceDisk(_ disk: Disk, at position: Position) -> Bool {
-        !self.flippedDiskCoordinatesByPlacingDisk(disk, at: position).isEmpty
-    }
-    
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
     func validMoves(for side: Disk) -> [Position] {
@@ -134,6 +125,17 @@ struct Board {
         }
         
         return coordinates
+    }
+}
+
+private extension Board {
+    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
+    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
+    /// - Parameter x: セルの列です。
+    /// - Parameter y: セルの行です。
+    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
+    func canPlaceDisk(_ disk: Disk, at position: Position) -> Bool {
+        !self.flippedDiskCoordinatesByPlacingDisk(disk, at: position).isEmpty
     }
 }
 
