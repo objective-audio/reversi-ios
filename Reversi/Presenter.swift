@@ -94,6 +94,14 @@ class Presenter {
         return self.interactor.board.validMoves(for: side)
     }
     
+    private var _began: Bool = false
+    func begin() {
+        #warning("処理を無視するのはステートでやる")
+        guard !self._began else { return }
+        self._began = true
+        self.waitForPlayer()
+    }
+    
     func newGame() {
         self.interactor.newGame()
         

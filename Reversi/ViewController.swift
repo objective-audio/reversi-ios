@@ -31,13 +31,10 @@ class ViewController: UIViewController {
         self.updateAll()
     }
     
-    private var viewHasAppeared: Bool = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.viewHasAppeared { return }
-        self.viewHasAppeared = true
-        self.presenter.waitForPlayer()
+        self.presenter.begin()
     }
 }
 
