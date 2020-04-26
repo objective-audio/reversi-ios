@@ -82,6 +82,7 @@ extension ViewController: Displayable {
     
     /// 現在の状況に応じてメッセージを表示します。
     func updateMessageViews() {
+        #warning("presenter側で整理して取得する")
         switch self.presenter.turn {
         case .some(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
