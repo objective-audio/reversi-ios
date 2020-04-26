@@ -126,8 +126,9 @@ struct Board {
         
         for y in Board.yRange {
             for x in Board.xRange {
-                if self.canPlaceDisk(side, at: .init(x: x, y: y)) {
-                    coordinates.append(.init(x: x, y: y))
+                let position = Position(x: x, y: y)
+                if self.canPlaceDisk(side, at: position) {
+                    coordinates.append(position)
                 }
             }
         }
