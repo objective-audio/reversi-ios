@@ -122,11 +122,6 @@ extension ViewController {
 // MARK: Game management
 
 extension ViewController {
-    /// ゲームの状態を初期化し、新しいゲームを開始します。
-    func newGame() {
-        self.presenter.newGame()
-    }
-    
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
         guard let turn = self.presenter.turn else { return }
@@ -318,7 +313,7 @@ private extension ViewController {
                 self.presenter.playerCancellers.removeValue(forKey: side)
             }
             
-            self.newGame()
+            self.presenter.newGame()
             self.waitForPlayer()
         })
         present(alertController, animated: true)
