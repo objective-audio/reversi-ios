@@ -41,35 +41,6 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: Game management
-
-extension ViewController {
-    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
-    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
-    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    func nextTurn() {
-        guard var turn = self.presenter.turn else { return }
-
-        turn.flip()
-        
-        if self.presenter.validMoves(for: turn).isEmpty {
-            if self.presenter.validMoves(for: turn.flipped).isEmpty {
-                self.presenter.turn = nil
-                self.updateMessageViews()
-            } else {
-                self.presenter.turn = turn
-                self.updateMessageViews()
-                
-                self.presentPassView()
-            }
-        } else {
-            self.presenter.turn = turn
-            self.updateMessageViews()
-            self.presenter.waitForPlayer()
-        }
-    }
-}
-
 // MARK: Inputs
 
 extension ViewController {
@@ -114,7 +85,7 @@ extension ViewController: BoardViewDelegate {
         guard case .manual = self.presenter.player(for: turn) else { return }
         // try? because doing nothing when an error occurs
         try? self.presenter.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
-            self?.nextTurn()
+            self?.presenter.nextTurn()
         }
     }
 }
@@ -132,37 +103,6 @@ extension ViewController: Displayable {
         for side in Disk.allCases {
             self.countLabels[side.index].text = "\(self.presenter.diskCount(of: side))"
         }
-    }
-    
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?) {
-        self.boardView.setDisk(disk, atX: x, y: y, animated: animated, completion: completion)
-    }
-    
-    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int) {
-        self.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
-    }
-    
-    func startPlayerActivityIndicatorAnimating(side: Disk) {
-        self.playerActivityIndicators[side.index].startAnimating()
-    }
-    
-    func stopPlayerActivityIndicatorAnimating(side: Disk) {
-        self.playerActivityIndicators[side.index].stopAnimating()
-    }
-}
-
-private extension ViewController {
-    func updateBoardView() {
-        for (y, boardLine) in self.presenter.disks.enumerated() {
-            for (x, disk) in boardLine.enumerated() {
-                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-            }
-        }
-    }
-    
-    func updatePlayerControls() {
-        self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
-        self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
     }
     
     /// 現在の状況に応じてメッセージを表示します。
@@ -184,6 +124,49 @@ private extension ViewController {
         }
     }
     
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?) {
+        self.boardView.setDisk(disk, atX: x, y: y, animated: animated, completion: completion)
+    }
+    
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int) {
+        self.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
+    }
+    
+    func startPlayerActivityIndicatorAnimating(side: Disk) {
+        self.playerActivityIndicators[side.index].startAnimating()
+    }
+    
+    func stopPlayerActivityIndicatorAnimating(side: Disk) {
+        self.playerActivityIndicators[side.index].stopAnimating()
+    }
+    
+    func presentPassView() {
+        let alertController = UIAlertController(
+            title: "Pass",
+            message: "Cannot place a disk.",
+            preferredStyle: .alert
+        )
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
+            self?.presenter.nextTurn()
+        })
+        present(alertController, animated: true)
+    }
+}
+
+private extension ViewController {
+    func updateBoardView() {
+        for (y, boardLine) in self.presenter.disks.enumerated() {
+            for (x, disk) in boardLine.enumerated() {
+                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
+            }
+        }
+    }
+    
+    func updatePlayerControls() {
+        self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
+        self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
+    }
+    
     /// アラートを表示して、ゲームを初期化して良いか確認し、
     /// "OK" が選択された場合ゲームを初期化します。
     func presentConfirmationView() {
@@ -195,18 +178,6 @@ private extension ViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.presenter.comfirmationOK()
-        })
-        present(alertController, animated: true)
-    }
-    
-    func presentPassView() {
-        let alertController = UIAlertController(
-            title: "Pass",
-            message: "Cannot place a disk.",
-            preferredStyle: .alert
-        )
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
-            self?.nextTurn()
         })
         present(alertController, animated: true)
     }
