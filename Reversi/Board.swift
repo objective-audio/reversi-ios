@@ -34,11 +34,6 @@ struct Board {
         self.disks[y][x] = disk
     }
     
-    func diskAt(_ position: Position) -> Disk? {
-        guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
-        return self.disks[position.y][position.x]
-    }
-    
     mutating func resetDisks() {
         self.disks = Self.emptyDisks()
         
@@ -131,6 +126,11 @@ struct Board {
 }
 
 private extension Board {
+    func diskAt(_ position: Position) -> Disk? {
+        guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
+        return self.disks[position.y][position.x]
+    }
+    
     /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
     /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
     /// - Parameter x: セルの列です。
