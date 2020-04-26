@@ -26,7 +26,7 @@ class Interactor {
         self.darkPlayer = .manual
         self.lightPlayer = .manual
         
-        try? self.save()
+        self.save()
     }
     
     func load() throws {
