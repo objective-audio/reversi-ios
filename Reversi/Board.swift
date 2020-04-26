@@ -34,9 +34,9 @@ struct Board {
         self.disks[y][x] = disk
     }
     
-    func diskAt(x: Int, y: Int) -> Disk? {
-        guard Self.xRange.contains(x) && Self.yRange.contains(y) else { return nil }
-        return self.disks[y][x]
+    func diskAt(_ position: Position) -> Disk? {
+        guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
+        return self.disks[position.y][position.x]
     }
     
     mutating func resetDisks() {
@@ -67,13 +67,14 @@ struct Board {
             (x: -1, y:  1),
         ]
         
-        guard self.diskAt(x: position.x, y: position.y) == nil else {
+        guard self.diskAt(position) == nil else {
             return []
         }
         
         var diskCoordinates: [Position] = []
         
         for direction in directions {
+            #warning("Positionを一次変数に使えるようにする?")
             var x = position.x
             var y = position.y
             
@@ -82,7 +83,7 @@ struct Board {
                 x += direction.x
                 y += direction.y
                 
-                switch (disk, self.diskAt(x: x, y: y)) { // Uses tuples to make patterns exhaustive
+                switch (disk, self.diskAt(.init(x: x, y: y))) { // Uses tuples to make patterns exhaustive
                 case (.dark, .some(.dark)), (.light, .some(.light)):
                     diskCoordinates.append(contentsOf: diskCoordinatesInLine)
                     break flipping
