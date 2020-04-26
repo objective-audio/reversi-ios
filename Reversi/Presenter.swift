@@ -34,15 +34,6 @@ class Presenter {
         self.interactor = interactor
     }
     
-    private(set) var turn: Side? {
-        get { self.interactor.turn }
-        set {
-            self.interactor.turn = newValue
-            #warning("interactor経由にする")
-            self.displayer?.updateMessageViews()
-        }
-    }
-    
     var darkPlayer: Player { self.interactor.darkPlayer }
     var lightPlayer: Player { self.interactor.lightPlayer }
     
@@ -122,6 +113,15 @@ class Presenter {
 }
 
 private extension Presenter {
+    var turn: Side? {
+        get { self.interactor.turn }
+        set {
+            self.interactor.turn = newValue
+            #warning("interactor経由にする")
+            self.displayer?.updateMessageViews()
+        }
+    }
+    
     func player(for side: Side) -> Player {
         switch side {
         case .dark:
