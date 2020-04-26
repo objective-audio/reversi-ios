@@ -20,7 +20,6 @@ class Presenter {
     
     weak var displayer: Displayable?
     
-    #warning("privateにする")
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
     private var playerCancellers: [Disk: Canceller] = [:]
