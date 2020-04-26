@@ -46,8 +46,8 @@ struct Board {
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
-    func diskCount(of side: Disk) -> Int {
-        return self.disks.flatMap { $0 }.filter { $0 == side }.count
+    func diskCount(of side: Side) -> Int {
+        return self.disks.flatMap { $0 }.filter { $0 == side.disk }.count
     }
     
     func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, at position: Position) -> [Position] {
@@ -95,7 +95,7 @@ struct Board {
     /// 盤上に置かれたディスクの枚数が多い方の色を返します。
     /// 引き分けの場合は `nil` が返されます。
     /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
-    func sideWithMoreDisks() -> Disk? {
+    func sideWithMoreDisks() -> Side? {
         let darkCount = self.diskCount(of: .dark)
         let lightCount = self.diskCount(of: .light)
         if darkCount == lightCount {
@@ -107,13 +107,14 @@ struct Board {
     
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
-    func validMoves(for side: Disk) -> [Position] {
+    func validMoves(for side: Side) -> [Position] {
         var coordinates: [Position] = []
+        let disk = side.disk
         
         for y in Board.yRange {
             for x in Board.xRange {
                 let position = Position(x: x, y: y)
-                if self.canPlaceDisk(side, at: position) {
+                if self.canPlaceDisk(disk, at: position) {
                     coordinates.append(position)
                 }
             }

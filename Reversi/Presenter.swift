@@ -5,8 +5,8 @@ protocol Displayable: class {
     func updateCountLabels()
     func updateMessageViews()
     
-    func startPlayerActivityIndicatorAnimating(side: Disk)
-    func stopPlayerActivityIndicatorAnimating(side: Disk)
+    func startPlayerActivityIndicatorAnimating(side: Side)
+    func stopPlayerActivityIndicatorAnimating(side: Side)
     
     func presentPassView()
     
@@ -17,8 +17,8 @@ protocol Displayable: class {
 
 class Presenter {
     enum Status {
-        case turn(side: Disk)
-        case won(side: Disk)
+        case turn(side: Side)
+        case won(side: Side)
         case tied
     }
     
@@ -28,13 +28,13 @@ class Presenter {
     
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
-    private var playerCancellers: [Disk: Canceller] = [:]
+    private var playerCancellers: [Side: Canceller] = [:]
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
     }
     
-    private(set) var turn: Disk? {
+    private(set) var turn: Side? {
         get { self.interactor.turn }
         set {
             self.interactor.turn = newValue
@@ -46,7 +46,7 @@ class Presenter {
     var darkPlayer: Player { self.interactor.darkPlayer }
     var lightPlayer: Player { self.interactor.lightPlayer }
     
-    func player(for side: Disk) -> Player {
+    func player(for side: Side) -> Player {
         switch side {
         case .dark:
             return self.darkPlayer
@@ -70,7 +70,7 @@ class Presenter {
         }
     }
     
-    func diskCount(of side: Disk) -> Int {
+    func diskCount(of side: Side) -> Int {
         return self.interactor.board.diskCount(of: side)
     }
     
@@ -82,7 +82,7 @@ class Presenter {
         self.waitForPlayer()
     }
     
-    func changePlayer(_ player: Player, side: Disk) {
+    func changePlayer(_ player: Player, side: Side) {
         switch side {
         case .dark:
             self.interactor.darkPlayer = player
@@ -102,11 +102,11 @@ class Presenter {
     }
     
     func selectBoard(position: Board.Position) {
-        guard let turn = self.turn else { return }
+        guard let side = self.turn else { return }
         if self.isAnimating { return }
-        guard case .manual = self.player(for: turn) else { return }
+        guard case .manual = self.player(for: side) else { return }
         // try? because doing nothing when an error occurs
-        try? self.placeDisk(turn, at: position, animated: true) { [weak self] _ in
+        try? self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
             self?.nextTurn()
         }
     }
@@ -116,7 +116,7 @@ class Presenter {
         self.animationCanceller?.cancel()
         self.animationCanceller = nil
         
-        for side in Disk.allCases {
+        for side in Side.allCases {
             self.playerCancellers[side]?.cancel()
             self.playerCancellers.removeValue(forKey: side)
         }
@@ -215,15 +215,15 @@ private extension Presenter {
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
-        guard let turn = self.turn else { preconditionFailure() }
-        let position = self.interactor.board.validMoves(for: turn).randomElement()!
+        guard let side = self.turn else { preconditionFailure() }
+        let position = self.interactor.board.validMoves(for: side).randomElement()!
 
-        self.displayer?.startPlayerActivityIndicatorAnimating(side: turn)
+        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
         
         let cleanUp: () -> Void = { [weak self] in
             guard let self = self else { return }
-            self.displayer?.stopPlayerActivityIndicatorAnimating(side: turn)
-            self.playerCancellers[turn] = nil
+            self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
+            self.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
@@ -231,32 +231,32 @@ private extension Presenter {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.placeDisk(turn, at: position, animated: true) { [weak self] _ in
+            try! self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
                 self?.nextTurn()
             }
         }
         
-        self.playerCancellers[turn] = canceller
+        self.playerCancellers[side] = canceller
     }
     
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     func nextTurn() {
-        guard var turn = self.turn else { return }
+        guard let currentSide = self.turn else { return }
 
-        turn.flip()
+        let nextSide = currentSide.flipped
         
-        if self.interactor.board.validMoves(for: turn).isEmpty {
-            if self.interactor.board.validMoves(for: turn.flipped).isEmpty {
+        if self.interactor.board.validMoves(for: nextSide).isEmpty {
+            if self.interactor.board.validMoves(for: currentSide).isEmpty {
                 self.turn = nil
             } else {
-                self.turn = turn
+                self.turn = nextSide
                 
                 self.displayer?.presentPassView()
             }
         } else {
-            self.turn = turn
+            self.turn = nextSide
             self.waitForPlayer()
         }
     }
@@ -264,8 +264,8 @@ private extension Presenter {
     #warning("interactorに移動したい")
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
-        guard let turn = self.turn else { return }
-        switch self.player(for: turn) {
+        guard let side = self.turn else { return }
+        switch self.player(for: side) {
         case .manual:
             break
         case .computer:

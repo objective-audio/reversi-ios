@@ -49,9 +49,10 @@ extension ViewController {
     /// プレイヤーのモードが変更された場合に呼ばれるハンドラーです。
     @IBAction func changePlayerControlSegment(_ sender: UISegmentedControl) {
         guard let sideIndex = self.playerControls.firstIndex(of: sender) else { fatalError() }
+        guard let side = Side(rawValue: sideIndex) else { fatalError() }
         guard let player = Player(rawValue: sender.selectedSegmentIndex) else { fatalError() }
         
-        self.presenter.changePlayer(player, side: .init(index: sideIndex))
+        self.presenter.changePlayer(player, side: side)
     }
 }
 
@@ -75,9 +76,8 @@ extension ViewController: Displayable {
     
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
-        for side in Disk.allCases {
-            self.countLabels[side.index].text = "\(self.presenter.diskCount(of: side))"
-        }
+        self.countLabels[Side.dark.rawValue].text = "\(self.presenter.diskCount(of: .dark))"
+        self.countLabels[Side.light.rawValue].text = "\(self.presenter.diskCount(of: .light))"
     }
     
     /// 現在の状況に応じてメッセージを表示します。
@@ -85,11 +85,11 @@ extension ViewController: Displayable {
         switch self.presenter.status {
         case .turn(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
-            self.messageDiskView.disk = side
+            self.messageDiskView.disk = side.disk
             self.messageLabel.text = "'s turn"
         case .won(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
-            self.messageDiskView.disk = side
+            self.messageDiskView.disk = side.disk
             self.messageLabel.text = " won"
         case .tied:
             self.messageDiskSizeConstraint.constant = 0
@@ -105,12 +105,12 @@ extension ViewController: Displayable {
         self.setBoardDisk(disk, at: position, animated: false, completion: nil)
     }
     
-    func startPlayerActivityIndicatorAnimating(side: Disk) {
-        self.playerActivityIndicators[side.index].startAnimating()
+    func startPlayerActivityIndicatorAnimating(side: Side) {
+        self.playerActivityIndicators[side.rawValue].startAnimating()
     }
     
-    func stopPlayerActivityIndicatorAnimating(side: Disk) {
-        self.playerActivityIndicators[side.index].stopAnimating()
+    func stopPlayerActivityIndicatorAnimating(side: Side) {
+        self.playerActivityIndicators[side.rawValue].stopAnimating()
     }
     
     func presentPassView() {
@@ -136,8 +136,8 @@ private extension ViewController {
     }
     
     func updatePlayerControls() {
-        self.playerControls[Disk.dark.index].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
-        self.playerControls[Disk.light.index].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
+        self.playerControls[Side.dark.rawValue].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
+        self.playerControls[Side.light.rawValue].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
     }
     
     /// アラートを表示して、ゲームを初期化して良いか確認し、

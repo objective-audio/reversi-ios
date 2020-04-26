@@ -2,7 +2,7 @@ import Foundation
 
 class DataStore {
     struct Parameters {
-        let turn: Disk?
+        let turn: Side?
         let darkPlayer: Player
         let lightPlayer: Player
         let board: [[Disk?]]
@@ -41,15 +41,15 @@ class DataStore {
             throw FileIOError.read(path: path, cause: nil)
         }
         
-        let turn: Disk?
+        let turn: Side?
         do { // turn
             guard
-                let diskSymbol = line.popFirst(),
-                let disk = Optional<Disk>(symbol: diskSymbol.description)
+                let sideSymbol = line.popFirst(),
+                let side = Optional<Side>(symbol: sideSymbol.description)
             else {
                 throw FileIOError.read(path: path, cause: nil)
             }
-            turn = disk
+            turn = side
         }
 
         // players
@@ -106,6 +106,33 @@ private extension DataStore {
     enum FileIOError: Error {
         case write(path: String, cause: Error?)
         case read(path: String, cause: Error?)
+    }
+}
+
+private extension Optional where Wrapped == Side {
+    init?<S: StringProtocol>(symbol: S) {
+        
+        switch symbol {
+        case "x":
+            self = .dark
+        case "o":
+            self = .light
+        case "-":
+            self = .none
+        default:
+            return nil
+        }
+    }
+    
+    var symbol: String {
+        switch self {
+        case .dark:
+            return "x"
+        case .light:
+            return "o"
+        case .none:
+            return "-"
+        }
     }
 }
 

@@ -2,7 +2,7 @@ import Foundation
 
 class Interactor {
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    var turn: Disk? = .dark
+    var turn: Side? = .dark
     
     #warning("init時に読み込んだ値をセットする")
     var darkPlayer: Player = .manual
