@@ -88,10 +88,6 @@ class Presenter {
         self.displayer?.updateAll()
     }
     
-    func save() {
-        self.interactor.save()
-    }
-    
     #warning("interactorに移動したい")
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
@@ -160,7 +156,7 @@ class Presenter {
                 cleanUp()
 
                 completion?(isFinished)
-                self.save()
+                self.interactor.save()
                 self.displayer?.updateCountLabels()
             }
         } else {
@@ -173,7 +169,7 @@ class Presenter {
                     self.displayer?.setBoardDisk(disk, atX: x, y: y)
                 }
                 completion?(true)
-                self.save()
+                self.interactor.save()
                 self.displayer?.updateCountLabels()
             }
         }
@@ -235,7 +231,7 @@ class Presenter {
             self.interactor.lightPlayer = player
         }
         
-        self.save()
+        self.interactor.save()
         
         if let canceller = self.playerCancellers[side] {
             canceller.cancel()
