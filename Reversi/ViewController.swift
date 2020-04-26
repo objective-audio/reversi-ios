@@ -70,7 +70,7 @@ extension ViewController {
                 cleanUp()
 
                 completion?(isFinished)
-                self.saveGame()
+                self.presenter.save()
                 self.updateCountLabels()
             }
         } else {
@@ -83,7 +83,7 @@ extension ViewController {
                     self.boardView.setDisk(disk, atX: x, y: y, animated: false)
                 }
                 completion?(true)
-                self.saveGame()
+                self.presenter.save()
                 self.updateCountLabels()
             }
         }
@@ -220,7 +220,7 @@ extension ViewController {
             self.presenter.lightPlayer = player
         }
         
-        self.saveGame()
+        self.presenter.save()
         
         if let canceller = self.presenter.playerCancellers[side] {
             canceller.cancel()
@@ -245,14 +245,6 @@ extension ViewController: BoardViewDelegate {
         try? self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
             self?.nextTurn()
         }
-    }
-}
-
-// MARK: Save and Load
-
-extension ViewController {
-    func saveGame() {
-        self.presenter.save()
     }
 }
 
