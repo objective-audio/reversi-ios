@@ -5,8 +5,12 @@ class Interactor {
     var turn: Side? = .dark
     
     #warning("init時に読み込んだ値をセットする")
-    var darkPlayer: Player = .manual
-    var lightPlayer: Player = .manual
+    var darkPlayer: Player = .manual {
+        didSet { self.save() }
+    }
+    var lightPlayer: Player = .manual {
+        didSet { self.save() }
+    }
     
     #warning("init時にdiskをセットする")
     var board: Board = .init()

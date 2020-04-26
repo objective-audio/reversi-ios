@@ -72,8 +72,6 @@ class Presenter {
             self.interactor.lightPlayer = player
         }
         
-        self.interactor.save()
-        
         if let canceller = self.playerCancellers[side] {
             canceller.cancel()
         }
