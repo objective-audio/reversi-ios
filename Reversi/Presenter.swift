@@ -3,6 +3,9 @@ import Foundation
 protocol Displayable: class {
     func updateAll()
     
+    #warning("completionを無くしたい?")
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?)
+    
     #warning("残すつもりはない")
     func playTurnOfComputer()
 }
@@ -110,6 +113,36 @@ class Presenter {
             break
         case .computer:
             self.displayer?.playTurnOfComputer()
+        }
+    }
+    
+    /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
+    /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
+    /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
+    /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
+    func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping (Bool) -> Void)
+        where C.Element == (Int, Int)
+    {
+        guard let (x, y) = coordinates.first else {
+            completion(true)
+            return
+        }
+        
+        let animationCanceller = self.animationCanceller!
+        self.setDisk(disk, atX: x, y: y)
+        
+        self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
+            guard let self = self else { return }
+            if animationCanceller.isCancelled { return }
+            if isFinished {
+                self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
+            } else {
+                for (x, y) in coordinates {
+                    self.setDisk(disk, atX: x, y: y)
+                    self.displayer?.setBoardDisk(disk, atX: x, y: y, animated: false, completion: nil)
+                }
+                completion(false)
+            }
         }
     }
     

@@ -63,7 +63,7 @@ extension ViewController {
                 self?.presenter.animationCanceller = nil
             }
             self.presenter.animationCanceller = Canceller(cleanUp)
-            self.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
+            self.presenter.animateSettingDisks(at: [(x, y)] + diskCoordinates, to: disk) { [weak self] isFinished in
                 guard let self = self else { return }
                 guard let canceller = self.presenter.animationCanceller else { return }
                 if canceller.isCancelled { return }
@@ -85,35 +85,6 @@ extension ViewController {
                 completion?(true)
                 self.presenter.save()
                 self.updateCountLabels()
-            }
-        }
-    }
-    
-    /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
-    /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
-    /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
-    /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
-    private func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping (Bool) -> Void)
-        where C.Element == (Int, Int)
-    {
-        guard let (x, y) = coordinates.first else {
-            completion(true)
-            return
-        }
-        
-        let animationCanceller = self.presenter.animationCanceller!
-        self.presenter.setDisk(disk, atX: x, y: y)
-        self.boardView.setDisk(disk, atX: x, y: y, animated: true) { [weak self] isFinished in
-            guard let self = self else { return }
-            if animationCanceller.isCancelled { return }
-            if isFinished {
-                self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
-            } else {
-                for (x, y) in coordinates {
-                    self.presenter.setDisk(disk, atX: x, y: y)
-                    self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-                }
-                completion(false)
             }
         }
     }
@@ -237,6 +208,10 @@ extension ViewController: Displayable {
         self.updatePlayerControls()
         self.updateMessageViews()
         self.updateCountLabels()
+    }
+    
+    func setBoardDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)?) {
+        self.boardView.setDisk(disk, atX: x, y: y, animated: animated, completion: completion)
     }
 }
 
