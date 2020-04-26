@@ -58,7 +58,7 @@ class Presenter {
         #warning("処理を無視するのはステートでやる")
         guard !self._began else { return }
         self._began = true
-        self.waitForPlayer()
+        self.interactor.waitForPlayer()
     }
     
     func changePlayer(_ player: Player, side: Side) {
@@ -81,7 +81,7 @@ class Presenter {
     func selectBoard(position: Board.Position) {
         guard let side = self.interactor.turn else { return }
         if self.interactor.isAnimating { return }
-        guard case .manual = self.player(for: side) else { return }
+        guard case .manual = self.interactor.player(for: side) else { return }
         // try? because doing nothing when an error occurs
         try? self.placeDisk(side.disk, at: position, animated: true) { [weak self] _ in
             self?.nextTurn()
@@ -99,7 +99,7 @@ class Presenter {
         }
         
         self.newGame()
-        self.waitForPlayer()
+        self.interactor.waitForPlayer()
     }
     
     func pass() {
@@ -108,15 +108,6 @@ class Presenter {
 }
 
 private extension Presenter {
-    func player(for side: Side) -> Player {
-        switch side {
-        case .dark:
-            return self.darkPlayer
-        case .light:
-            return self.lightPlayer
-        }
-    }
-    
     func newGame() {
         self.interactor.newGame()
         
@@ -151,18 +142,6 @@ private extension Presenter {
                 }
                 completion(false)
             }
-        }
-    }
-    
-    #warning("interactorに移動したい")
-    /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        guard let side = self.interactor.turn else { return }
-        switch self.player(for: side) {
-        case .manual:
-            break
-        case .computer:
-            self.interactor.playTurnOfComputer()
         }
     }
 }
@@ -246,7 +225,7 @@ extension Presenter {
             }
         } else {
             self.interactor.turn = nextSide
-            self.waitForPlayer()
+            self.interactor.waitForPlayer()
         }
     }
 }

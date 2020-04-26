@@ -84,6 +84,26 @@ class Interactor {
         
         self.playerCancellers[side] = canceller
     }
+    
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer() {
+        guard let side = self.turn else { return }
+        switch self.player(for: side) {
+        case .manual:
+            break
+        case .computer:
+            self.playTurnOfComputer()
+        }
+    }
+    
+    func player(for side: Side) -> Player {
+        switch side {
+        case .dark:
+            return self.darkPlayer
+        case .light:
+            return self.lightPlayer
+        }
+    }
 }
 
 private extension Interactor {
