@@ -38,6 +38,7 @@ class Presenter {
         get { self.interactor.turn }
         set {
             self.interactor.turn = newValue
+            #warning("interactor経由にする")
             self.displayer?.updateMessageViews()
         }
     }
