@@ -187,7 +187,6 @@ extension ViewController {
 extension ViewController {
     /// リセットボタンが押された場合に呼ばれるハンドラーです。
     @IBAction func pressResetButton(_ sender: UIButton) {
-        #warning("presenter経由にする")
         self.presentConfirmationView()
     }
     
