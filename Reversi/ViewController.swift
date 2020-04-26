@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         
         if self.viewHasAppeared { return }
         self.viewHasAppeared = true
-        self.waitForPlayer()
+        self.presenter.waitForPlayer()
     }
 }
 
@@ -122,11 +122,6 @@ extension ViewController {
 // MARK: Game management
 
 extension ViewController {
-    /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        self.presenter.waitForPlayer()
-    }
-    
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
@@ -156,7 +151,7 @@ extension ViewController {
         } else {
             self.presenter.turn = turn
             self.updateMessageViews()
-            self.waitForPlayer()
+            self.presenter.waitForPlayer()
         }
     }
     
@@ -308,7 +303,7 @@ private extension ViewController {
             }
             
             self.presenter.newGame()
-            self.waitForPlayer()
+            self.presenter.waitForPlayer()
         })
         present(alertController, animated: true)
     }
