@@ -10,6 +10,11 @@ struct Board {
     /// 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。
     static let yRange: Range<Int> = 0..<height
     
+    struct Position {
+        let x: Int
+        let y: Int
+    }
+    
     private(set) var disks: [[Disk?]]
     
     init(disks: [[Disk?]]) {
