@@ -43,11 +43,7 @@ class Presenter {
     }
     
     var darkPlayer: Player { self.interactor.darkPlayer }
-    
-    private(set) var lightPlayer: Player {
-        get { self.interactor.lightPlayer }
-        set { self.interactor.lightPlayer = newValue }
-    }
+    var lightPlayer: Player { self.interactor.lightPlayer }
     
     func player(for side: Disk) -> Player {
         switch side {
@@ -236,7 +232,7 @@ class Presenter {
         case .dark:
             self.interactor.darkPlayer = player
         case .light:
-            self.lightPlayer = player
+            self.interactor.lightPlayer = player
         }
         
         self.save()
