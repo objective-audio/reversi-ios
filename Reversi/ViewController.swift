@@ -52,25 +52,9 @@ extension ViewController {
     /// プレイヤーのモードが変更された場合に呼ばれるハンドラーです。
     @IBAction func changePlayerControlSegment(_ sender: UISegmentedControl) {
         guard let sideIndex = self.playerControls.firstIndex(of: sender) else { fatalError() }
-        let side: Disk = Disk(index: sideIndex)
         guard let player = Player(rawValue: sender.selectedSegmentIndex) else { fatalError() }
         
-        switch side {
-        case .dark:
-            self.presenter.darkPlayer = player
-        case .light:
-            self.presenter.lightPlayer = player
-        }
-        
-        self.presenter.save()
-        
-        if let canceller = self.presenter.playerCancellers[side] {
-            canceller.cancel()
-        }
-        
-        if !self.presenter.isAnimating, side == self.presenter.turn, case .computer = player {
-            self.presenter.playTurnOfComputer()
-        }
+        self.presenter.changePlayer(player, side: .init(index: sideIndex))
     }
 }
 

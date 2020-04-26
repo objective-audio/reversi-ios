@@ -247,6 +247,25 @@ class Presenter {
         }
     }
     
+    func changePlayer(_ player: Player, side: Disk) {
+        switch side {
+        case .dark:
+            self.darkPlayer = player
+        case .light:
+            self.lightPlayer = player
+        }
+        
+        self.save()
+        
+        if let canceller = self.playerCancellers[side] {
+            canceller.cancel()
+        }
+        
+        if !self.isAnimating, side == self.turn, case .computer = player {
+            self.playTurnOfComputer()
+        }
+    }
+    
     func comfirmationOK() {
         #warning("interactorに移動したい？")
         self.animationCanceller?.cancel()
