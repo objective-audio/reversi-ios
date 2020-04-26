@@ -46,15 +46,6 @@ class Presenter {
     var darkPlayer: Player { self.interactor.darkPlayer }
     var lightPlayer: Player { self.interactor.lightPlayer }
     
-    func player(for side: Side) -> Player {
-        switch side {
-        case .dark:
-            return self.darkPlayer
-        case .light:
-            return self.lightPlayer
-        }
-    }
-    
     var disks: [[Disk?]] { self.interactor.board.disks }
     
     var status: Status {
@@ -131,6 +122,15 @@ class Presenter {
 }
 
 private extension Presenter {
+    func player(for side: Side) -> Player {
+        switch side {
+        case .dark:
+            return self.darkPlayer
+        case .light:
+            return self.lightPlayer
+        }
+    }
+    
     func newGame() {
         self.interactor.newGame()
         
