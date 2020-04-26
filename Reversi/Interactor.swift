@@ -29,20 +29,22 @@ class Interactor {
         self.save()
     }
     
-    func load() throws {
+    func save() {
+        try? DataStore().save(.init(turn: self.turn,
+                                    darkPlayer: self.darkPlayer,
+                                    lightPlayer: self.lightPlayer,
+                                    board: self.board.disks))
+    }
+}
+
+private extension Interactor {
+    private func load() throws {
         let parameters = try DataStore().load()
         
         self.turn = parameters.turn
         self.darkPlayer = parameters.darkPlayer
         self.lightPlayer = parameters.lightPlayer
         self.board.setDisks(parameters.board)
-    }
-    
-    func save() {
-        try? DataStore().save(.init(turn: self.turn,
-                                    darkPlayer: self.darkPlayer,
-                                    lightPlayer: self.lightPlayer,
-                                    board: self.board.disks))
     }
 }
 
