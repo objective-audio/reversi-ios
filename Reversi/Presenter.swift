@@ -57,20 +57,8 @@ class Presenter {
     
     var disks: [[Disk?]] { self.interactor.board.disks }
     
-    func setDisks(_ disks: [[Disk?]]) {
-        self.interactor.board.setDisks(disks)
-    }
-    
     func setDisk(_ disk: Disk?, atX x: Int, y: Int) {
         self.interactor.board.setDisk(disk, atX: x, y: y)
-    }
-    
-    func diskAt(x: Int, y: Int) -> Disk? {
-        self.interactor.board.diskAt(x: x, y: y)
-    }
-    
-    func resetDisks() {
-        self.interactor.board.resetDisks()
     }
     
     func diskCount(of side: Disk) -> Int {
@@ -83,10 +71,6 @@ class Presenter {
     
     func sideWithMoreDisks() -> Disk? {
         return self.interactor.board.sideWithMoreDisks()
-    }
-    
-    func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
-        return self.interactor.board.canPlaceDisk(disk, atX: x, y: y)
     }
     
     func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
@@ -103,13 +87,6 @@ class Presenter {
     
     func newGame() {
         self.interactor.newGame()
-        
-        #warning("通知で呼び出す")
-        self.displayer?.updateAll()
-    }
-    
-    func load() throws {
-        try self.interactor.load()
         
         #warning("通知で呼び出す")
         self.displayer?.updateAll()
