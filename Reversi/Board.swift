@@ -11,8 +11,8 @@ struct Board {
     static let yRange: Range<Int> = 0..<height
     
     struct Position {
-        let x: Int
-        let y: Int
+        var x: Int
+        var y: Int
     }
     
     private(set) var disks: [[Disk?]]
