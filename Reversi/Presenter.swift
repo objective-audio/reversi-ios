@@ -10,7 +10,6 @@ protocol Displayable: class {
     
     func presentPassView()
     
-    #warning("completionを無くしたい?")
     func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
 }
 
