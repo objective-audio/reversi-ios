@@ -16,6 +16,8 @@
 		B659DC9424544FA400B5CC0B /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC9324544FA400B5CC0B /* BoardTests.swift */; };
 		B659DC962455A2D600B5CC0B /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC952455A2D600B5CC0B /* Side.swift */; };
 		B6BF4203245330E8008676C9 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF4202245330E8008676C9 /* Interactor.swift */; };
+		B6CB006F2456DB2A00054BA1 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CB006E2456DB2A00054BA1 /* State.swift */; };
+		B6CB00712456DC5D00054BA1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CB00702456DC5D00054BA1 /* Result.swift */; };
 		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
 		D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB523A9FE4500396732 /* SceneDelegate.swift */; };
@@ -48,6 +50,8 @@
 		B659DC9324544FA400B5CC0B /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		B659DC952455A2D600B5CC0B /* Side.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
 		B6BF4202245330E8008676C9 /* Interactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
+		B6CB006E2456DB2A00054BA1 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		B6CB00702456DC5D00054BA1 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D642BDB323A9FE4500396732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 				B659DC952455A2D600B5CC0B /* Side.swift */,
 				B659DC8B24539B6700B5CC0B /* Player.swift */,
 				B659DC912454316B00B5CC0B /* Board.swift */,
+				B6CB006E2456DB2A00054BA1 /* State.swift */,
+				B6CB00702456DC5D00054BA1 /* Result.swift */,
 			);
 			name = DataTypes;
 			sourceTree = "<group>";
@@ -258,8 +264,10 @@
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
 				B659DC962455A2D600B5CC0B /* Side.swift in Sources */,
 				B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */,
+				B6CB00712456DC5D00054BA1 /* Result.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				B659DC922454316B00B5CC0B /* Board.swift in Sources */,
+				B6CB006F2456DB2A00054BA1 /* State.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				B659DC8E24541AF400B5CC0B /* Canceller.swift in Sources */,
 				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
