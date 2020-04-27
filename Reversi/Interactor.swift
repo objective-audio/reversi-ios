@@ -141,7 +141,7 @@ private extension Interactor {
         
         self.delegate?.didBeginNewGame()
         
-        self.waitForPlayer()
+        self.state = .waiting(side: .dark, player: .manual)
     }
     
     /// プレイヤーの行動を待ちます。
