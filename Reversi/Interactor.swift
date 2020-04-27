@@ -172,7 +172,7 @@ class Interactor {
 }
 
 private extension Interactor {
-    private func load() throws {
+    func load() throws {
         let parameters = try DataStore().load()
         
         self.turn = parameters.turn
