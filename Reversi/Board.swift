@@ -17,13 +17,8 @@ struct Board {
     
     private(set) var disks: [[Disk?]]
     
-    init(disks: [[Disk?]]) {
+    init(disks: [[Disk?]] = Self.initialDisks()) {
         self.disks = disks
-    }
-    
-    #warning("後で消す?")
-    init() {
-        self.init(disks: Self.initialDisks())
     }
     
     mutating func setDisks(_ disks: [[Disk?]]) {
