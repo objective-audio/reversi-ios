@@ -68,13 +68,6 @@ class Interactor {
         self.delegate?.didBeginNewGame()
     }
     
-    func save() {
-        try? self.dataStore.save(.init(turn: self.turn,
-                                       darkPlayer: self.darkPlayer,
-                                       lightPlayer: self.lightPlayer,
-                                       board: self.board.disks))
-    }
-    
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
         guard let side = self.turn else { preconditionFailure() }
@@ -180,6 +173,13 @@ private extension Interactor {
         self.turn = parameters.turn
         self.darkPlayer = parameters.darkPlayer
         self.lightPlayer = parameters.lightPlayer
+    }
+    
+    func save() {
+        try? self.dataStore.save(.init(turn: self.turn,
+                                       darkPlayer: self.darkPlayer,
+                                       lightPlayer: self.lightPlayer,
+                                       board: self.board.disks))
     }
     
     func placeDisk(at position: Board.Position) throws {
