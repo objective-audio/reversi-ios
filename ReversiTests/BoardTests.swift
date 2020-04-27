@@ -2,14 +2,25 @@ import XCTest
 @testable import Reversi
 
 class BoardTests: XCTestCase {
-    func testEmptyDisks() {
-        let disks = Board.emptyDisks()
+    func testInitialDisks() {
+        let disks = Board.initialDisks()
         
-        XCTAssertEqual(disks.count, 8)
-        for diskLine in disks {
-            XCTAssertEqual(diskLine.count, 8)
-            for disk in diskLine {
-                XCTAssertNil(disk)
+        let expect: [[Disk?]] = [
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, .light, .dark, nil, nil, nil],
+            [nil, nil, nil, .dark, .light, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil]
+        ]
+        
+        XCTAssertEqual(disks.count, expect.count)
+        for (y, diskLine) in disks.enumerated() {
+            let expectLine = expect[y]
+            for x in 0..<8 {
+                XCTAssertEqual(diskLine[x], expectLine[x])
             }
         }
     }

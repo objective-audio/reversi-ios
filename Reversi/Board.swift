@@ -23,7 +23,7 @@ struct Board {
     
     #warning("後で消す?")
     init() {
-        self.init(disks: Self.emptyDisks())
+        self.init(disks: Self.initialDisks())
     }
     
     mutating func setDisks(_ disks: [[Disk?]]) {
@@ -35,12 +35,7 @@ struct Board {
     }
     
     mutating func resetDisks() {
-        self.disks = Self.emptyDisks()
-        
-        self.setDisk(.light, at: .init(x: Self.width / 2 - 1, y: Self.height / 2 - 1))
-        self.setDisk(.dark, at: .init(x: Self.width / 2, y: Self.height / 2 - 1))
-        self.setDisk(.dark, at: .init(x: Self.width / 2 - 1, y: Self.height / 2))
-        self.setDisk(.light, at: .init(x: Self.width / 2, y: Self.height / 2))
+        self.disks = Self.initialDisks()
     }
     
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
@@ -141,8 +136,20 @@ private extension Board {
 }
 
 extension Board {
-    static func emptyDisks() -> [[Disk?]] {
+    static func initialDisks() -> [[Disk?]] {
         let line = [Disk?](repeating: nil, count: Self.width)
-        return [[Disk?]](repeating: line, count: Self.height)
+        var disks = [[Disk?]](repeating: line, count: Self.height)
+        
+        let down = Self.height / 2
+        let up = down - 1
+        let right = Self.width / 2
+        let left = right - 1
+        
+        disks[up][left] = .light
+        disks[up][right] = .dark
+        disks[down][left] = .dark
+        disks[down][right] = .light
+        
+        return disks
     }
 }
