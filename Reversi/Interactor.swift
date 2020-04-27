@@ -19,6 +19,7 @@ protocol InteractorEventReceiver: class {
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
+    #warning("turnはstateで済ませる")
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     var turn: Side? {
         didSet {
