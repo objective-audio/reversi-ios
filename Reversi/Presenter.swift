@@ -34,6 +34,7 @@ class Presenter {
     var disks: [[Disk?]] { self.interactor.board.disks }
     
     var status: Status {
+        #warning("stateから取得する")
         switch self.interactor.turn {
         case .some(let side):
             return .turn(side: side)
