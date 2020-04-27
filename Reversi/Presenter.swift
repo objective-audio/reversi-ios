@@ -40,7 +40,7 @@ class Presenter {
             return .turn(side: side)
         case .none:
             if let winner = self.interactor.board.sideWithMoreDisks() {
-                return .result(.won(side: winner))//won(side: winner)
+                return .result(.won(side: winner))
             } else {
                 return .result(.tied)
             }
