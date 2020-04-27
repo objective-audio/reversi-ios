@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B611CEB12456EF80001C73BB /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B611CEB02456EF80001C73BB /* Action.swift */; };
 		B659DC88245393D600B5CC0B /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC87245393D600B5CC0B /* Presenter.swift */; };
 		B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC89245394D100B5CC0B /* DataStore.swift */; };
 		B659DC8C24539B6700B5CC0B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8B24539B6700B5CC0B /* Player.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B611CEB02456EF80001C73BB /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		B659DC87245393D600B5CC0B /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		B659DC89245394D100B5CC0B /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		B659DC8B24539B6700B5CC0B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				B659DC912454316B00B5CC0B /* Board.swift */,
 				B6CB006E2456DB2A00054BA1 /* State.swift */,
 				B6CB00702456DC5D00054BA1 /* Result.swift */,
+				B611CEB02456EF80001C73BB /* Action.swift */,
 			);
 			name = DataTypes;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				B6CB00712456DC5D00054BA1 /* Result.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				B659DC922454316B00B5CC0B /* Board.swift in Sources */,
+				B611CEB12456EF80001C73BB /* Action.swift in Sources */,
 				B6CB006F2456DB2A00054BA1 /* State.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				B659DC8E24541AF400B5CC0B /* Canceller.swift in Sources */,
