@@ -31,6 +31,7 @@ class Interactor {
         }
     }
     
+    let dataStore: DataStore
     #warning("init時にdiskをセットする")
     var board: Board = .init()
     
@@ -39,7 +40,9 @@ class Interactor {
     var isAnimating: Bool { animationCanceller != nil }
     var playerCancellers: [Side: Canceller] = [:]
     
-    init() {
+    init(dataStore: DataStore = .init()) {
+        self.dataStore = dataStore
+        
         do {
             try self.load()
         } catch {
@@ -60,10 +63,10 @@ class Interactor {
     }
     
     func save() {
-        try? DataStore().save(.init(turn: self.turn,
-                                    darkPlayer: self.darkPlayer,
-                                    lightPlayer: self.lightPlayer,
-                                    board: self.board.disks))
+        try? self.dataStore.save(.init(turn: self.turn,
+                                       darkPlayer: self.darkPlayer,
+                                       lightPlayer: self.lightPlayer,
+                                       board: self.board.disks))
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
@@ -165,7 +168,7 @@ class Interactor {
 
 private extension Interactor {
     func load() throws {
-        let parameters = try DataStore().load()
+        let parameters = try self.dataStore.load()
         
         self.turn = parameters.turn
         self.darkPlayer = parameters.darkPlayer
