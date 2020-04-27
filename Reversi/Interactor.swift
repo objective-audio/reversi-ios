@@ -159,6 +159,16 @@ class Interactor {
             self.playTurnOfComputer()
         }
     }
+    
+    func placeDiskByManual(at position: Board.Position) {
+        guard let side = self.turn else { return }
+        if self.isAnimating { return }
+        guard case .manual = self.player(for: side) else { return }
+        // try? because doing nothing when an error occurs
+        try? self.delegate?.placeDisk(side.disk, at: position) { [weak self] _ in
+            self?.nextTurn()
+        }
+    }
 }
 
 private extension Interactor {

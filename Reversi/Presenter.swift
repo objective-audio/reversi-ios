@@ -65,14 +65,8 @@ class Presenter {
         self.interactor.changePlayer(player, side: side)
     }
     
-    func selectBoard(position: Board.Position) {
-        guard let side = self.interactor.turn else { return }
-        if self.interactor.isAnimating { return }
-        guard case .manual = self.interactor.player(for: side) else { return }
-        // try? because doing nothing when an error occurs
-        try? self.placeDisk(side.disk, at: position) { [weak self] _ in
-            self?.interactor.nextTurn()
-        }
+    func selectBoard(at position: Board.Position) {
+        self.interactor.placeDiskByManual(at: position)
     }
     
     func reset() {

@@ -62,7 +62,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
-        self.presenter.selectBoard(position: .init(x: x, y: y))
+        self.presenter.selectBoard(at: .init(x: x, y: y))
     }
 }
 
