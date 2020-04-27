@@ -20,7 +20,9 @@ struct Board {
     init(disks: [[Disk?]] = Self.initialDisks()) {
         self.disks = disks
     }
-    
+}
+ 
+extension Board {
     mutating func setDisk(_ disk: Disk?, at position: Position) {
         self.disks[position.y][position.x] = disk
     }
