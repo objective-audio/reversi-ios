@@ -90,7 +90,11 @@ class Interactor {
                 break
             }
         case .endPlaceDisks:
-            self.nextTurn()
+            if case .placing = self.state {
+                self.nextTurn()
+            } else {
+                fatalError()
+            }
         case .pass:
             self.nextTurn()
         case .reset:
