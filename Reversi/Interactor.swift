@@ -68,15 +68,6 @@ class Interactor {
         self.waitForPlayer()
     }
     
-    func player(for side: Side) -> Player {
-        switch side {
-        case .dark:
-            return self.darkPlayer
-        case .light:
-            return self.lightPlayer
-        }
-    }
-    
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
@@ -131,6 +122,15 @@ class Interactor {
 }
 
 private extension Interactor {
+    func player(for side: Side) -> Player {
+        switch side {
+        case .dark:
+            return self.darkPlayer
+        case .light:
+            return self.lightPlayer
+        }
+    }
+    
     func load() throws {
         let parameters = try self.dataStore.load()
         
