@@ -14,7 +14,10 @@ class Interactor {
     
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     var turn: Side? = .dark {
-        didSet { self.delegate?.didChangeTurn() }
+        didSet {
+            self.save()
+            self.delegate?.didChangeTurn()
+        }
     }
     
     #warning("init時に読み込んだ値をセットする")

@@ -142,7 +142,6 @@ extension Presenter: InteractorDelegate {
             self.displayer?.updateCountLabels()
             
             self.interactor.nextTurn()
-            self.interactor.save()
         }
     }
 }
