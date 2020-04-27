@@ -44,7 +44,6 @@ class Interactor {
     
     private(set) var state: State = .launching
     let dataStore: DataStore
-    #warning("init時にdiskをセットする")
     var board: Board
     
     #warning("privateにする")
