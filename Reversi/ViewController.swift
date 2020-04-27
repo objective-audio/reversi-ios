@@ -87,11 +87,11 @@ extension ViewController: Displayable {
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
             self.messageDiskView.disk = side.disk
             self.messageLabel.text = "'s turn"
-        case .won(let side):
+        case .result(.won(let side)):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
             self.messageDiskView.disk = side.disk
             self.messageLabel.text = " won"
-        case .tied:
+        case .result(.tied):
             self.messageDiskSizeConstraint.constant = 0
             self.messageLabel.text = "Tied"
         }

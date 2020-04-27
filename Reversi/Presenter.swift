@@ -17,8 +17,7 @@ protocol Displayable: class {
 class Presenter {
     enum Status {
         case turn(side: Side)
-        case won(side: Side)
-        case tied
+        case result(Result)
     }
     
     private let interactor: Interactor
@@ -41,9 +40,9 @@ class Presenter {
             return .turn(side: side)
         case .none:
             if let winner = self.interactor.board.sideWithMoreDisks() {
-                return .won(side: winner)
+                return .result(.won(side: winner))//won(side: winner)
             } else {
-                return .tied
+                return .result(.tied)
             }
         }
     }
