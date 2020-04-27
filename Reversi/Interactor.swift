@@ -74,7 +74,12 @@ class Interactor {
                 self.waitForPlayer()
             }
         case .changePlayer(let player, let side):
-            self.setPlayer(player, side: side)
+            switch self.state {
+            case .launching:
+                fatalError()
+            default:
+                self.setPlayer(player, side: side)
+            }
         case .placeDisk(let position):
             self.placeDiskByManual(at: position)
         case .endPlaceDisks:
