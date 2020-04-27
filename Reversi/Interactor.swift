@@ -168,9 +168,9 @@ private extension Interactor {
         self.darkPlayer = .manual
         self.lightPlayer = .manual
         
-        self.delegate?.didBeginNewGame()
-        
         self.state = .waiting(side: .dark, player: .manual)
+        
+        self.delegate?.didBeginNewGame()
     }
     
     /// プレイヤーの行動を待ちます。
@@ -253,17 +253,17 @@ private extension Interactor {
         
         if self.board.validMoves(for: nextSide).isEmpty {
             if self.board.validMoves(for: currentSide).isEmpty {
-                self.turn = nil
-                
                 if let winner = self.board.sideWithMoreDisks() {
                     self.state = .result(.won(side: winner))
                 } else {
                     self.state = .result(.tied)
                 }
-            } else {
-                self.turn = nextSide
                 
+                self.turn = nil
+            } else {
                 self.state = .passing(side: nextSide)
+                
+                self.turn = nextSide
                 
                 self.delegate?.noPlaceToPutDisk()
             }
