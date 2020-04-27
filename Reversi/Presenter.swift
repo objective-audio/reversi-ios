@@ -28,19 +28,7 @@ class Presenter {
     
     var disks: [[Disk?]] { self.interactor.board.disks }
     
-    var status: Status {
-        #warning("stateから取得する")
-        switch self.interactor.turn {
-        case .some(let side):
-            return .turn(side: side)
-        case .none:
-            if let winner = self.interactor.board.sideWithMoreDisks() {
-                return .result(.won(side: winner))
-            } else {
-                return .result(.tied)
-            }
-        }
-    }
+    var status: Status { self.interactor.status }
     
     func diskCount(of side: Side) -> Int {
         return self.interactor.board.diskCount(of: side)

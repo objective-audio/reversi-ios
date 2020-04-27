@@ -42,7 +42,17 @@ class Interactor {
         }
     }
     
-    private(set) var state: State = .launching
+    private(set) var state: State
+    
+    var status: Status {
+        switch self.state {
+        case .launching(let side), .waiting(let side, _), .placing(let side), .passing(let side):
+            return .turn(side: side)
+        case .result(let result):
+            return .result(result)
+        }
+    }
+    
     let dataStore: DataStore
     var board: Board
     
@@ -60,12 +70,32 @@ class Interactor {
             self.turn = parameters.turn
             self.darkPlayer = parameters.darkPlayer
             self.lightPlayer = parameters.lightPlayer
-            self.board = .init(disks: parameters.board)
+            
+            let board = Board(disks: parameters.board)
+            self.board = board
+            
+            #warning("整理したい")
+            switch parameters.turn {
+            case .some(let side):
+                switch side {
+                case .dark:
+                    self.state = .launching(side: .dark)
+                case .light:
+                    self.state = .launching(side: .light)
+                }
+            case .none:
+                if let winner = board.sideWithMoreDisks() {
+                    self.state = .result(.won(side: winner))
+                } else {
+                    self.state = .result(.tied)
+                }
+            }
         } catch {
             self.turn = .dark
             self.darkPlayer = .manual
             self.lightPlayer = .manual
             self.board = .init()
+            self.state = .launching(side: .dark)
         }
     }
     
@@ -73,12 +103,7 @@ class Interactor {
         switch action {
         case .begin:
             if case .launching = self.state {
-                if self.turn != nil {
-                    self.waitForPlayer()
-                } else {
-                    fatalError()
-                    #warning("resultやpassingになる")
-                }
+                self.waitForPlayer()
             }
         case .changePlayer(let player, let side):
             switch self.state {
