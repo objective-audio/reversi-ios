@@ -83,11 +83,11 @@ private extension Presenter {
     /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
     /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
     /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
-    func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping (Bool) -> Void)
+    func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping () -> Void)
         where C.Element == Board.Position
     {
         guard let position = coordinates.first else {
-            completion(true)
+            completion()
             return
         }
         
@@ -102,7 +102,7 @@ private extension Presenter {
                 for position in coordinates {
                     self.displayer?.setBoardDisk(disk, at: position, animated: false, completion: nil)
                 }
-                completion(false)
+                completion()
             }
         }
     }
@@ -134,7 +134,7 @@ extension Presenter: InteractorDelegate {
             self?.interactor.animationCanceller = nil
         }
         self.interactor.animationCanceller = Canceller(cleanUp)
-        self.animateSettingDisks(at: positions, to: side.disk) { [weak self] isFinished in
+        self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
             guard let self = self else { return }
             guard let canceller = self.interactor.animationCanceller else { return }
             if canceller.isCancelled { return }
