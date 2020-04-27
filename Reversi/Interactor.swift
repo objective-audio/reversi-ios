@@ -15,22 +15,28 @@ class Interactor {
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     var turn: Side? = .dark {
         didSet {
-            self.save()
-            self.delegate?.didChangeTurn()
+            if self.turn != oldValue {
+                self.save()
+                self.delegate?.didChangeTurn()
+            }
         }
     }
     
     #warning("init時に読み込んだ値をセットする")
     var darkPlayer: Player = .manual {
         didSet {
-            self.save()
-            self.didChangePlayer(side: .dark)
+            if self.darkPlayer != oldValue {
+                self.save()
+                self.didChangePlayer(side: .dark)
+            }
         }
     }
     var lightPlayer: Player = .manual {
         didSet {
-            self.save()
-            self.didChangePlayer(side: .light)
+            if self.lightPlayer != oldValue {
+                self.save()
+                self.didChangePlayer(side: .light)
+            }
         }
     }
     
