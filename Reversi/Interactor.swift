@@ -60,30 +60,6 @@ class Interactor {
         }
     }
     
-    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    func playTurnOfComputer() {
-        guard let side = self.turn else { preconditionFailure() }
-        let position = self.board.validMoves(for: side).randomElement()!
-
-        self.delegate?.willBeginComputerWaiting(side: side)
-        
-        let cleanUp: () -> Void = { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.didEndComputerWaiting(side: side)
-            self.playerCancellers[side] = nil
-        }
-        let canceller = Canceller(cleanUp)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-            if canceller.isCancelled { return }
-            cleanUp()
-            
-            try! self.placeDisk(at: position)
-        }
-        
-        self.playerCancellers[side] = canceller
-    }
-    
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
         guard let side = self.turn else { return }
@@ -181,6 +157,30 @@ private extension Interactor {
         self.lightPlayer = .manual
         
         self.delegate?.didBeginNewGame()
+    }
+    
+    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    func playTurnOfComputer() {
+        guard let side = self.turn else { preconditionFailure() }
+        let position = self.board.validMoves(for: side).randomElement()!
+
+        self.delegate?.willBeginComputerWaiting(side: side)
+        
+        let cleanUp: () -> Void = { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.didEndComputerWaiting(side: side)
+            self.playerCancellers[side] = nil
+        }
+        let canceller = Canceller(cleanUp)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            if canceller.isCancelled { return }
+            cleanUp()
+            
+            try! self.placeDisk(at: position)
+        }
+        
+        self.playerCancellers[side] = canceller
     }
     
     func placeDisk(at position: Board.Position) throws {
