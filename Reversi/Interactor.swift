@@ -19,10 +19,16 @@ class Interactor {
     
     #warning("init時に読み込んだ値をセットする")
     var darkPlayer: Player = .manual {
-        didSet { self.save() }
+        didSet {
+            self.save()
+            self.didChangePlayer(side: .dark)
+        }
     }
     var lightPlayer: Player = .manual {
-        didSet { self.save() }
+        didSet {
+            self.save()
+            self.didChangePlayer(side: .light)
+        }
     }
     
     #warning("init時にdiskをセットする")
@@ -139,20 +145,12 @@ class Interactor {
         self.waitForPlayer()
     }
     
-    func changePlayer(_ player: Player, side: Side) {
+    func setPlayer(_ player: Player, side: Side) {
         switch side {
         case .dark:
             self.darkPlayer = player
         case .light:
             self.lightPlayer = player
-        }
-        
-        if let canceller = self.playerCancellers[side] {
-            canceller.cancel()
-        }
-        
-        if !self.isAnimating, side == self.turn, case .computer = player {
-            self.playTurnOfComputer()
         }
     }
     
@@ -192,6 +190,16 @@ private extension Interactor {
         positions.forEach { self.board.setDisk(disk, at: $0) }
         
         self.delegate?.didPlaceDisks(side: side, positions: positions)
+    }
+    
+    func didChangePlayer(side: Side) {
+        if let canceller = self.playerCancellers[side] {
+            canceller.cancel()
+        }
+        
+        if !self.isAnimating, side == self.turn, case .computer = self.player(for: side) {
+            self.playTurnOfComputer()
+        }
     }
 }
 

@@ -61,7 +61,7 @@ class Presenter {
     }
     
     func changePlayer(_ player: Player, side: Side) {
-        self.interactor.changePlayer(player, side: side)
+        self.interactor.setPlayer(player, side: side)
     }
     
     func selectBoard(at position: Board.Position) {
