@@ -102,7 +102,12 @@ class Interactor {
                 fatalError()
             }
         case .reset:
-            self.reset()
+            switch self.state {
+            case .launching:
+                fatalError()
+            default:
+                self.reset()
+            }
         }
     }
 }
