@@ -170,10 +170,10 @@ private extension Interactor {
     func load() throws {
         let parameters = try self.dataStore.load()
         
+        self.board.setDisks(parameters.board)
         self.turn = parameters.turn
         self.darkPlayer = parameters.darkPlayer
         self.lightPlayer = parameters.lightPlayer
-        self.board.setDisks(parameters.board)
     }
     
     func placeDisk(at position: Board.Position) throws {
