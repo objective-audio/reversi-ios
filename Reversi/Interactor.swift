@@ -56,11 +56,8 @@ class Interactor {
     func newGame() {
         self.board.resetDisks()
         self.turn = .dark
-        
         self.darkPlayer = .manual
         self.lightPlayer = .manual
-        
-        self.save()
         
         self.delegate?.didBeginNewGame()
     }
