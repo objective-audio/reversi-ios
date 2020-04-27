@@ -21,16 +21,8 @@ struct Board {
         self.disks = disks
     }
     
-    mutating func setDisks(_ disks: [[Disk?]]) {
-        self.disks = disks
-    }
-    
     mutating func setDisk(_ disk: Disk?, at position: Position) {
         self.disks[position.y][position.x] = disk
-    }
-    
-    mutating func resetDisks() {
-        self.disks = Self.initialDisks()
     }
     
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。

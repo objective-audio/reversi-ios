@@ -164,7 +164,7 @@ private extension Interactor {
     
     func newGame() {
         #warning("resetDisksを先にしてディスク位置が保存されるようにしている")
-        self.board.resetDisks()
+        self.board = .init()
         self.turn = .dark
         self.darkPlayer = .manual
         self.lightPlayer = .manual
