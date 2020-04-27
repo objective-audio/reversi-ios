@@ -1,5 +1,7 @@
 import Foundation
 
+private let computerThinkTIme = 2.0
+
 protocol InteractorDelegate: class {
     func didBeginNewGame()
     func didChangeTurn()
@@ -169,7 +171,7 @@ private extension Interactor {
             self.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkTIme) { [weak self] in
             guard let self = self else { return }
             if canceller.isCancelled { return }
             cleanUp()
