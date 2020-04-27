@@ -68,17 +68,6 @@ class Interactor {
         self.waitForPlayer()
     }
     
-    /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        guard let side = self.turn else { return }
-        switch self.player(for: side) {
-        case .manual:
-            break
-        case .computer:
-            self.playTurnOfComputer()
-        }
-    }
-    
     func player(for side: Side) -> Player {
         switch side {
         case .dark:
@@ -165,6 +154,17 @@ private extension Interactor {
         self.lightPlayer = .manual
         
         self.delegate?.didBeginNewGame()
+    }
+    
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer() {
+        guard let side = self.turn else { return }
+        switch self.player(for: side) {
+        case .manual:
+            break
+        case .computer:
+            self.playTurnOfComputer()
+        }
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
