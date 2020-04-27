@@ -6,9 +6,7 @@ protocol InteractorDelegate: class {
     func willBeginComputerWaiting(side: Side)
     func didEndComputerWaiting(side: Side)
     func noPlaceToPutDisk()
-    
-    #warning("残すつもりはない")
-    func placeDisk(_ disk: Disk, at position: Board.Position, completion: ((Bool) -> Void)?) throws
+    func didPlaceDisks(side: Side, positions: [Board.Position])
 }
 
 class Interactor {
@@ -80,9 +78,7 @@ class Interactor {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.delegate?.placeDisk(side.disk, at: position) { [weak self] _ in
-                self?.nextTurn()
-            }
+            try! self.placeDisk(at: position)
         }
         
         self.playerCancellers[side] = canceller
@@ -164,10 +160,8 @@ class Interactor {
         guard let side = self.turn else { return }
         if self.isAnimating { return }
         guard case .manual = self.player(for: side) else { return }
-        // try? because doing nothing when an error occurs
-        try? self.delegate?.placeDisk(side.disk, at: position) { [weak self] _ in
-            self?.nextTurn()
-        }
+        
+        try? self.placeDisk(at: position)
     }
 }
 
@@ -180,9 +174,28 @@ private extension Interactor {
         self.lightPlayer = parameters.lightPlayer
         self.board.setDisks(parameters.board)
     }
+    
+    func placeDisk(at position: Board.Position) throws {
+        guard let side = self.turn else {
+            throw DiskPlacementError(disk: nil, position: position)
+        }
+        
+        let disk = side.disk
+        
+        let diskCoordinates = self.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
+        if diskCoordinates.isEmpty {
+            throw DiskPlacementError(disk: disk, position: position)
+        }
+        
+        let positions = [position] + diskCoordinates
+        
+        positions.forEach { self.board.setDisk(disk, at: $0) }
+        
+        self.delegate?.didPlaceDisks(side: side, positions: positions)
+    }
 }
 
 struct DiskPlacementError: Error {
-    let disk: Disk
+    let disk: Disk?
     let position: Board.Position
 }
