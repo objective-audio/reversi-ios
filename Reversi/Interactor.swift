@@ -42,7 +42,7 @@ class Interactor {
     private(set) var state: State = .launching
     let dataStore: DataStore
     #warning("init時にdiskをセットする")
-    var board: Board = .init()
+    var board: Board
     
     #warning("privateにする")
     var animationCanceller: Canceller?
@@ -58,12 +58,12 @@ class Interactor {
             self.turn = parameters.turn
             self.darkPlayer = parameters.darkPlayer
             self.lightPlayer = parameters.lightPlayer
-            self.board.setDisks(parameters.board)
+            self.board = .init(disks: parameters.board)
         } catch {
             self.turn = .dark
             self.darkPlayer = .manual
             self.lightPlayer = .manual
-            self.board.resetDisks()
+            self.board = .init()
         }
     }
     
