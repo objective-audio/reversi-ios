@@ -60,15 +60,6 @@ class Interactor {
         }
     }
     
-    func newGame() {
-        self.board.resetDisks()
-        self.turn = .dark
-        self.darkPlayer = .manual
-        self.lightPlayer = .manual
-        
-        self.delegate?.didBeginNewGame()
-    }
-    
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer() {
         guard let side = self.turn else { preconditionFailure() }
@@ -181,6 +172,15 @@ private extension Interactor {
                                        darkPlayer: self.darkPlayer,
                                        lightPlayer: self.lightPlayer,
                                        board: self.board.disks))
+    }
+    
+    func newGame() {
+        self.board.resetDisks()
+        self.turn = .dark
+        self.darkPlayer = .manual
+        self.lightPlayer = .manual
+        
+        self.delegate?.didBeginNewGame()
     }
     
     func placeDisk(at position: Board.Position) throws {
