@@ -101,10 +101,6 @@ extension ViewController: Displayable {
         self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animated, completion: completion)
     }
     
-    func setBoardDisk(_ disk: Disk?, at position: Board.Position) {
-        self.setBoardDisk(disk, at: position, animated: false, completion: nil)
-    }
-    
     func startPlayerActivityIndicatorAnimating(side: Side) {
         self.playerActivityIndicators[side.rawValue].startAnimating()
     }

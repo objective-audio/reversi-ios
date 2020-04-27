@@ -12,7 +12,6 @@ protocol Displayable: class {
     
     #warning("completionを無くしたい?")
     func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
-    func setBoardDisk(_ disk: Disk?, at position: Board.Position)
 }
 
 class Presenter {
