@@ -1,6 +1,7 @@
 import Foundation
 
-private let computerThinkTIme = 2.0
+#warning("2.0に戻す")
+private let computerThinkTIme = 0.3
 
 protocol InteractorDelegate: class {
     func didBeginNewGame()
