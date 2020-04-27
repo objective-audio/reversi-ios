@@ -103,6 +103,7 @@ class Interactor {
         switch action {
         case .begin:
             if case .launching = self.state {
+                #warning("passingを考慮")
                 self.waitForPlayer()
             }
         case .changePlayer(let player, let side):
