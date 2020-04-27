@@ -96,7 +96,11 @@ class Interactor {
                 fatalError()
             }
         case .pass:
-            self.nextTurn()
+            if case .passing = self.state {
+                self.nextTurn()
+            } else {
+                fatalError()
+            }
         case .reset:
             self.reset()
         }
