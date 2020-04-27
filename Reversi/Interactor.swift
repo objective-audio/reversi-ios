@@ -47,7 +47,7 @@ class Interactor {
     #warning("privateにする")
     var animationCanceller: Canceller?
     var isAnimating: Bool { animationCanceller != nil }
-    var playerCancellers: [Side: Canceller] = [:]
+    private var playerCancellers: [Side: Canceller] = [:]
     
     init(dataStore: DataStore = .init()) {
         self.dataStore = dataStore
