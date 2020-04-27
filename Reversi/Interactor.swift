@@ -73,8 +73,12 @@ class Interactor {
         switch action {
         case .begin:
             if case .launching = self.state {
-                #warning("resultやpassingになる場合がある")
-                self.waitForPlayer()
+                if self.turn != nil {
+                    self.waitForPlayer()
+                } else {
+                    fatalError()
+                    #warning("resultやpassingになる")
+                }
             }
         case .changePlayer(let player, let side):
             switch self.state {
