@@ -20,7 +20,7 @@ class Presenter {
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
-        interactor.delegate = self
+        interactor.eventReceiver = self
     }
     
     var darkPlayer: Player { self.interactor.darkPlayer }
@@ -55,6 +55,25 @@ class Presenter {
     }
 }
 
+extension Presenter: InteractorEventReceiver {
+    func receiveEvent(_ event: InteractorEvent) {
+        switch event {
+        case .didBeginNewGame:
+            self.displayer?.updateAll()
+        case .didChangeTurn:
+            self.displayer?.updateMessageViews()
+        case .willBeginComputerWaiting(let side):
+            self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
+        case .didEndComputerWaiting(let side):
+            self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
+        case .noPlaceToPutDisk:
+            self.displayer?.presentPassView()
+        case .didPlaceDisks(let side, let positions):
+            self.didPlaceDisks(side: side, positions: positions)
+        }
+    }
+}
+
 private extension Presenter {
     /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
     /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
@@ -82,28 +101,6 @@ private extension Presenter {
                 completion()
             }
         }
-    }
-}
-
-extension Presenter: InteractorDelegate {
-    func didBeginNewGame() {
-        self.displayer?.updateAll()
-    }
-    
-    func didChangeTurn() {
-        self.displayer?.updateMessageViews()
-    }
-    
-    func willBeginComputerWaiting(side: Side) {
-        self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
-    }
-    
-    func didEndComputerWaiting(side: Side) {
-        self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
-    }
-    
-    func noPlaceToPutDisk() {
-        self.displayer?.presentPassView()
     }
     
     func didPlaceDisks(side: Side, positions: [Board.Position]) {

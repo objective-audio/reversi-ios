@@ -3,24 +3,28 @@ import Foundation
 #warning("2.0に戻す")
 private let computerThinkTIme = 0.3
 
-protocol InteractorDelegate: class {
-    func didBeginNewGame()
-    func didChangeTurn()
-    func willBeginComputerWaiting(side: Side)
-    func didEndComputerWaiting(side: Side)
-    func noPlaceToPutDisk()
-    func didPlaceDisks(side: Side, positions: [Board.Position])
+enum InteractorEvent {
+    case didBeginNewGame
+    case didChangeTurn
+    case willBeginComputerWaiting(side: Side)
+    case didEndComputerWaiting(side: Side)
+    case noPlaceToPutDisk
+    case didPlaceDisks(side: Side, positions: [Board.Position])
+}
+
+protocol InteractorEventReceiver: class {
+    func receiveEvent(_ event: InteractorEvent)
 }
 
 class Interactor {
-    weak var delegate: InteractorDelegate?
+    weak var eventReceiver: InteractorEventReceiver?
     
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     var turn: Side? {
         didSet {
             if self.turn != oldValue {
                 self.save()
-                self.delegate?.didChangeTurn()
+                self.eventReceiver?.receiveEvent(.didChangeTurn)
             }
         }
     }
@@ -171,7 +175,7 @@ private extension Interactor {
         
         self.state = .waiting(side: .dark, player: .manual)
         
-        self.delegate?.didBeginNewGame()
+        self.eventReceiver?.receiveEvent(.didBeginNewGame)
     }
     
     /// プレイヤーの行動を待ちます。
@@ -194,11 +198,11 @@ private extension Interactor {
         guard let side = self.turn else { preconditionFailure() }
         let position = self.board.validMoves(for: side).randomElement()!
 
-        self.delegate?.willBeginComputerWaiting(side: side)
+        self.eventReceiver?.receiveEvent(.willBeginComputerWaiting(side: side))
         
         let cleanUp: () -> Void = { [weak self] in
             guard let self = self else { return }
-            self.delegate?.didEndComputerWaiting(side: side)
+            self.eventReceiver?.receiveEvent(.didEndComputerWaiting(side: side))
             self.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
@@ -231,7 +235,7 @@ private extension Interactor {
         
         positions.forEach { self.board.setDisk(disk, at: $0) }
         
-        self.delegate?.didPlaceDisks(side: side, positions: positions)
+        self.eventReceiver?.receiveEvent(.didPlaceDisks(side: side, positions: positions))
     }
     
     func didChangePlayer(side: Side) {
@@ -266,7 +270,7 @@ private extension Interactor {
                 
                 self.turn = nextSide
                 
-                self.delegate?.noPlaceToPutDisk()
+                self.eventReceiver?.receiveEvent(.noPlaceToPutDisk)
             }
         } else {
             self.turn = nextSide
