@@ -13,7 +13,7 @@ class Interactor {
     weak var delegate: InteractorDelegate?
     
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    var turn: Side? = .dark {
+    var turn: Side? {
         didSet {
             if self.turn != oldValue {
                 self.save()
@@ -22,8 +22,7 @@ class Interactor {
         }
     }
     
-    #warning("init時に読み込んだ値をセットする")
-    var darkPlayer: Player = .manual {
+    var darkPlayer: Player {
         didSet {
             if self.darkPlayer != oldValue {
                 self.save()
@@ -31,7 +30,7 @@ class Interactor {
             }
         }
     }
-    var lightPlayer: Player = .manual {
+    var lightPlayer: Player {
         didSet {
             if self.lightPlayer != oldValue {
                 self.save()
@@ -54,9 +53,17 @@ class Interactor {
         self.dataStore = dataStore
         
         do {
-            try self.load()
+            let parameters = try self.dataStore.load()
+            
+            self.turn = parameters.turn
+            self.darkPlayer = parameters.darkPlayer
+            self.lightPlayer = parameters.lightPlayer
+            self.board.setDisks(parameters.board)
         } catch {
-            self.newGame()
+            self.turn = .dark
+            self.darkPlayer = .manual
+            self.lightPlayer = .manual
+            self.board.resetDisks()
         }
     }
     
@@ -146,15 +153,6 @@ private extension Interactor {
         case .light:
             return self.lightPlayer
         }
-    }
-    
-    func load() throws {
-        let parameters = try self.dataStore.load()
-        
-        self.board.setDisks(parameters.board)
-        self.turn = parameters.turn
-        self.darkPlayer = parameters.darkPlayer
-        self.lightPlayer = parameters.lightPlayer
     }
     
     func save() {
