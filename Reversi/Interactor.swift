@@ -70,7 +70,9 @@ class Interactor {
     func doAction(_ action: Action) {
         switch action {
         case .begin:
-            self.begin()
+            if case .launching = self.state {
+                self.waitForPlayer()
+            }
         case .changePlayer(let player, let side):
             self.setPlayer(player, side: side)
         case .placeDisk(let position):
@@ -82,14 +84,6 @@ class Interactor {
         case .reset:
             self.reset()
         }
-    }
-    
-    private var _began: Bool = false
-    func begin() {
-        #warning("処理を無視するのはステートでやる")
-        guard !self._began else { return }
-        self._began = true
-        self.waitForPlayer()
     }
 }
 
@@ -118,12 +112,18 @@ private extension Interactor {
         self.lightPlayer = .manual
         
         self.delegate?.didBeginNewGame()
+        
+        self.waitForPlayer()
     }
     
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
         guard let side = self.turn else { return }
-        switch self.player(for: side) {
+        let player =  self.player(for: side)
+        
+        self.state = .waiting(side: side, player: player)
+        
+        switch player {
         case .manual:
             break
         case .computer:
@@ -216,7 +216,6 @@ private extension Interactor {
         }
         
         self.newGame()
-        self.waitForPlayer()
     }
     
     func setPlayer(_ player: Player, side: Side) {
