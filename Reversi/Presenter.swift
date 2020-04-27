@@ -52,23 +52,23 @@ class Presenter {
     }
     
     func begin() {
-        self.interactor.begin()
+        self.interactor.doAction(.begin)
     }
     
     func changePlayer(_ player: Player, side: Side) {
-        self.interactor.setPlayer(player, side: side)
+        self.interactor.doAction(.changePlayer(player, side: side))
     }
     
     func selectBoard(at position: Board.Position) {
-        self.interactor.placeDiskByManual(at: position)
+        self.interactor.doAction(.placeDisk(position: position))
     }
     
     func reset() {
-        self.interactor.reset()
+        self.interactor.doAction(.reset)
     }
     
     func pass() {
-        self.interactor.nextTurn()
+        self.interactor.doAction(.pass)
     }
 }
 

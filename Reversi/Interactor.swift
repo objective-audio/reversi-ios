@@ -60,6 +60,23 @@ class Interactor {
         }
     }
     
+    func doAction(_ action: Action) {
+        switch action {
+        case .begin:
+            self.begin()
+        case .changePlayer(let player, let side):
+            self.setPlayer(player, side: side)
+        case .placeDisk(let position):
+            self.placeDiskByManual(at: position)
+        case .endPlaceDisks:
+            self.nextTurn()
+        case .pass:
+            self.nextTurn()
+        case .reset:
+            self.reset()
+        }
+    }
+    
     private var _began: Bool = false
     func begin() {
         #warning("処理を無視するのはステートでやる")
