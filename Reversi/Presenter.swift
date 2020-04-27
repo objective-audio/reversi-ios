@@ -51,12 +51,8 @@ class Presenter {
         return self.interactor.board.diskCount(of: side)
     }
     
-    private var _began: Bool = false
     func begin() {
-        #warning("処理を無視するのはステートでやる")
-        guard !self._began else { return }
-        self._began = true
-        self.interactor.waitForPlayer()
+        self.interactor.begin()
     }
     
     func changePlayer(_ player: Player, side: Side) {

@@ -60,6 +60,14 @@ class Interactor {
         }
     }
     
+    private var _began: Bool = false
+    func begin() {
+        #warning("処理を無視するのはステートでやる")
+        guard !self._began else { return }
+        self._began = true
+        self.waitForPlayer()
+    }
+    
     /// プレイヤーの行動を待ちます。
     func waitForPlayer() {
         guard let side = self.turn else { return }
