@@ -81,7 +81,14 @@ class Interactor {
                 self.setPlayer(player, side: side)
             }
         case .placeDisk(let position):
-            self.placeDiskByManual(at: position)
+            switch self.state {
+            case .waiting(_, player: .manual):
+                self.placeDiskByManual(at: position)
+            case .launching:
+                fatalError()
+            default:
+                break
+            }
         case .endPlaceDisks:
             self.nextTurn()
         case .pass:
@@ -171,6 +178,8 @@ private extension Interactor {
         if diskCoordinates.isEmpty {
             throw DiskPlacementError(disk: disk, position: position)
         }
+        
+        self.state = .placing(side: side)
         
         let positions = [position] + diskCoordinates
         
