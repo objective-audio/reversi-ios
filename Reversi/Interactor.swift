@@ -158,6 +158,27 @@ class Interactor {
     }
 }
 
+extension Interactor {
+    enum Action {
+        case begin
+        case placeDisk(position: Board.Position)
+        case endPlaceDisks
+        case changePlayer(_ player: Player, side: Side)
+        case pass
+        case reset
+    }
+    
+    enum Event {
+        case didBeginNewGame
+        case didChangeTurn
+        case willBeginComputerWaiting(side: Side)
+        case didEndComputerWaiting(side: Side)
+        case didEnterPassing
+        case didPlaceDisks(side: Side, positions: [Board.Position])
+        case willReset
+    }
+}
+
 private extension Interactor {
     func player(for side: Side) -> Player {
         switch side {
@@ -240,27 +261,6 @@ private extension Interactor {
         } else {
             self.waitForPlayer(side: nextSide)
         }
-    }
-}
-
-extension Interactor {
-    enum Action {
-        case begin
-        case placeDisk(position: Board.Position)
-        case endPlaceDisks
-        case changePlayer(_ player: Player, side: Side)
-        case pass
-        case reset
-    }
-    
-    enum Event {
-        case didBeginNewGame
-        case didChangeTurn
-        case willBeginComputerWaiting(side: Side)
-        case didEndComputerWaiting(side: Side)
-        case didEnterPassing
-        case didPlaceDisks(side: Side, positions: [Board.Position])
-        case willReset
     }
 }
 
