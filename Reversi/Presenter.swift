@@ -83,9 +83,9 @@ private extension Presenter {
     /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
     /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
     /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
-    func animateSettingDisks<C: Collection>(at coordinates: C, to disk: Disk, completion: @escaping () -> Void)
-        where C.Element == Board.Position
-    {
+    func animateSettingDisks<C: Collection>(at coordinates: C,
+                                            to disk: Disk,
+                                            completion: @escaping () -> Void) where C.Element == Board.Position {
         guard let position = coordinates.first else {
             completion()
             return
