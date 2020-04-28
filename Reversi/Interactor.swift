@@ -103,11 +103,7 @@ class Interactor {
                     self.state = .launching(side: .light)
                 }
             case .none:
-                if let winner = board.sideWithMoreDisks() {
-                    self.state = .result(.won(side: winner))
-                } else {
-                    self.state = .result(.tied)
-                }
+                self.state = .result(board.result())
             }
         } catch {
             self.darkPlayer = .manual
@@ -250,11 +246,7 @@ private extension Interactor {
         
         if self.board.validMoves(for: nextSide).isEmpty {
             if self.board.validMoves(for: currentSide).isEmpty {
-                if let winner = self.board.sideWithMoreDisks() {
-                    self.state = .result(.won(side: winner))
-                } else {
-                    self.state = .result(.tied)
-                }
+                self.state = .result(self.board.result())
             } else {
                 self.state = .passing(side: nextSide)
             }

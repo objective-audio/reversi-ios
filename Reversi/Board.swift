@@ -80,17 +80,13 @@ extension Board {
         return diskCoordinates
     }
     
-    #warning("ゲーム結果の型を作りたい")
-    /// 盤上に置かれたディスクの枚数が多い方の色を返します。
-    /// 引き分けの場合は `nil` が返されます。
-    /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
-    func sideWithMoreDisks() -> Side? {
+    func result() -> Result {
         let darkCount = self.diskCount(of: .dark)
         let lightCount = self.diskCount(of: .light)
         if darkCount == lightCount {
-            return nil
+            return .tied
         } else {
-            return darkCount > lightCount ? .dark : .light
+            return .won(side: darkCount > lightCount ? .dark : .light)
         }
     }
     
