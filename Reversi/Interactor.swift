@@ -18,7 +18,7 @@ class Interactor {
             case .waiting(let side, let player):
                 if case .computer = player {
                     self.playerCanceller?.cancel()
-                    self.eventReceiver?.receiveEvent(.didEndComputerWaiting(side: side))
+                    self.sendEvent(.didEndComputerWaiting(side: side))
                 }
             default:
                 break
@@ -29,20 +29,20 @@ class Interactor {
             
             if self.state.turn != oldValue.turn {
                 self.save()
-                self.eventReceiver?.receiveEvent(.didChangeTurn)
+                self.sendEvent(.didChangeTurn)
             }
             
             switch self.state {
             case .passing:
-                self.eventReceiver?.receiveEvent(.didEnterPassing)
+                self.sendEvent(.didEnterPassing)
             case .waiting(let side, let player):
                 if case .computer = player {
-                    self.eventReceiver?.receiveEvent(.willBeginComputerWaiting(side: side))
+                    self.sendEvent(.willBeginComputerWaiting(side: side))
                     self.playTurnOfComputer(side: side)
                 }
             case .placing(let side, let positions):
                 positions.forEach { self.board.setDisk(side.disk, at: $0) }
-                self.eventReceiver?.receiveEvent(.didPlaceDisks(side: side, positions: positions))
+                self.sendEvent(.didPlaceDisks(side: side, positions: positions))
             default:
                 break
             }
@@ -137,7 +137,7 @@ class Interactor {
             case .launching:
                 fatalError()
             default:
-                self.eventReceiver?.receiveEvent(.willReset)
+                self.sendEvent(.willReset)
                 self.reset()
             }
         }
@@ -191,7 +191,7 @@ private extension Interactor {
         
         self.state = .waiting(side: .dark, player: .manual)
         
-        self.eventReceiver?.receiveEvent(.didBeginNewGame)
+        self.sendEvent(.didBeginNewGame)
     }
     
     /// プレイヤーの行動を待ちます。
@@ -241,6 +241,10 @@ private extension Interactor {
         } else {
             self.waitForPlayer(side: nextSide)
         }
+    }
+    
+    func sendEvent(_ event: Event) {
+        self.eventReceiver?.receiveEvent(event)
     }
 }
 
