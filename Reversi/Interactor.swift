@@ -1,8 +1,5 @@
 import Foundation
 
-#warning("2.0に戻す")
-private let computerThinkDuration = 0.3
-
 enum InteractorEvent {
     case didBeginNewGame
     case didChangeTurn
@@ -79,10 +76,13 @@ class Interactor {
     let dataStore: DataStore
     var board: Board
     
+    private let computerDuration: TimeInterval
     private var playerCanceller: Canceller?
     
-    init(dataStore: DataStore = .init()) {
+    init(dataStore: DataStore = .init(),
+         computerDuration: TimeInterval = 2.0) {
         self.dataStore = dataStore
+        self.computerDuration = computerDuration
         
         do {
             let parameters = try self.dataStore.load()
@@ -211,7 +211,7 @@ private extension Interactor {
         
         self.playerCanceller = canceller
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkDuration) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.computerDuration) { [weak self] in
             guard let self = self else { return }
             guard !canceller.isCancelled else { return }
             self.playerCanceller = nil
