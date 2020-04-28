@@ -45,11 +45,11 @@ class DataStore {
         do { // turn
             guard
                 let sideCharacter = line.popFirst(),
-                let side = Side?(character: sideCharacter)
+                let symbol = Symbol(rawValue: sideCharacter)
             else {
                 throw FileIOError.read(path: path, cause: nil)
             }
-            turn = side
+            turn = Side?.init(symbol: symbol)
         }
 
         // players
@@ -116,16 +116,14 @@ private enum Symbol: Character {
 }
 
 private extension Optional where Wrapped == Side {
-    init?(character: Character) {
-        switch Symbol(rawValue: character) {
+    init(symbol: Symbol) {
+        switch symbol {
         case .dark:
             self = .dark
         case .light:
             self = .light
         case .none:
             self = .none
-        default:
-            return nil
         }
     }
     
