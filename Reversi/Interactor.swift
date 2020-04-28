@@ -78,9 +78,6 @@ class Interactor {
     let dataStore: DataStore
     var board: Board
     
-    #warning("privateにする")
-    var animationCanceller: Canceller?
-    var isAnimating: Bool { animationCanceller != nil }
     private var playerCanceller: Canceller?
     
     init(dataStore: DataStore = .init()) {

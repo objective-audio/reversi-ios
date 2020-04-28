@@ -18,6 +18,8 @@ class Presenter {
     
     weak var displayer: Displayable?
     
+    private var animationCanceller: Canceller?
+    
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
         interactor.eventReceiver = self
@@ -71,8 +73,7 @@ extension Presenter: InteractorEventReceiver {
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)
         case .willReset:
-            self.interactor.animationCanceller?.cancel()
-            self.interactor.animationCanceller = nil
+            self.animationCanceller?.cancel()
         }
     }
 }
@@ -90,7 +91,7 @@ private extension Presenter {
             return
         }
         
-        let animationCanceller = self.interactor.animationCanceller!
+        let animationCanceller = self.animationCanceller!
         
         self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
@@ -108,12 +109,12 @@ private extension Presenter {
     
     func didPlaceDisks(side: Side, positions: [Board.Position]) {
         let cleanUp: () -> Void = { [weak self] in
-            self?.interactor.animationCanceller = nil
+            self?.animationCanceller = nil
         }
-        self.interactor.animationCanceller = Canceller(cleanUp)
+        self.animationCanceller = Canceller(cleanUp)
         self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
             guard let self = self else { return }
-            guard let canceller = self.interactor.animationCanceller else { return }
+            guard let canceller = self.animationCanceller else { return }
             if canceller.isCancelled { return }
             cleanUp()
 
