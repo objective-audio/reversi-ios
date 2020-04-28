@@ -78,8 +78,8 @@ class DataStore {
                 var boardLine: [Disk?] = []
                 var x = 0
                 for character in line {
-                    let disk = Disk?(character: character).flatMap { $0 }
-                    boardLine.append(disk)
+                    guard let symbol = Symbol(rawValue: character) else { continue }
+                    boardLine.append(.init(symbol: symbol))
                     x += 1
                 }
                 guard x == Board.width else {
@@ -140,16 +140,14 @@ private extension Optional where Wrapped == Side {
 }
 
 private extension Optional where Wrapped == Disk {
-    init?(character: Character) {
-        switch Symbol(rawValue: character) {
+    init(symbol: Symbol) {
+        switch symbol {
         case .dark:
             self = .dark
         case .light:
             self = .light
         case .none:
             self = .none
-        default:
-            return nil
         }
     }
     
