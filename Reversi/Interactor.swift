@@ -206,9 +206,8 @@ private extension Interactor {
         self.state = .waiting(side: side, player: self.player(for: side))
     }
     
-    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     func playTurnOfComputer(side: Side) {
-        let position = self.board.validMoves(for: side).randomElement()!
+        guard let position = self.board.validMoves(for: side).randomElement() else { fatalError() }
         
         let canceller = Canceller { [weak self] in
             self?.playerCanceller = nil
