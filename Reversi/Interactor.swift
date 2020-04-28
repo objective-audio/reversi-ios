@@ -121,7 +121,7 @@ class Interactor {
             switch self.state {
             case .waiting(let side, player: .manual):
                 if self.board.canPlaceDisk(side.disk, at: position) {
-                    try? self.placeDisk(side: side, at: position)
+                    self.placeDisk(side: side, at: position)
                 }
             case .launching:
                 fatalError()
