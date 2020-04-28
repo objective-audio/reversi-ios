@@ -12,8 +12,6 @@ class Interactor {
     
     private(set) var state: State {
         willSet {
-            #warning("同じなら処理しない")
-            
             switch self.state {
             case .waiting(let side, let player):
                 if case .computer = player {
@@ -25,8 +23,6 @@ class Interactor {
             }
         }
         didSet {
-            #warning("同じなら処理しない")
-            
             if self.state.turn != oldValue.turn {
                 self.save()
                 self.sendEvent(.didChangeTurn)
