@@ -49,13 +49,29 @@ class Interactor {
     }
     
     private(set) var state: State {
+        willSet {
+            #warning("同じなら処理しない")
+            
+            switch self.state {
+            case .waiting(let side, let player):
+                if case .computer = player {
+                    self.playerCanceller?.cancel()
+                    self.eventReceiver?.receiveEvent(.didEndComputerWaiting(side: side))
+                }
+            default:
+                break
+            }
+        }
         didSet {
+            #warning("同じなら処理しない")
+            
             switch self.state {
             case .passing:
                 self.eventReceiver?.receiveEvent(.didEnterPassing)
-            case .waiting(_, let player):
+            case .waiting(let side, let player):
                 if case .computer = player {
-                    self.playTurnOfComputer()
+                    self.eventReceiver?.receiveEvent(.willBeginComputerWaiting(side: side))
+                    self.playTurnOfComputer(side: side)
                 }
             case .placing(let side, let positions):
                 positions.forEach { self.board.setDisk(side.disk, at: $0) }
@@ -81,7 +97,7 @@ class Interactor {
     #warning("privateにする")
     var animationCanceller: Canceller?
     var isAnimating: Bool { animationCanceller != nil }
-    private var playerCancellers: [Side: Canceller] = [:]
+    private var playerCanceller: Canceller?
     
     init(dataStore: DataStore = .init()) {
         self.dataStore = dataStore
@@ -211,18 +227,17 @@ private extension Interactor {
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    func playTurnOfComputer() {
-        guard let side = self.turn else { preconditionFailure() }
+    func playTurnOfComputer(side: Side) {
         let position = self.board.validMoves(for: side).randomElement()!
-
-        self.eventReceiver?.receiveEvent(.willBeginComputerWaiting(side: side))
         
         let cleanUp: () -> Void = { [weak self] in
-            guard let self = self else { return }
-            self.eventReceiver?.receiveEvent(.didEndComputerWaiting(side: side))
-            self.playerCancellers[side] = nil
+            self?.playerCanceller = nil
         }
+        
         let canceller = Canceller(cleanUp)
+        
+        self.playerCanceller = canceller
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkDuration) { [weak self] in
             guard let self = self else { return }
             if canceller.isCancelled { return }
@@ -230,8 +245,6 @@ private extension Interactor {
             
             try! self.placeDisk(at: position)
         }
-        
-        self.playerCancellers[side] = canceller
     }
     
     func placeDisk(at position: Board.Position) throws {
@@ -250,10 +263,6 @@ private extension Interactor {
     }
     
     func didChangePlayer(_ player: Player, side: Side) {
-        if let canceller = self.playerCancellers[side] {
-            canceller.cancel()
-        }
-        
         if case .waiting(side, player.flipped) = self.state {
             self.state = .waiting(side: side, player: player)
         }
@@ -288,12 +297,6 @@ private extension Interactor {
     
     func reset() {
         self.eventReceiver?.receiveEvent(.willReset)
-        
-        for side in Side.allCases {
-            self.playerCancellers[side]?.cancel()
-            self.playerCancellers.removeValue(forKey: side)
-        }
-        
         self.newGame()
     }
 }
