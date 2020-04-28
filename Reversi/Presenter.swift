@@ -70,6 +70,9 @@ extension Presenter: InteractorEventReceiver {
             self.displayer?.presentPassView()
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)
+        case .willReset:
+            self.interactor.animationCanceller?.cancel()
+            self.interactor.animationCanceller = nil
         }
     }
 }

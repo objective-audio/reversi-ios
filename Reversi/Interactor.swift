@@ -10,6 +10,7 @@ enum InteractorEvent {
     case didEndComputerWaiting(side: Side)
     case noPlaceToPutDisk
     case didPlaceDisks(side: Side, positions: [Board.Position])
+    case willReset
 }
 
 protocol InteractorEventReceiver: class {
@@ -280,8 +281,7 @@ private extension Interactor {
     }
     
     func reset() {
-        self.animationCanceller?.cancel()
-        self.animationCanceller = nil
+        self.eventReceiver?.receiveEvent(.willReset)
         
         for side in Side.allCases {
             self.playerCancellers[side]?.cancel()
