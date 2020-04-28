@@ -83,15 +83,9 @@ class Interactor {
             let board = Board(disks: parameters.board)
             self.board = board
             
-            #warning("整理したい")
             switch parameters.turn {
             case .some(let side):
-                switch side {
-                case .dark:
-                    self.state = .launching(side: .dark)
-                case .light:
-                    self.state = .launching(side: .light)
-                }
+                self.state = .launching(side: side)
             case .none:
                 self.state = .result(board.result())
             }
