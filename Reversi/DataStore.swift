@@ -11,14 +11,14 @@ class DataStore {
     /// ゲームの状態をファイルに書き出し、保存します。
     func save(_ parameters: Parameters) throws {
         var output: String = ""
-        output += parameters.turn.symbol
+        output += String(parameters.turn.symbol.rawValue)
         output += String(parameters.darkPlayer.rawValue)
         output += String(parameters.lightPlayer.rawValue)
         output += "\n"
         
         for line in parameters.board {
             for disk in line {
-                output += disk.symbol
+                output += String(disk.symbol.rawValue)
             }
             output += "\n"
         }
@@ -44,8 +44,8 @@ class DataStore {
         let turn: Side?
         do { // turn
             guard
-                let sideSymbol = line.popFirst(),
-                let side = Optional<Side>(symbol: sideSymbol.description)
+                let sideCharactor = line.popFirst(),
+                let side = Side?(symbol: sideCharactor)
             else {
                 throw FileIOError.read(path: path, cause: nil)
             }
@@ -78,7 +78,7 @@ class DataStore {
                 var boardLine: [Disk?] = []
                 var x = 0
                 for character in line {
-                    let disk = Disk?(symbol: "\(character)").flatMap { $0 }
+                    let disk = Disk?(symbol: character).flatMap { $0 }
                     boardLine.append(disk)
                     x += 1
                 }
@@ -109,55 +109,60 @@ private extension DataStore {
     }
 }
 
+private enum Symbol: Character {
+    case dark = "x"
+    case light = "o"
+    case none = "-"
+}
+
 private extension Optional where Wrapped == Side {
-    init?<S: StringProtocol>(symbol: S) {
-        
-        switch symbol {
-        case "x":
+    init?(symbol: Character) {
+        switch Symbol(rawValue: symbol) {
+        case .dark:
             self = .dark
-        case "o":
+        case .light:
             self = .light
-        case "-":
+        case .none:
             self = .none
         default:
             return nil
         }
     }
     
-    var symbol: String {
+    var symbol: Symbol {
         switch self {
         case .dark:
-            return "x"
+            return .dark
         case .light:
-            return "o"
+            return .light
         case .none:
-            return "-"
+            return .none
         }
     }
 }
 
 private extension Optional where Wrapped == Disk {
-    init?<S: StringProtocol>(symbol: S) {
-        switch symbol {
-        case "x":
+    init?(symbol: Character) {
+        switch Symbol(rawValue: symbol) {
+        case .dark:
             self = .dark
-        case "o":
+        case .light:
             self = .light
-        case "-":
+        case .none:
             self = .none
         default:
             return nil
         }
     }
     
-    var symbol: String {
+    var symbol: Symbol {
         switch self {
         case .dark:
-            return "x"
+            return .dark
         case .light:
-            return "o"
+            return .light
         case .none:
-            return "-"
+            return .none
         }
     }
 }
