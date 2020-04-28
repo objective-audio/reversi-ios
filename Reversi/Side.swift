@@ -17,7 +17,6 @@ extension Side {
 }
 
 extension Side {
-    #warning("置き場所は再考")
     var disk: Disk {
         switch self {
         case .dark: return .dark
