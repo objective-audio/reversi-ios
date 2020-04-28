@@ -1,7 +1,6 @@
 import UIKit
 
-#warning("0.25に戻す")
-private let animationDuration: TimeInterval = 0.1
+private let animationDuration: TimeInterval = 0.25
 
 class CellView: UIView {
     private let button: UIButton = UIButton()
