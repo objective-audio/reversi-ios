@@ -183,7 +183,8 @@ class Interactor {
             case .launching:
                 fatalError()
             default:
-                self.reset()
+                self.eventReceiver?.receiveEvent(.willReset)
+                self.newGame()
             }
         }
     }
@@ -293,11 +294,6 @@ private extension Interactor {
             self.turn = nextSide
             self.waitForPlayer()
         }
-    }
-    
-    func reset() {
-        self.eventReceiver?.receiveEvent(.willReset)
-        self.newGame()
     }
 }
 
