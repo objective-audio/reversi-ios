@@ -35,7 +35,7 @@ class Interactor {
         didSet {
             if self.darkPlayer != oldValue {
                 self.save()
-                self.didChangePlayer(side: .dark)
+                self.didChangePlayer(self.darkPlayer, side: .dark)
             }
         }
     }
@@ -43,7 +43,7 @@ class Interactor {
         didSet {
             if self.lightPlayer != oldValue {
                 self.save()
-                self.didChangePlayer(side: .light)
+                self.didChangePlayer(self.lightPlayer, side: .light)
             }
         }
     }
@@ -53,6 +53,10 @@ class Interactor {
             switch self.state {
             case .passing:
                 self.eventReceiver?.receiveEvent(.didEnterPassing)
+            case .waiting(_, let player):
+                if case .computer = player {
+                    self.playTurnOfComputer()
+                }
             default:
                 break
             }
@@ -201,13 +205,6 @@ private extension Interactor {
         let player =  self.player(for: side)
         
         self.state = .waiting(side: side, player: player)
-        
-        switch player {
-        case .manual:
-            break
-        case .computer:
-            self.playTurnOfComputer()
-        }
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
@@ -255,13 +252,13 @@ private extension Interactor {
         self.eventReceiver?.receiveEvent(.didPlaceDisks(side: side, positions: positions))
     }
     
-    func didChangePlayer(side: Side) {
+    func didChangePlayer(_ player: Player, side: Side) {
         if let canceller = self.playerCancellers[side] {
             canceller.cancel()
         }
         
-        if !self.isAnimating, side == self.turn, case .computer = self.player(for: side) {
-            self.playTurnOfComputer()
+        if case .waiting(side, player.flipped) = self.state {
+            self.state = .waiting(side: side, player: player)
         }
     }
     
