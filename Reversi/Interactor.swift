@@ -125,7 +125,7 @@ class Interactor {
         case .placeDisk(let position):
             switch self.state {
             case .waiting(_, player: .manual):
-                self.placeDiskByManual(at: position)
+                try? self.placeDisk(at: position)
             case .launching:
                 fatalError()
             default:
@@ -298,14 +298,6 @@ private extension Interactor {
         case .light:
             self.lightPlayer = player
         }
-    }
-    
-    func placeDiskByManual(at position: Board.Position) {
-        guard let side = self.turn else { return }
-        if self.isAnimating { return }
-        guard case .manual = self.player(for: side) else { return }
-        
-        try? self.placeDisk(at: position)
     }
     
     func changeStateToPassing(side: Side) {
