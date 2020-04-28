@@ -20,8 +20,6 @@ protocol InteractorEventReceiver: class {
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
-    var status: Status { self.state.status }
-    
     var darkPlayer: Player {
         didSet {
             if self.darkPlayer != oldValue {

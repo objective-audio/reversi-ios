@@ -28,7 +28,7 @@ class Presenter {
     
     var disks: [[Disk?]] { self.interactor.board.disks }
     
-    var status: Status { self.interactor.status }
+    var status: Status { self.interactor.state.status }
     
     func diskCount(of side: Side) -> Int {
         return self.interactor.board.diskCount(of: side)
