@@ -8,6 +8,16 @@ enum State {
     case result(Result)
 }
 
+enum Result {
+    case won(side: Side)
+    case tied
+}
+
+enum Status {
+    case turn(side: Side)
+    case result(Result)
+}
+
 extension State {
     var status: Status {
         switch self {
