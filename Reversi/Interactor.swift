@@ -14,6 +14,15 @@ protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: InteractorEvent)
 }
 
+enum Action {
+    case begin
+    case placeDisk(position: Board.Position)
+    case endPlaceDisks
+    case changePlayer(_ player: Player, side: Side)
+    case pass
+    case reset
+}
+
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
