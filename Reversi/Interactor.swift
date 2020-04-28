@@ -23,12 +23,7 @@ class Interactor {
     #warning("turnはstateで済ませる")
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     var turn: Side? {
-        didSet {
-            if self.turn != oldValue {
-                self.save()
-                self.eventReceiver?.receiveEvent(.didChangeTurn)
-            }
-        }
+        return self.state.turn
     }
     
     var darkPlayer: Player {
@@ -105,7 +100,6 @@ class Interactor {
         do {
             let parameters = try self.dataStore.load()
             
-            self.turn = parameters.turn
             self.darkPlayer = parameters.darkPlayer
             self.lightPlayer = parameters.lightPlayer
             
@@ -129,7 +123,6 @@ class Interactor {
                 }
             }
         } catch {
-            self.turn = .dark
             self.darkPlayer = .manual
             self.lightPlayer = .manual
             self.board = .init()
@@ -144,7 +137,7 @@ class Interactor {
                 if self.board.validMoves(for: side).isEmpty {
                     self.state = .passing(side: side)
                 } else {
-                    self.waitForPlayer()
+                    self.waitForPlayer(side: side)
                 }
             }
         case .changePlayer(let player, let side):
@@ -210,7 +203,6 @@ private extension Interactor {
     func newGame() {
         #warning("resetDisksを先にしてディスク位置が保存されるようにしている")
         self.board = .init()
-        self.turn = .dark
         self.darkPlayer = .manual
         self.lightPlayer = .manual
         
@@ -220,8 +212,7 @@ private extension Interactor {
     }
     
     /// プレイヤーの行動を待ちます。
-    func waitForPlayer() {
-        guard let side = self.turn else { return }
+    func waitForPlayer(side: Side) {
         let player =  self.player(for: side)
         
         self.state = .waiting(side: side, player: player)
@@ -282,15 +273,11 @@ private extension Interactor {
                 } else {
                     self.state = .result(.tied)
                 }
-                
-                self.turn = nil
             } else {
                 self.state = .passing(side: nextSide)
-                self.turn = nextSide
             }
         } else {
-            self.turn = nextSide
-            self.waitForPlayer()
+            self.waitForPlayer(side: nextSide)
         }
     }
 }
