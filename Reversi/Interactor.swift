@@ -252,3 +252,14 @@ private extension Interactor {
         }
     }
 }
+
+private extension State {
+    var turn: Side? {
+        switch self.status {
+        case .turn(let side):
+            return side
+        case .result:
+            return nil
+        }
+    }
+}

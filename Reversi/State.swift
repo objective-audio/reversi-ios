@@ -10,16 +10,6 @@ enum State {
 
 extension State {
     #warning("置き場所は再考")
-    var turn: Side? {
-        switch self.status {
-        case .turn(let side):
-            return side
-        case .result:
-            return nil
-        }
-    }
-    
-    #warning("置き場所は再考")
     var status: Status {
         switch self {
         case .launching(let side), .waiting(let side, _), .placing(let side, _), .passing(let side):
