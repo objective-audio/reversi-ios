@@ -1,7 +1,7 @@
 import Foundation
 
 #warning("2.0に戻す")
-private let computerThinkTIme = 0.3
+private let computerThinkDuration = 0.3
 
 enum InteractorEvent {
     case didBeginNewGame
@@ -210,7 +210,7 @@ private extension Interactor {
             self.playerCancellers[side] = nil
         }
         let canceller = Canceller(cleanUp)
-        DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkTIme) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkDuration) { [weak self] in
             guard let self = self else { return }
             if canceller.isCancelled { return }
             cleanUp()
