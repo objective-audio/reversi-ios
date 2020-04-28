@@ -28,3 +28,6 @@ extension State {
         }
     }
 }
+
+extension Result: Equatable {}
+extension Status: Equatable {}
