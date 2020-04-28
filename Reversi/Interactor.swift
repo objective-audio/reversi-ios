@@ -146,7 +146,7 @@ class Interactor {
                 fatalError()
             default:
                 self.eventReceiver?.receiveEvent(.willReset)
-                self.newGame()
+                self.reset()
             }
         }
     }
@@ -190,7 +190,7 @@ private extension Interactor {
                                        board: self.board.disks))
     }
     
-    func newGame() {
+    func reset() {
         #warning("resetDisksを先にしてディスク位置が保存されるようにしている")
         self.board = .init()
         self.darkPlayer = .manual
