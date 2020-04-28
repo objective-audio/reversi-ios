@@ -20,9 +20,6 @@ protocol InteractorEventReceiver: class {
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
-    #warning("turnはstateで済ませる")
-    /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    var turn: Side? { self.state.turn }
     var status: Status { self.state.status }
     
     var darkPlayer: Player {
@@ -59,7 +56,7 @@ class Interactor {
         didSet {
             #warning("同じなら処理しない")
             
-            if self.turn != oldValue.turn {
+            if self.state.turn != oldValue.turn {
                 self.eventReceiver?.receiveEvent(.didChangeTurn)
             }
             
@@ -188,7 +185,7 @@ private extension Interactor {
     }
     
     func save() {
-        try? self.dataStore.save(.init(turn: self.turn,
+        try? self.dataStore.save(.init(turn: self.state.turn,
                                        darkPlayer: self.darkPlayer,
                                        lightPlayer: self.lightPlayer,
                                        board: self.board.disks))
@@ -234,7 +231,7 @@ private extension Interactor {
     }
     
     func placeDisk(at position: Board.Position) throws {
-        guard let side = self.turn else {
+        guard let side = self.state.turn else {
             throw DiskPlacementError(disk: nil, position: position)
         }
         
