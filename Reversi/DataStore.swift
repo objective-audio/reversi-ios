@@ -73,7 +73,6 @@ class DataStore {
                 throw FileIOError.read(path: path, cause: nil)
             }
             
-            var y = 0
             while let line = lines.popFirst() {
                 var boardLine: [Disk?] = []
                 for character in line {
@@ -84,10 +83,9 @@ class DataStore {
                     throw FileIOError.read(path: path, cause: nil)
                 }
                 board.append(boardLine)
-                y += 1
             }
             
-            guard y == Board.height else {
+            guard board.count == Board.height else {
                 throw FileIOError.read(path: path, cause: nil)
             }
         }
