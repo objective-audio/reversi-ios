@@ -218,11 +218,11 @@ private extension Interactor {
         self.playerCanceller = canceller
         
         DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkDuration) { [weak self] in
-            guard let self = self else { return }
-            if canceller.isCancelled { return }
+            guard !canceller.isCancelled else { return }
+            
             cleanUp()
             
-            try! self.placeDisk(at: position)
+            try! self?.placeDisk(at: position)
         }
     }
     
