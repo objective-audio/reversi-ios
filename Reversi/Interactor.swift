@@ -200,9 +200,7 @@ private extension Interactor {
     
     /// プレイヤーの行動を待ちます。
     func waitForPlayer(side: Side) {
-        let player =  self.player(for: side)
-        
-        self.state = .waiting(side: side, player: player)
+        self.state = .waiting(side: side, player: self.player(for: side))
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
