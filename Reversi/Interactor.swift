@@ -135,8 +135,8 @@ class Interactor {
             }
         case .placeDisk(let position):
             switch self.state {
-            case .waiting(_, player: .manual):
-                try? self.placeDisk(at: position)
+            case .waiting(let side, player: .manual):
+                try? self.placeDisk(side: side, at: position)
             case .launching:
                 fatalError()
             default:
@@ -213,15 +213,11 @@ private extension Interactor {
             guard !canceller.isCancelled else { return }
             self?.playerCanceller = nil
             
-            try! self?.placeDisk(at: position)
+            try! self?.placeDisk(side: side, at: position)
         }
     }
     
-    func placeDisk(at position: Board.Position) throws {
-        guard let side = self.state.turn else {
-            throw DiskPlacementError(disk: nil, position: position)
-        }
-        
+    func placeDisk(side: Side, at position: Board.Position) throws {
         let disk = side.disk
         
         let diskCoordinates = self.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
