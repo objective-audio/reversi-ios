@@ -76,7 +76,9 @@ class DataStore {
             while let line = lines.popFirst() {
                 var boardLine: [Disk?] = []
                 for character in line {
-                    guard let symbol = Symbol(rawValue: character) else { break }
+                    guard let symbol = Symbol(rawValue: character) else {
+                        throw FileIOError.read(path: path, cause: nil)
+                    }
                     boardLine.append(.init(symbol: symbol))
                 }
                 guard boardLine.count == Board.width else {
