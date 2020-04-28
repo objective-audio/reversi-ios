@@ -22,9 +22,8 @@ class Interactor {
     
     #warning("turnはstateで済ませる")
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    var turn: Side? {
-        return self.state.turn
-    }
+    var turn: Side? { self.state.turn }
+    var status: Status { self.state.status }
     
     var darkPlayer: Player {
         didSet {
@@ -78,15 +77,6 @@ class Interactor {
             default:
                 break
             }
-        }
-    }
-    
-    var status: Status {
-        switch self.state {
-        case .launching(let side), .waiting(let side, _), .placing(let side, _), .passing(let side):
-            return .turn(side: side)
-        case .result(let result):
-            return .result(result)
         }
     }
     
