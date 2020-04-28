@@ -80,6 +80,15 @@ extension Board {
         return diskCoordinates
     }
     
+    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
+    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
+    /// - Parameter x: セルの列です。
+    /// - Parameter y: セルの行です。
+    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
+    func canPlaceDisk(_ disk: Disk, at position: Position) -> Bool {
+        !self.flippedDiskCoordinatesByPlacingDisk(disk, at: position).isEmpty
+    }
+    
     func result() -> Result {
         let darkCount = self.diskCount(of: .dark)
         let lightCount = self.diskCount(of: .light)
@@ -113,15 +122,6 @@ private extension Board {
     func diskAt(_ position: Position) -> Disk? {
         guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
         return self.disks[position.y][position.x]
-    }
-    
-    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
-    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
-    /// - Parameter x: セルの列です。
-    /// - Parameter y: セルの行です。
-    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
-    func canPlaceDisk(_ disk: Disk, at position: Position) -> Bool {
-        !self.flippedDiskCoordinatesByPlacingDisk(disk, at: position).isEmpty
     }
 }
 
