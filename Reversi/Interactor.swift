@@ -60,6 +60,10 @@ class Interactor {
         didSet {
             #warning("同じなら処理しない")
             
+            if self.turn != oldValue.turn {
+                self.eventReceiver?.receiveEvent(.didChangeTurn)
+            }
+            
             switch self.state {
             case .passing:
                 self.eventReceiver?.receiveEvent(.didEnterPassing)
