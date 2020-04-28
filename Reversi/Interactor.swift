@@ -107,9 +107,12 @@ class Interactor {
     func doAction(_ action: Action) {
         switch action {
         case .begin:
-            if case .launching = self.state {
-                #warning("passingを考慮")
-                self.waitForPlayer()
+            if case .launching(let side) = self.state {
+                if self.board.validMoves(for: side).isEmpty {
+                    self.changeStateToPassing(side: side)
+                } else {
+                    self.waitForPlayer()
+                }
             }
         case .changePlayer(let player, let side):
             switch self.state {
@@ -267,11 +270,8 @@ private extension Interactor {
                 
                 self.turn = nil
             } else {
-                self.state = .passing(side: nextSide)
-                
+                self.changeStateToPassing(side: nextSide)
                 self.turn = nextSide
-                
-                self.eventReceiver?.receiveEvent(.noPlaceToPutDisk)
             }
         } else {
             self.turn = nextSide
@@ -306,6 +306,11 @@ private extension Interactor {
         guard case .manual = self.player(for: side) else { return }
         
         try? self.placeDisk(at: position)
+    }
+    
+    func changeStateToPassing(side: Side) {
+        self.state = .passing(side: side)
+        self.eventReceiver?.receiveEvent(.noPlaceToPutDisk)
     }
 }
 
