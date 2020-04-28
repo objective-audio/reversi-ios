@@ -209,18 +209,15 @@ private extension Interactor {
     func playTurnOfComputer(side: Side) {
         let position = self.board.validMoves(for: side).randomElement()!
         
-        let cleanUp: () -> Void = { [weak self] in
+        let canceller = Canceller { [weak self] in
             self?.playerCanceller = nil
         }
-        
-        let canceller = Canceller(cleanUp)
         
         self.playerCanceller = canceller
         
         DispatchQueue.main.asyncAfter(deadline: .now() + computerThinkDuration) { [weak self] in
             guard !canceller.isCancelled else { return }
-            
-            cleanUp()
+            self?.playerCanceller = nil
             
             try! self?.placeDisk(at: position)
         }
