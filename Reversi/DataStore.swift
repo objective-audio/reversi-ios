@@ -44,8 +44,8 @@ class DataStore {
         let turn: Side?
         do { // turn
             guard
-                let sideCharactor = line.popFirst(),
-                let side = Side?(symbol: sideCharactor)
+                let sideCharacter = line.popFirst(),
+                let side = Side?(character: sideCharacter)
             else {
                 throw FileIOError.read(path: path, cause: nil)
             }
@@ -78,7 +78,7 @@ class DataStore {
                 var boardLine: [Disk?] = []
                 var x = 0
                 for character in line {
-                    let disk = Disk?(symbol: character).flatMap { $0 }
+                    let disk = Disk?(character: character).flatMap { $0 }
                     boardLine.append(disk)
                     x += 1
                 }
@@ -116,8 +116,8 @@ private enum Symbol: Character {
 }
 
 private extension Optional where Wrapped == Side {
-    init?(symbol: Character) {
-        switch Symbol(rawValue: symbol) {
+    init?(character: Character) {
+        switch Symbol(rawValue: character) {
         case .dark:
             self = .dark
         case .light:
@@ -142,8 +142,8 @@ private extension Optional where Wrapped == Side {
 }
 
 private extension Optional where Wrapped == Disk {
-    init?(symbol: Character) {
-        switch Symbol(rawValue: symbol) {
+    init?(character: Character) {
+        switch Symbol(rawValue: character) {
         case .dark:
             self = .dark
         case .light:
