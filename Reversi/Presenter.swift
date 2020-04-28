@@ -108,15 +108,16 @@ private extension Presenter {
     }
     
     func didPlaceDisks(side: Side, positions: [Board.Position]) {
-        let cleanUp: () -> Void = { [weak self] in
+        self.animationCanceller = Canceller { [weak self] in
             self?.animationCanceller = nil
         }
-        self.animationCanceller = Canceller(cleanUp)
+        
         self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
             guard let self = self else { return }
+            
             guard let canceller = self.animationCanceller else { return }
-            if canceller.isCancelled { return }
-            cleanUp()
+            guard !canceller.isCancelled else { return }
+            self.animationCanceller = nil
 
             self.displayer?.updateCountLabels()
             
