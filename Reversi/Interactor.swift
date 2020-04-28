@@ -120,7 +120,10 @@ class Interactor {
             case .launching:
                 fatalError()
             default:
-                self.setPlayer(player, side: side)
+                switch side {
+                case .dark: self.darkPlayer = player
+                case .light: self.lightPlayer = player
+                }
             }
         case .placeDisk(let position):
             switch self.state {
@@ -289,15 +292,6 @@ private extension Interactor {
         }
         
         self.newGame()
-    }
-    
-    func setPlayer(_ player: Player, side: Side) {
-        switch side {
-        case .dark:
-            self.darkPlayer = player
-        case .light:
-            self.lightPlayer = player
-        }
     }
     
     func changeStateToPassing(side: Side) {
