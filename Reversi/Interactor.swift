@@ -55,6 +55,7 @@ class Interactor {
             #warning("同じなら処理しない")
             
             if self.state.turn != oldValue.turn {
+                self.save()
                 self.eventReceiver?.receiveEvent(.didChangeTurn)
             }
             
