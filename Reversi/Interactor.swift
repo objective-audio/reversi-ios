@@ -63,9 +63,9 @@ class Interactor {
         }
     }
     
-    let dataStore: DataStore
     private(set) var board: Board
     
+    private let dataStore: DataStore
     private let computerDuration: TimeInterval
     private var playerCanceller: Canceller?
     
