@@ -1,17 +1,7 @@
 import Foundation
 
-enum InteractorEvent {
-    case didBeginNewGame
-    case didChangeTurn
-    case willBeginComputerWaiting(side: Side)
-    case didEndComputerWaiting(side: Side)
-    case didEnterPassing
-    case didPlaceDisks(side: Side, positions: [Board.Position])
-    case willReset
-}
-
 protocol InteractorEventReceiver: class {
-    func receiveEvent(_ event: InteractorEvent)
+    func receiveEvent(_ event: Interactor.Event)
 }
 
 class Interactor {
@@ -261,6 +251,16 @@ extension Interactor {
         case changePlayer(_ player: Player, side: Side)
         case pass
         case reset
+    }
+    
+    enum Event {
+        case didBeginNewGame
+        case didChangeTurn
+        case willBeginComputerWaiting(side: Side)
+        case didEndComputerWaiting(side: Side)
+        case didEnterPassing
+        case didPlaceDisks(side: Side, positions: [Board.Position])
+        case willReset
     }
 }
 

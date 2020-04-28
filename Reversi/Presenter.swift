@@ -58,7 +58,7 @@ class Presenter {
 }
 
 extension Presenter: InteractorEventReceiver {
-    func receiveEvent(_ event: InteractorEvent) {
+    func receiveEvent(_ event: Interactor.Event) {
         switch event {
         case .didBeginNewGame:
             self.displayer?.updateAll()
