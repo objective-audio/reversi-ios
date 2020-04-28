@@ -57,6 +57,9 @@ class Interactor {
                 if case .computer = player {
                     self.playTurnOfComputer()
                 }
+            case .placing(let side, let positions):
+                positions.forEach { self.board.setDisk(side.disk, at: $0) }
+                self.eventReceiver?.receiveEvent(.didPlaceDisks(side: side, positions: positions))
             default:
                 break
             }
@@ -65,7 +68,7 @@ class Interactor {
     
     var status: Status {
         switch self.state {
-        case .launching(let side), .waiting(let side, _), .placing(let side), .passing(let side):
+        case .launching(let side), .waiting(let side, _), .placing(let side, _), .passing(let side):
             return .turn(side: side)
         case .result(let result):
             return .result(result)
@@ -243,13 +246,7 @@ private extension Interactor {
             throw DiskPlacementError(disk: disk, position: position)
         }
         
-        self.state = .placing(side: side)
-        
-        let positions = [position] + diskCoordinates
-        
-        positions.forEach { self.board.setDisk(disk, at: $0) }
-        
-        self.eventReceiver?.receiveEvent(.didPlaceDisks(side: side, positions: positions))
+        self.state = .placing(side: side, positions: [position] + diskCoordinates)
     }
     
     func didChangePlayer(_ player: Player, side: Side) {
