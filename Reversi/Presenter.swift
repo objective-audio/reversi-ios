@@ -66,7 +66,7 @@ extension Presenter: InteractorEventReceiver {
             self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
         case .didEndComputerWaiting(let side):
             self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
-        case .noPlaceToPutDisk:
+        case .didEnterPassing:
             self.displayer?.presentPassView()
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)

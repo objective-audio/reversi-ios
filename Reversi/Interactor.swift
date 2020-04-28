@@ -8,7 +8,7 @@ enum InteractorEvent {
     case didChangeTurn
     case willBeginComputerWaiting(side: Side)
     case didEndComputerWaiting(side: Side)
-    case noPlaceToPutDisk
+    case didEnterPassing
     case didPlaceDisks(side: Side, positions: [Board.Position])
     case willReset
 }
@@ -48,7 +48,16 @@ class Interactor {
         }
     }
     
-    private(set) var state: State
+    private(set) var state: State {
+        didSet {
+            switch self.state {
+            case .passing:
+                self.eventReceiver?.receiveEvent(.didEnterPassing)
+            default:
+                break
+            }
+        }
+    }
     
     var status: Status {
         switch self.state {
@@ -110,7 +119,7 @@ class Interactor {
         case .begin:
             if case .launching(let side) = self.state {
                 if self.board.validMoves(for: side).isEmpty {
-                    self.changeStateToPassing(side: side)
+                    self.state = .passing(side: side)
                 } else {
                     self.waitForPlayer()
                 }
@@ -274,7 +283,7 @@ private extension Interactor {
                 
                 self.turn = nil
             } else {
-                self.changeStateToPassing(side: nextSide)
+                self.state = .passing(side: nextSide)
                 self.turn = nextSide
             }
         } else {
@@ -292,11 +301,6 @@ private extension Interactor {
         }
         
         self.newGame()
-    }
-    
-    func changeStateToPassing(side: Side) {
-        self.state = .passing(side: side)
-        self.eventReceiver?.receiveEvent(.noPlaceToPutDisk)
     }
 }
 
