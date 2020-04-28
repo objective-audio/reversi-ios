@@ -7,22 +7,8 @@ protocol InteractorEventReceiver: class {
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
-    var darkPlayer: Player {
-        didSet {
-            if self.darkPlayer != oldValue {
-                self.save()
-                self.didChangePlayer(self.darkPlayer, side: .dark)
-            }
-        }
-    }
-    var lightPlayer: Player {
-        didSet {
-            if self.lightPlayer != oldValue {
-                self.save()
-                self.didChangePlayer(self.lightPlayer, side: .light)
-            }
-        }
-    }
+    var darkPlayer: Player
+    var lightPlayer: Player
     
     private(set) var state: State {
         willSet {
@@ -116,6 +102,12 @@ class Interactor {
                 case .dark: self.darkPlayer = player
                 case .light: self.lightPlayer = player
                 }
+                
+                self.save()
+                
+                if case .waiting(side, player.flipped) = self.state {
+                    self.state = .waiting(side: side, player: player)
+                }
             }
         case .placeDisk(let position):
             switch self.state {
@@ -191,10 +183,11 @@ private extension Interactor {
     }
     
     func reset() {
-        #warning("resetDisksを先にしてディスク位置が保存されるようにしている")
         self.board = .init()
         self.darkPlayer = .manual
         self.lightPlayer = .manual
+        
+        self.save()
         
         self.state = .waiting(side: .dark, player: .manual)
         
@@ -231,12 +224,6 @@ private extension Interactor {
         guard !diskCoordinates.isEmpty else { fatalError() }
         
         self.state = .placing(side: side, positions: [position] + diskCoordinates)
-    }
-    
-    func didChangePlayer(_ player: Player, side: Side) {
-        if case .waiting(side, player.flipped) = self.state {
-            self.state = .waiting(side: side, player: player)
-        }
     }
     
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
