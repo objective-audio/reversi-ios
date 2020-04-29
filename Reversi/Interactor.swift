@@ -146,13 +146,13 @@ extension Interactor {
     }
     
     enum Event {
-        case didReset
         case didChangeTurn
         case willBeginComputerWaiting(side: Side)
         case didEndComputerWaiting(side: Side)
         case didEnterPassing
         case didPlaceDisks(side: Side, positions: [Board.Position])
         case willReset
+        case didReset
     }
 }
 
