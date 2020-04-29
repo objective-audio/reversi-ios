@@ -27,7 +27,7 @@ class InteractorTests: XCTestCase {
         let dataStore = DataStoreMock()
         let interactor = Interactor(dataStore: dataStore)
         
-        XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks())
+        XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks)
         XCTAssertEqual(interactor.darkPlayer, .manual)
         XCTAssertEqual(interactor.lightPlayer, .manual)
         

@@ -2,7 +2,7 @@ import Foundation
 @testable import Reversi
 
 struct TestUtils {
-    static func initialDisks() -> [[Disk?]] {
+    static var initialDisks: [[Disk?]] {
         return [
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -15,7 +15,7 @@ struct TestUtils {
         ]
     }
     
-    static func emptyDisks() -> [[Disk?]] {
+    static var emptyDisks: [[Disk?]] {
         return [
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -26,5 +26,18 @@ struct TestUtils {
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
         ]
+    }
+    
+    static var url: URL {
+        guard let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first?.appendingPathComponent("Game") else { fatalError() }
+        return url
+    }
+    
+    static func writeToFile(string: String) {
+        try! string.write(to: self.url, atomically: true, encoding: .utf8)
+    }
+    
+    static func loadFromFile() -> String {
+        return try! String(contentsOf: self.url)
     }
 }

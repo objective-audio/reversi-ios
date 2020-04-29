@@ -18,7 +18,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            self.writeToFile(string: string)
+            TestUtils.writeToFile(string: string)
             
             guard let loaded = try? DataStore().load() else {
                 XCTFail()
@@ -58,7 +58,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            self.writeToFile(string: string)
+            TestUtils.writeToFile(string: string)
             
             guard let loaded = try? DataStore().load() else {
                 XCTFail()
@@ -85,7 +85,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            self.writeToFile(string: string)
+            TestUtils.writeToFile(string: string)
             
             guard let loaded = try? DataStore().load() else {
                 XCTFail()
@@ -130,7 +130,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            XCTAssertEqual(self.loadFromFile(), expected)
+            XCTAssertEqual(TestUtils.loadFromFile(), expected)
         }
         
         XCTContext.runActivity(named: "turn:light, darkPlayer:computer, lightPlayer:manual") { _ in
@@ -166,7 +166,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            XCTAssertEqual(self.loadFromFile(), expected)
+            XCTAssertEqual(TestUtils.loadFromFile(), expected)
         }
         
         XCTContext.runActivity(named: "turn:none") { _ in
@@ -202,22 +202,7 @@ class DataStoreTests: XCTestCase {
                 
                 """
             
-            XCTAssertEqual(self.loadFromFile(), expected)
+            XCTAssertEqual(TestUtils.loadFromFile(), expected)
         }
-    }
-}
-
-private extension DataStoreTests {
-    var url: URL {
-        guard let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first?.appendingPathComponent("Game") else { fatalError() }
-        return url
-    }
-    
-    func writeToFile(string: String) {
-        try! string.write(to: self.url, atomically: true, encoding: .utf8)
-    }
-    
-    func loadFromFile() -> String {
-        return try! String(contentsOf: self.url)
     }
 }

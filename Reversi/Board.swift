@@ -19,7 +19,7 @@ struct Board {
     
     private(set) var disks: [[Disk?]]
     
-    init(_ disks: [[Disk?]] = Self.initialDisks()) {
+    init(_ disks: [[Disk?]] = Self.initialDisks) {
         precondition(disks.count == Self.height)
         for diskLine in disks {
             precondition(diskLine.count == Self.width)
@@ -129,7 +129,7 @@ private extension Board {
 }
 
 extension Board {
-    static func initialDisks() -> [[Disk?]] {
+    static var initialDisks: [[Disk?]] {
         let line = [Disk?](repeating: nil, count: Self.width)
         var disks = [[Disk?]](repeating: line, count: Self.height)
         
