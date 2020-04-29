@@ -99,16 +99,7 @@ class Interactor {
             case .launching:
                 fatalError()
             default:
-                switch side {
-                case .dark: self.darkPlayer = player
-                case .light: self.lightPlayer = player
-                }
-                
-                self.save()
-                
-                if case .waiting(side, player.flipped) = self.state {
-                    self.state = .waiting(side: side, player: player)
-                }
+                self.changePlayer(player, side: side)
             }
         case .placeDisk(let position):
             switch self.state {
@@ -239,6 +230,21 @@ private extension Interactor {
             }
         } else {
             self.waitForPlayer(side: nextSide)
+        }
+    }
+    
+    func changePlayer(_ player: Player, side: Side) {
+        guard player != self.player(for: side) else { return }
+        
+        switch side {
+        case .dark: self.darkPlayer = player
+        case .light: self.lightPlayer = player
+        }
+        
+        self.save()
+        
+        if case .waiting(side, player.flipped) = self.state {
+            self.state = .waiting(side: side, player: player)
         }
     }
     
