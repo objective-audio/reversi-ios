@@ -76,8 +76,9 @@ extension ViewController: Displayable {
     
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
-        self.countLabels[Side.dark.rawValue].text = "\(self.presenter.diskCount(of: .dark))"
-        self.countLabels[Side.light.rawValue].text = "\(self.presenter.diskCount(of: .light))"
+        for side in Side.allCases {
+            self.countLabels[side.rawValue].text = "\(self.presenter.diskCount(of: side))"
+        }
     }
     
     /// 現在の状況に応じてメッセージを表示します。
@@ -132,8 +133,9 @@ private extension ViewController {
     }
     
     func updatePlayerControls() {
-        self.playerControls[Side.dark.rawValue].selectedSegmentIndex = self.presenter.player(for: .dark).rawValue
-        self.playerControls[Side.light.rawValue].selectedSegmentIndex = self.presenter.player(for: .light).rawValue
+        for side in Side.allCases {
+            self.playerControls[side.rawValue].selectedSegmentIndex = self.presenter.player(for: side).rawValue
+        }
     }
     
     /// アラートを表示して、ゲームを初期化して良いか確認し、
