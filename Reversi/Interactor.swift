@@ -4,6 +4,11 @@ protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: Interactor.Event)
 }
 
+protocol InteractorDataStore {
+    func save(_ parameters: DataStore.Parameters) throws
+    func load() throws -> DataStore.Parameters
+}
+
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
@@ -47,11 +52,11 @@ class Interactor {
     
     private(set) var board: Board
     
-    private let dataStore: DataStore
+    private let dataStore: InteractorDataStore
     private let computerDuration: TimeInterval
     private var playerCanceller: Canceller?
     
-    init(dataStore: DataStore = .init(),
+    init(dataStore: InteractorDataStore = DataStore(),
          computerDuration: TimeInterval = 2.0) {
         self.dataStore = dataStore
         self.computerDuration = computerDuration
@@ -254,3 +259,5 @@ private extension State {
         }
     }
 }
+
+extension DataStore: InteractorDataStore {}
