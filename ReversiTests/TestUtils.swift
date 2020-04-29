@@ -40,4 +40,8 @@ struct TestUtils {
     static func loadFromFile() -> String {
         return try! String(contentsOf: self.url)
     }
+    
+    static func removeFile() {
+        try? FileManager.default.removeItem(at: self.url)
+    }
 }

@@ -2,6 +2,16 @@ import XCTest
 @testable import Reversi
 
 class DataStoreTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        TestUtils.removeFile()
+    }
+    
+    override func tearDown() {
+        TestUtils.removeFile()
+        super.tearDown()
+    }
+    
     func testLoad() {
         XCTContext.runActivity(named: "turn:dark, darkPlayer:manual, lightPlayer:computer") { _ in
             let string =
