@@ -143,3 +143,5 @@ extension Board {
         return disks
     }
 }
+
+extension Board.Position: Equatable {}
