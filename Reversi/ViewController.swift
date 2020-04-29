@@ -67,11 +67,18 @@ extension ViewController: BoardViewDelegate {
 }
 
 extension ViewController: Displayable {
-    func updateAll() {
-        self.updateBoardView()
-        self.updatePlayerControls()
-        self.updateMessageViews()
-        self.updateCountLabels()
+    func updateBoardView() {
+        for (y, boardLine) in self.presenter.disks.enumerated() {
+            for (x, disk) in boardLine.enumerated() {
+                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
+            }
+        }
+    }
+    
+    func updatePlayerControls() {
+        for side in Side.allCases {
+            self.playerControls[side.rawValue].selectedSegmentIndex = self.presenter.player(for: side).rawValue
+        }
     }
     
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
@@ -124,18 +131,11 @@ extension ViewController: Displayable {
 }
 
 private extension ViewController {
-    func updateBoardView() {
-        for (y, boardLine) in self.presenter.disks.enumerated() {
-            for (x, disk) in boardLine.enumerated() {
-                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-            }
-        }
-    }
-    
-    func updatePlayerControls() {
-        for side in Side.allCases {
-            self.playerControls[side.rawValue].selectedSegmentIndex = self.presenter.player(for: side).rawValue
-        }
+    func updateAll() {
+        self.updateBoardView()
+        self.updatePlayerControls()
+        self.updateMessageViews()
+        self.updateCountLabels()
     }
     
     /// アラートを表示して、ゲームを初期化して良いか確認し、

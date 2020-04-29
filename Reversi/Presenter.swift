@@ -1,7 +1,8 @@
 import Foundation
 
 protocol Displayable: class {
-    func updateAll()
+    func updateBoardView()
+    func updatePlayerControls()
     func updateCountLabels()
     func updateMessageViews()
     
@@ -60,7 +61,10 @@ extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
         case .didReset:
-            self.displayer?.updateAll()
+            self.displayer?.updateBoardView()
+            self.displayer?.updatePlayerControls()
+            self.displayer?.updateMessageViews()
+            self.displayer?.updateCountLabels()
         case .didChangeTurn:
             self.displayer?.updateMessageViews()
         case .willBeginComputerWaiting(let side):
