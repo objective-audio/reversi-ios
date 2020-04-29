@@ -91,7 +91,7 @@ class Interactor {
                 if self.board.validMoves(for: side).isEmpty {
                     self.state = .passing(side: side)
                 } else {
-                    self.waitForPlayer(side: side)
+                    self.state = self.waitForPlayer(side: side)
                 }
             }
         case .changePlayer(let player, let side):
@@ -186,8 +186,8 @@ private extension Interactor {
     }
     
     /// プレイヤーの行動を待ちます。
-    func waitForPlayer(side: Side) {
-        self.state = .waiting(side: side, player: self.player(for: side))
+    func waitForPlayer(side: Side) -> State {
+        return .waiting(side: side, player: self.player(for: side))
     }
     
     func playTurnOfComputer(side: Side) {
@@ -230,7 +230,7 @@ private extension Interactor {
                 self.state = .passing(side: nextSide)
             }
         } else {
-            self.waitForPlayer(side: nextSide)
+            self.state = self.waitForPlayer(side: nextSide)
         }
     }
     
