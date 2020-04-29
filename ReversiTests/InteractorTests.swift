@@ -22,6 +22,14 @@ private class DataStoreMock: InteractorDataStore {
     }
 }
 
+private class EventReceiverMock: InteractorEventReceiver {
+    var receiveHandler: ((Interactor.Event) -> Void)?
+    
+    func receiveEvent(_ event: Interactor.Event) {
+        self.receiveHandler?(event)
+    }
+}
+
 class InteractorTests: XCTestCase {
     func testNewGame() {
         let dataStore = DataStoreMock()
@@ -97,14 +105,6 @@ class InteractorTests: XCTestCase {
                 XCTFail()
             }
         }
-    }
-    
-    func testBeginGame() {
-        #warning("todo")
-    }
-    
-    func testBeginPass() {
-        #warning("todo")
     }
     
     func testLoadResultTied() {
@@ -198,6 +198,157 @@ class InteractorTests: XCTestCase {
             XCTFail()
             return
         }
+    }
+    
+    func testBeginNewGame() {
+        let dataStore = DataStoreMock()
+        let eventReceiver = EventReceiverMock()
+        
+        var receivedEvents: [Interactor.Event] = []
+        
+        eventReceiver.receiveHandler = { event in
+            receivedEvents.append(event)
+        }
+        
+        let interactor = Interactor(dataStore: dataStore)
+        
+        if case .launching(let side) = interactor.state {
+            XCTAssertEqual(side, .dark)
+        } else {
+            XCTFail()
+        }
+        
+        interactor.doAction(.begin)
+        
+        if case .waiting(let side, let player) = interactor.state {
+            XCTAssertEqual(side, .dark)
+            XCTAssertEqual(player, .manual)
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertEqual(receivedEvents.count, 0)
+    }
+    
+    func testBeginManualWaiting() {
+        let dataStore = DataStoreMock()
+        let eventReceiver = EventReceiverMock()
+        
+        var receivedEvents: [Interactor.Event] = []
+        
+        let disks: [[Disk?]] = [
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, .light, .dark, nil, nil, nil],
+            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil]
+        ]
+        
+        dataStore.loadHandler = {
+            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .manual, board: disks)
+        }
+        
+        eventReceiver.receiveHandler = { event in
+            receivedEvents.append(event)
+        }
+        
+        let interactor = Interactor(dataStore: dataStore)
+        interactor.eventReceiver = eventReceiver
+        
+        interactor.doAction(.begin)
+        
+        if case .waiting(let side, let player) = interactor.state {
+            XCTAssertEqual(side, .light)
+            XCTAssertEqual(player, .manual)
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertEqual(receivedEvents.count, 0)
+    }
+    
+    func testBeginComputerWaiting() {
+        let dataStore = DataStoreMock()
+        let eventReceiver = EventReceiverMock()
+        
+        var receivedEvents: [Interactor.Event] = []
+        
+        let disks: [[Disk?]] = [
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, .light, .dark, nil, nil, nil],
+            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil]
+        ]
+        
+        dataStore.loadHandler = {
+            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .computer, board: disks)
+        }
+        
+        eventReceiver.receiveHandler = { event in
+            receivedEvents.append(event)
+        }
+        
+        let interactor = Interactor(dataStore: dataStore)
+        interactor.eventReceiver = eventReceiver
+        
+        interactor.doAction(.begin)
+        
+        if case .waiting(let side, let player) = interactor.state {
+            XCTAssertEqual(side, .light)
+            XCTAssertEqual(player, .computer)
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertEqual(receivedEvents.count, 1)
+        XCTAssertEqual(receivedEvents[0], .willBeginComputerWaiting(side: .light))
+    }
+    
+    func testBeginPass() {
+        let dataStore = DataStoreMock()
+        let eventReceiver = EventReceiverMock()
+        
+        var receivedEvents: [Interactor.Event] = []
+        
+        let disks: [[Disk?]] = [
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
+            [nil, nil, nil, .dark, .light, .dark, nil, nil],
+            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil]
+        ]
+        
+        dataStore.loadHandler = {
+            return .init(turn: .dark, darkPlayer: .manual, lightPlayer: .manual, board: disks)
+        }
+        
+        eventReceiver.receiveHandler = { event in
+            receivedEvents.append(event)
+        }
+        
+        let interactor = Interactor(dataStore: dataStore)
+        interactor.eventReceiver = eventReceiver
+        
+        interactor.doAction(.begin)
+        
+        if case .passing(let side) = interactor.state {
+            XCTAssertEqual(side, .dark)
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertEqual(receivedEvents.count, 1)
+        XCTAssertEqual(receivedEvents.last, .didEnterPassing)
     }
     
     func testResetFromManualWaiting() {

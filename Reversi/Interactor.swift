@@ -53,13 +53,13 @@ class Interactor {
     private(set) var board: Board
     
     private let dataStore: InteractorDataStore
-    private let computerDuration: TimeInterval
+    private let computerWaiting: (@escaping () -> Void) -> Void
     private var playerCanceller: Canceller?
     
     init(dataStore: InteractorDataStore = DataStore(),
-         computerDuration: TimeInterval = 2.0) {
+         computerWaiting: @escaping (@escaping () -> Void) -> Void = defaultComputerWaiting) {
         self.dataStore = dataStore
-        self.computerDuration = computerDuration
+        self.computerWaiting = computerWaiting
         
         do {
             let parameters = try self.dataStore.load()
@@ -157,6 +157,10 @@ extension Interactor {
 }
 
 private extension Interactor {
+    static var defaultComputerWaiting: (@escaping () -> Void) -> Void {
+        return { DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: $0) }
+    }
+    
     func player(for side: Side) -> Player {
         switch side {
         case .dark: return self.darkPlayer
@@ -199,7 +203,7 @@ private extension Interactor {
         
         self.playerCanceller = canceller
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + self.computerDuration) { [weak self] in
+        self.computerWaiting { [weak self] in
             guard let self = self else { return }
             guard !canceller.isCancelled else { return }
             self.playerCanceller = nil
