@@ -28,6 +28,11 @@ struct Board {
 }
  
 extension Board {
+    subscript(position: Position) -> Disk? {
+        get { self.disks[position.y][position.x] }
+        set { self.disks[position.y][position.x] = newValue }
+    }
+    
     mutating func setDisk(_ disk: Disk?, at position: Position) {
         self.disks[position.y][position.x] = disk
     }
