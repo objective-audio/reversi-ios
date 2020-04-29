@@ -5,7 +5,7 @@ class BoardTests: XCTestCase {
     func testInitialDisks() {
         let disks = Board.initialDisks()
         
-        XCTAssertEqual(disks, self.initialDisks)
+        XCTAssertEqual(disks, TestUtils.initialDisks())
     }
     
     func testAllPositions() {
@@ -24,7 +24,7 @@ class BoardTests: XCTestCase {
     func testInit() {
         let board = Board()
         
-        XCTAssertEqual(board.disks, self.initialDisks)
+        XCTAssertEqual(board.disks, TestUtils.initialDisks())
     }
     
     func testInitWithDisks() {
@@ -63,7 +63,7 @@ class BoardTests: XCTestCase {
     }
     
     func testSetDisk() {
-        var board = Board(self.emptyDisks)
+        var board = Board(TestUtils.emptyDisks())
         
         let position = Board.Position(x: 2, y: 3)
         
@@ -166,7 +166,7 @@ class BoardTests: XCTestCase {
     
     func testResult() {
         XCTContext.runActivity(named: "lightとdarkが同じ数なら引き分け") { _ in
-            var board = Board(self.emptyDisks)
+            var board = Board(TestUtils.emptyDisks())
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 0, y: 1)] = .dark
@@ -175,7 +175,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "lightが多ければlightの勝ち") { _ in
-            var board = Board(self.emptyDisks)
+            var board = Board(TestUtils.emptyDisks())
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 1, y: 0)] = .light
@@ -185,7 +185,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "darkが多ければdarkの勝ち") { _ in
-            var board = Board(self.emptyDisks)
+            var board = Board(TestUtils.emptyDisks())
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 0, y: 1)] = .dark
@@ -223,33 +223,5 @@ class BoardTests: XCTestCase {
             
             XCTAssertEqual(Set(positions), Set(expected))
         }
-    }
-}
-
-private extension BoardTests {
-    var initialDisks: [[Disk?]] {
-        return [
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, .light, .dark, nil, nil, nil],
-            [nil, nil, nil, .dark, .light, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
-    }
-    
-    var emptyDisks: [[Disk?]] {
-        return [
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
     }
 }
