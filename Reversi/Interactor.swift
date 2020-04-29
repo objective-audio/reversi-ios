@@ -15,6 +15,40 @@ class Interactor {
     var darkPlayer: Player
     var lightPlayer: Player
     
+    private(set) var board: Board
+    
+    private let dataStore: InteractorDataStore
+    private let computerWaiting: (@escaping () -> Void) -> Void
+    private var playerCanceller: Canceller?
+    
+    init(dataStore: InteractorDataStore = DataStore(),
+         computerWaiting: @escaping (@escaping () -> Void) -> Void = defaultComputerWaiting) {
+        self.dataStore = dataStore
+        self.computerWaiting = computerWaiting
+        
+        do {
+            let parameters = try self.dataStore.load()
+            
+            self.darkPlayer = parameters.darkPlayer
+            self.lightPlayer = parameters.lightPlayer
+            
+            let board = Board(parameters.board)
+            self.board = board
+            
+            switch parameters.turn {
+            case .some(let side):
+                self.state = .launching(side: side)
+            case .none:
+                self.state = .result(board.result())
+            }
+        } catch {
+            self.darkPlayer = .manual
+            self.lightPlayer = .manual
+            self.board = .init()
+            self.state = .launching(side: .dark)
+        }
+    }
+    
     private(set) var state: State {
         willSet {
             switch self.state {
@@ -49,39 +83,16 @@ class Interactor {
             }
         }
     }
-    
-    private(set) var board: Board
-    
-    private let dataStore: InteractorDataStore
-    private let computerWaiting: (@escaping () -> Void) -> Void
-    private var playerCanceller: Canceller?
-    
-    init(dataStore: InteractorDataStore = DataStore(),
-         computerWaiting: @escaping (@escaping () -> Void) -> Void = defaultComputerWaiting) {
-        self.dataStore = dataStore
-        self.computerWaiting = computerWaiting
-        
-        do {
-            let parameters = try self.dataStore.load()
-            
-            self.darkPlayer = parameters.darkPlayer
-            self.lightPlayer = parameters.lightPlayer
-            
-            let board = Board(parameters.board)
-            self.board = board
-            
-            switch parameters.turn {
-            case .some(let side):
-                self.state = .launching(side: side)
-            case .none:
-                self.state = .result(board.result())
-            }
-        } catch {
-            self.darkPlayer = .manual
-            self.lightPlayer = .manual
-            self.board = .init()
-            self.state = .launching(side: .dark)
-        }
+}
+
+extension Interactor {
+    enum Action {
+        case begin
+        case placeDisk(position: Board.Position)
+        case endPlaceDisks
+        case changePlayer(_ player: Player, side: Side)
+        case pass
+        case reset
     }
     
     func doAction(_ action: Action) {
@@ -132,17 +143,6 @@ class Interactor {
                 self.reset()
             }
         }
-    }
-}
-
-extension Interactor {
-    enum Action {
-        case begin
-        case placeDisk(position: Board.Position)
-        case endPlaceDisks
-        case changePlayer(_ player: Player, side: Side)
-        case pass
-        case reset
     }
     
     enum Event {
