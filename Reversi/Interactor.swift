@@ -114,13 +114,13 @@ class Interactor {
             }
         case .endPlaceDisks:
             if case .placing(let side, _) = self.state {
-                self.nextTurn(from: side)
+                self.state = self.nextTurn(from: side)
             } else {
                 fatalError()
             }
         case .pass:
             if case .passing(let side) = self.state {
-                self.nextTurn(from: side)
+                self.state = self.nextTurn(from: side)
             } else {
                 fatalError()
             }
@@ -220,17 +220,17 @@ private extension Interactor {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    func nextTurn(from currentSide: Side) {
+    func nextTurn(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
         if self.board.validMoves(for: nextSide).isEmpty {
             if self.board.validMoves(for: currentSide).isEmpty {
-                self.state = .result(self.board.result())
+                return .result(self.board.result())
             } else {
-                self.state = .passing(side: nextSide)
+                return .passing(side: nextSide)
             }
         } else {
-            self.state = self.waitForPlayer(side: nextSide)
+            return self.waitForPlayer(side: nextSide)
         }
     }
     
