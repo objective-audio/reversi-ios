@@ -236,19 +236,8 @@ class InteractorTests: XCTestCase {
         
         var receivedEvents: [Interactor.Event] = []
         
-        let disks: [[Disk?]] = [
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, .light, .dark, nil, nil, nil],
-            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
-        
         dataStore.loadHandler = {
-            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .manual, board: disks)
+            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .manual, board: TestUtils.darkPlacedDisks)
         }
         
         eventReceiver.receiveHandler = { event in
@@ -276,19 +265,8 @@ class InteractorTests: XCTestCase {
         
         var receivedEvents: [Interactor.Event] = []
         
-        let disks: [[Disk?]] = [
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, .light, .dark, nil, nil, nil],
-            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
-        
         dataStore.loadHandler = {
-            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .computer, board: disks)
+            return .init(turn: .light, darkPlayer: .manual, lightPlayer: .computer, board: TestUtils.darkPlacedDisks)
         }
         
         eventReceiver.receiveHandler = { event in

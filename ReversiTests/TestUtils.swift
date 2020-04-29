@@ -41,6 +41,19 @@ struct TestUtils {
         ]
     }
     
+    static var darkPlacedDisks: [[Disk?]] {
+        return [
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, .light, .dark, nil, nil, nil],
+            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil],
+            [nil, nil, nil, nil, nil, nil, nil, nil]
+        ]
+    }
+    
     static var url: URL {
         guard let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first?.appendingPathComponent("Game") else { fatalError() }
         return url
