@@ -69,31 +69,37 @@ class BoardTests: XCTestCase {
         
         Board.allPositions.forEach { XCTAssertNil(board[$0]) }
         
-        board[position] = .light
-        
-        Board.allPositions.forEach {
-            switch $0 {
-            case position:
-                XCTAssertEqual(board[$0], .light)
-            default:
-                XCTAssertNil(board[$0])
+        XCTContext.runActivity(named: "lightを置いてセットされている") { _ in
+            board[position] = .light
+            
+            Board.allPositions.forEach {
+                switch $0 {
+                case position:
+                    XCTAssertEqual(board[$0], .light)
+                default:
+                    XCTAssertNil(board[$0])
+                }
             }
         }
         
-        board[position] = .dark
-        
-        Board.allPositions.forEach {
-            switch $0 {
-            case position:
-                XCTAssertEqual(board[$0], .dark)
-            default:
-                XCTAssertNil(board[$0])
+        XCTContext.runActivity(named: "darkを置いてセットされている") { _ in
+            board[position] = .dark
+            
+            Board.allPositions.forEach {
+                switch $0 {
+                case position:
+                    XCTAssertEqual(board[$0], .dark)
+                default:
+                    XCTAssertNil(board[$0])
+                }
             }
         }
         
-        board[position] = nil
-        
-        Board.allPositions.forEach { XCTAssertNil(board[$0]) }
+        XCTContext.runActivity(named: "nilを置いてセットされている") { _ in
+            board[position] = nil
+            
+            Board.allPositions.forEach { XCTAssertNil(board[$0]) }
+        }
     }
     
     func testFlippedDiskCoordinatesByPlacingDiskWithInitialDisks() {
