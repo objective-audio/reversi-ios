@@ -60,7 +60,7 @@ class Presenter {
 extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
-        case .didBeginNewGame:
+        case .didReset:
             self.displayer?.updateAll()
         case .didChangeTurn:
             self.displayer?.updateMessageViews()

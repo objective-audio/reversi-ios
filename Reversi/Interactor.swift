@@ -146,7 +146,7 @@ extension Interactor {
     }
     
     enum Event {
-        case didBeginNewGame
+        case didReset
         case didChangeTurn
         case willBeginComputerWaiting(side: Side)
         case didEndComputerWaiting(side: Side)
@@ -182,7 +182,7 @@ private extension Interactor {
         
         self.state = .waiting(side: .dark, player: .manual)
         
-        self.sendEvent(.didBeginNewGame)
+        self.sendEvent(.didReset)
     }
     
     /// プレイヤーの行動を待ちます。
