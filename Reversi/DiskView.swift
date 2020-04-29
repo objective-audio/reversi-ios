@@ -1,41 +1,41 @@
 import UIKit
 
-class DiskView: UIView {
+public class DiskView: UIView {
     /// このビューが表示するディスクの色を決定します。
-    var disk: Disk = .dark {
+    public var disk: Disk = .dark {
         didSet { setNeedsDisplay() }
     }
     
     /// Interface Builder からディスクの色を設定するためのプロパティです。 `"dark"` か `"light"` の文字列を設定します。
-    @IBInspectable var name: String {
-        get { self.disk.name }
-        set { self.disk = .init(name: newValue) }
+    @IBInspectable public var name: String {
+        get { disk.name }
+        set { disk = .init(name: newValue) }
     }
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
-        self.setUp()
+        setUp()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.setUp()
+        setUp()
     }
 
     private func setUp() {
-        self.backgroundColor = .clear
-        self.isUserInteractionEnabled = false
+        backgroundColor = .clear
+        isUserInteractionEnabled = false
     }
 
-    override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setFillColor(self.disk.cgColor)
+        context.setFillColor(disk.cgColor)
         context.fillEllipse(in: bounds)
     }
 }
 
 extension Disk {
-    private var uiColor: UIColor {
+    fileprivate var uiColor: UIColor {
         switch self {
         case .dark: return UIColor(named: "DarkColor")!
         case .light: return UIColor(named: "LightColor")!
@@ -43,7 +43,7 @@ extension Disk {
     }
     
     fileprivate var cgColor: CGColor {
-        self.uiColor.cgColor
+        uiColor.cgColor
     }
     
     fileprivate var name: String {

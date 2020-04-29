@@ -2,29 +2,29 @@ import UIKit
 
 private let animationDuration: TimeInterval = 0.25
 
-class CellView: UIView {
+public class CellView: UIView {
     private let button: UIButton = UIButton()
     private let diskView: DiskView = DiskView()
     
     private var _disk: Disk?
-    var disk: Disk? {
-        get { self._disk }
-        set { self.setDisk(newValue, animated: true) }
+    public var disk: Disk? {
+        get { _disk }
+        set { setDisk(newValue, animated: true) }
     }
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
-        self.setUp()
+        setUp()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.setUp()
+        setUp()
     }
     
     private func setUp() {
         do { // button
-            self.button.translatesAutoresizingMaskIntoConstraints = false
+            button.translatesAutoresizingMaskIntoConstraints = false
             do { // backgroundImage
                 UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
                 defer { UIGraphicsEndImageContext() }
@@ -34,53 +34,53 @@ class CellView: UIView {
                 UIRectFill(CGRect(x: 0, y: 0, width: 1, height: 1))
                 
                 let backgroundImage = UIGraphicsGetImageFromCurrentImageContext()!
-                self.button.setBackgroundImage(backgroundImage, for: .normal)
-                self.button.setBackgroundImage(backgroundImage, for: .disabled)
+                button.setBackgroundImage(backgroundImage, for: .normal)
+                button.setBackgroundImage(backgroundImage, for: .disabled)
             }
-            self.addSubview(self.button)
+            self.addSubview(button)
         }
 
         do { // diskView
-            self.diskView.translatesAutoresizingMaskIntoConstraints = false
-            self.addSubview(self.diskView)
+            diskView.translatesAutoresizingMaskIntoConstraints = false
+            self.addSubview(diskView)
         }
 
         setNeedsLayout()
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.button.frame = bounds
-        self.layoutDiskView()
+        button.frame = bounds
+        layoutDiskView()
     }
     
     private func layoutDiskView() {
         let cellSize = bounds.size
         let diskDiameter = Swift.min(cellSize.width, cellSize.height) * 0.8
         let diskSize: CGSize
-        if self._disk == nil || self.diskView.disk == self._disk {
+        if _disk == nil || diskView.disk == _disk {
             diskSize = CGSize(width: diskDiameter, height: diskDiameter)
         } else {
             diskSize = CGSize(width: 0, height: diskDiameter)
         }
-        self.diskView.frame = CGRect(
+        diskView.frame = CGRect(
             origin: CGPoint(x: (cellSize.width - diskSize.width) / 2, y: (cellSize.height - diskSize.height) / 2),
             size: diskSize
         )
-        self.diskView.alpha = self._disk == nil ? 0.0 : 1.0
+        diskView.alpha = _disk == nil ? 0.0 : 1.0
     }
     
-    func setDisk(_ disk: Disk?, animated: Bool, completion: ((Bool) -> Void)? = nil) {
-        let diskBefore: Disk? = self._disk
-        self._disk = disk
-        let diskAfter: Disk? = self._disk
+    public func setDisk(_ disk: Disk?, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+        let diskBefore: Disk? = _disk
+        _disk = disk
+        let diskAfter: Disk? = _disk
         if animated {
             switch (diskBefore, diskAfter) {
             case (.none, .none):
                 completion?(true)
             case (.none, .some(let animationDisk)):
-                self.diskView.disk = animationDisk
+                diskView.disk = animationDisk
                 fallthrough
             case (.some, .none):
                 UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseIn, animations: { [weak self] in
@@ -110,30 +110,30 @@ class CellView: UIView {
             }
         } else {
             if let diskAfter = diskAfter {
-                self.diskView.disk = diskAfter
+                diskView.disk = diskAfter
             }
             completion?(true)
             setNeedsLayout()
         }
     }
     
-    func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
-        self.button.addTarget(target, action: action, for: controlEvents)
+    public func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
+        button.addTarget(target, action: action, for: controlEvents)
     }
     
-    func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
-        self.button.removeTarget(target, action: action, for: controlEvents)
+    public func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
+        button.removeTarget(target, action: action, for: controlEvents)
     }
     
-    func actions(forTarget target: Any?, forControlEvent controlEvent: UIControl.Event) -> [String]? {
-        self.button.actions(forTarget: target, forControlEvent: controlEvent)
+    public func actions(forTarget target: Any?, forControlEvent controlEvent: UIControl.Event) -> [String]? {
+        button.actions(forTarget: target, forControlEvent: controlEvent)
     }
     
-    var allTargets: Set<AnyHashable> {
-        self.button.allTargets
+    public var allTargets: Set<AnyHashable> {
+        button.allTargets
     }
     
-    var allControlEvents: UIControl.Event {
-        self.button.allControlEvents
+    public var allControlEvents: UIControl.Event {
+        button.allControlEvents
     }
 }
