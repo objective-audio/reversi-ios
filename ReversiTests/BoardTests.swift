@@ -8,6 +8,10 @@ class BoardTests: XCTestCase {
         XCTAssertEqual(disks, self.initialDisks)
     }
     
+    func testAllPositions() {
+        XCTAssertEqual(Board.allPositions, self.allPositions)
+    }
+    
     func testInit() {
         let board = Board()
         
