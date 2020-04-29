@@ -146,3 +146,4 @@ extension Board {
 }
 
 extension Board.Position: Equatable {}
+extension Board.Position: Hashable {}
