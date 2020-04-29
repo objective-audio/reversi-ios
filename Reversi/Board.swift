@@ -33,10 +33,6 @@ extension Board {
         set { self.disks[position.y][position.x] = newValue }
     }
     
-    mutating func setDisk(_ disk: Disk?, at position: Position) {
-        self.disks[position.y][position.x] = disk
-    }
-    
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。

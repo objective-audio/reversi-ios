@@ -37,7 +37,7 @@ class Interactor {
                     self.playTurnOfComputer(side: side)
                 }
             case .placing(let side, let positions):
-                positions.forEach { self.board.setDisk(side.disk, at: $0) }
+                positions.forEach { self.board[$0] = side.disk }
                 self.sendEvent(.didPlaceDisks(side: side, positions: positions))
             default:
                 break
