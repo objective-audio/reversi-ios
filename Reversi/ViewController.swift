@@ -132,8 +132,8 @@ private extension ViewController {
     }
     
     func updatePlayerControls() {
-        self.playerControls[Side.dark.rawValue].selectedSegmentIndex = self.presenter.darkPlayer.rawValue
-        self.playerControls[Side.light.rawValue].selectedSegmentIndex = self.presenter.lightPlayer.rawValue
+        self.playerControls[Side.dark.rawValue].selectedSegmentIndex = self.presenter.player(for: .dark).rawValue
+        self.playerControls[Side.light.rawValue].selectedSegmentIndex = self.presenter.player(for: .light).rawValue
     }
     
     /// アラートを表示して、ゲームを初期化して良いか確認し、

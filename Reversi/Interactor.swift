@@ -12,8 +12,8 @@ protocol InteractorDataStore {
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
-    var darkPlayer: Player
-    var lightPlayer: Player
+    private var darkPlayer: Player
+    private var lightPlayer: Player
     
     private(set) var board: Board
     
@@ -46,6 +46,13 @@ class Interactor {
             self.lightPlayer = .manual
             self.board = .init()
             self.state = .launching(side: .dark)
+        }
+    }
+    
+    func player(for side: Side) -> Player {
+        switch side {
+        case .dark: return self.darkPlayer
+        case .light: return self.lightPlayer
         }
     }
     
@@ -159,13 +166,6 @@ extension Interactor {
 private extension Interactor {
     static var defaultComputerWaiting: (@escaping () -> Void) -> Void {
         return { DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: $0) }
-    }
-    
-    func player(for side: Side) -> Player {
-        switch side {
-        case .dark: return self.darkPlayer
-        case .light: return self.lightPlayer
-        }
     }
     
     func save() {

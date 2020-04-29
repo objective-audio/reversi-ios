@@ -25,8 +25,7 @@ class Presenter {
         interactor.eventReceiver = self
     }
     
-    var darkPlayer: Player { self.interactor.darkPlayer }
-    var lightPlayer: Player { self.interactor.lightPlayer }
+    func player(for side: Side) -> Player { self.interactor.player(for: side) }
     
     var disks: [[Disk?]] { self.interactor.board.disks }
     
