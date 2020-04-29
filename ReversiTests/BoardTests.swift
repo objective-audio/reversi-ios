@@ -9,7 +9,16 @@ class BoardTests: XCTestCase {
     }
     
     func testAllPositions() {
-        XCTAssertEqual(Board.allPositions, self.allPositions)
+        XCTAssertEqual(Board.allPositions.count, 64)
+        
+        var expected: [Board.Position] = []
+        for y in 0..<8 {
+            for x in 0..<8 {
+                expected.append(.init(x: x, y: y))
+            }
+        }
+        
+        XCTAssertEqual(Set(Board.allPositions), Set(expected))
     }
     
     func testInit() {
@@ -58,11 +67,11 @@ class BoardTests: XCTestCase {
         
         let position = Board.Position(x: 2, y: 3)
         
-        self.allPositions.forEach { XCTAssertNil(board[$0]) }
+        Board.allPositions.forEach { XCTAssertNil(board[$0]) }
         
         board[position] = .light
         
-        self.allPositions.forEach {
+        Board.allPositions.forEach {
             switch $0 {
             case position:
                 XCTAssertEqual(board[$0], .light)
@@ -73,7 +82,7 @@ class BoardTests: XCTestCase {
         
         board[position] = .dark
         
-        self.allPositions.forEach {
+        Board.allPositions.forEach {
             switch $0 {
             case position:
                 XCTAssertEqual(board[$0], .dark)
@@ -84,14 +93,14 @@ class BoardTests: XCTestCase {
         
         board[position] = nil
         
-        self.allPositions.forEach { XCTAssertNil(board[$0]) }
+        Board.allPositions.forEach { XCTAssertNil(board[$0]) }
     }
     
     func testFlippedDiskCoordinatesByPlacingDiskWithInitialDisks() {
         let board = Board()
         
         XCTContext.runActivity(named: "lightが置ける位置") { _ in
-            self.allPositions.forEach {
+            Board.allPositions.forEach {
                 let flippedDisks = board.flippedDiskCoordinatesByPlacingDisk(.light, at: $0)
                 switch $0 {
                 case .init(x: 4, y: 2), .init(x: 5, y: 3):
@@ -105,7 +114,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "darkが置ける位置") { _ in
-            self.allPositions.forEach {
+            Board.allPositions.forEach {
                 let flippedDisks = board.flippedDiskCoordinatesByPlacingDisk(.dark, at: $0)
                 switch $0 {
                 case .init(x: 3, y: 2), .init(x: 2, y: 3):
@@ -123,7 +132,7 @@ class BoardTests: XCTestCase {
         let board = Board()
         
         XCTContext.runActivity(named: "lightを置けるか") { _ in
-            let positions = self.allPositions.filter { board.canPlaceDisk(.light, at: $0) }
+            let positions = Board.allPositions.filter { board.canPlaceDisk(.light, at: $0) }
             
             let expected: [Board.Position] = [
                 .init(x: 4, y: 2),
@@ -136,7 +145,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "darkを置けるか") { _ in
-            let positions = self.allPositions.filter { board.canPlaceDisk(.dark, at: $0) }
+            let positions = Board.allPositions.filter { board.canPlaceDisk(.dark, at: $0) }
             
             let expected: [Board.Position] = [
                 .init(x: 3, y: 2),
@@ -236,15 +245,5 @@ private extension BoardTests {
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
         ]
-    }
-    
-    var allPositions: [Board.Position] {
-        var positions: [Board.Position] = []
-        Board.yRange.forEach { y in
-            Board.xRange.forEach { x in
-                positions.append(.init(x: x, y: y))
-            }
-        }
-        return positions
     }
 }
