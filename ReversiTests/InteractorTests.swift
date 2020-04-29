@@ -317,19 +317,8 @@ class InteractorTests: XCTestCase {
         
         var receivedEvents: [Interactor.Event] = []
         
-        let disks: [[Disk?]] = [
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
-            [nil, nil, nil, .dark, .light, .dark, nil, nil],
-            [nil, nil, nil, .dark, .dark, .dark, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil],
-            [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
-        
         dataStore.loadHandler = {
-            return .init(turn: .dark, darkPlayer: .manual, lightPlayer: .manual, board: disks)
+            return .init(turn: .dark, darkPlayer: .manual, lightPlayer: .manual, board: TestUtils.darkPassDisks)
         }
         
         eventReceiver.receiveHandler = { event in
