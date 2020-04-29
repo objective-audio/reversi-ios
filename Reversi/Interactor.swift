@@ -105,7 +105,7 @@ class Interactor {
             switch self.state {
             case .waiting(let side, player: .manual):
                 if self.board.canPlaceDisk(side.disk, at: position) {
-                    self.placeDisk(side: side, at: position)
+                    self.state = self.placeDisk(side: side, at: position)
                 }
             case .launching:
                 fatalError()
@@ -204,17 +204,17 @@ private extension Interactor {
             guard !canceller.isCancelled else { return }
             self.playerCanceller = nil
             
-            self.placeDisk(side: side, at: position)
+            self.state = self.placeDisk(side: side, at: position)
         }
     }
     
-    func placeDisk(side: Side, at position: Board.Position) {
+    func placeDisk(side: Side, at position: Board.Position) -> State {
         let disk = side.disk
         
         let diskCoordinates = self.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
         guard !diskCoordinates.isEmpty else { fatalError() }
         
-        self.state = .placing(side: side, positions: [position] + diskCoordinates)
+        return .placing(side: side, positions: [position] + diskCoordinates)
     }
     
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
