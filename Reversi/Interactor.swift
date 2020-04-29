@@ -62,7 +62,7 @@ class Interactor {
             self.darkPlayer = parameters.darkPlayer
             self.lightPlayer = parameters.lightPlayer
             
-            let board = Board(disks: parameters.board)
+            let board = Board(parameters.board)
             self.board = board
             
             switch parameters.turn {

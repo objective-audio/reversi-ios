@@ -17,7 +17,7 @@ struct Board {
     
     private(set) var disks: [[Disk?]]
     
-    init(disks: [[Disk?]] = Self.initialDisks()) {
+    init(_ disks: [[Disk?]] = Self.initialDisks()) {
         precondition(disks.count == Self.height)
         for diskLine in disks {
             precondition(diskLine.count == Self.width)
