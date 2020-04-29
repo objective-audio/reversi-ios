@@ -4,17 +4,19 @@ import XCTest
 class DataStoreTests: XCTestCase {
     func testLoad() {
         XCTContext.runActivity(named: "turn:dark, darkPlayer:manual, lightPlayer:computer") { _ in
-            let string = [
-                "x01\n",
-                "x------o\n",
-                "-x----o-\n",
-                "--x--o--\n",
-                "---xo---\n",
-                "---ox---\n",
-                "--o--x--\n",
-                "-o----x-\n",
-                "o------x\n",
-            ].joined()
+            let string =
+                """
+                x01
+                x------o
+                -x----o-
+                --x--o--
+                ---xo---
+                ---ox---
+                --o--x--
+                -o----x-
+                o------x
+                
+                """
             
             self.writeToFile(string: string)
             
@@ -42,17 +44,19 @@ class DataStoreTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "turn:light, darkPlayer:computer, lightPlayer:manual") { _ in
-            let string = [
-                "o10\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-            ].joined()
+            let string =
+                """
+                o10
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                
+                """
             
             self.writeToFile(string: string)
             
@@ -67,17 +71,19 @@ class DataStoreTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "turn:none") { _ in
-            let string = [
-                "-00\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-            ].joined()
+            let string =
+                """
+                -00
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                
+                """
             
             self.writeToFile(string: string)
             
@@ -110,17 +116,19 @@ class DataStoreTests: XCTestCase {
                 return
             }
             
-            let expected = [
-                "x01\n",
-                "x------o\n",
-                "-x----o-\n",
-                "--x--o--\n",
-                "---xo---\n",
-                "---ox---\n",
-                "--o--x--\n",
-                "-o----x-\n",
-                "o------x\n",
-            ].joined()
+            let expected =
+                """
+                x01
+                x------o
+                -x----o-
+                --x--o--
+                ---xo---
+                ---ox---
+                --o--x--
+                -o----x-
+                o------x
+                
+                """
             
             XCTAssertEqual(self.loadFromFile(), expected)
         }
@@ -144,17 +152,19 @@ class DataStoreTests: XCTestCase {
                 return
             }
             
-            let expected = [
-                "o10\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-            ].joined()
+            let expected =
+                """
+                o10
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                
+                """
             
             XCTAssertEqual(self.loadFromFile(), expected)
         }
@@ -178,17 +188,19 @@ class DataStoreTests: XCTestCase {
                 return
             }
             
-            let expected = [
-                "-00\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-                "--------\n",
-            ].joined()
+            let expected =
+                """
+                -00
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                --------
+                
+                """
             
             XCTAssertEqual(self.loadFromFile(), expected)
         }
