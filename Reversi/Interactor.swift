@@ -129,7 +129,6 @@ class Interactor {
             case .launching:
                 fatalError()
             default:
-                self.sendEvent(.willReset)
                 self.reset()
             }
         }
@@ -173,6 +172,8 @@ private extension Interactor {
     }
     
     func reset() {
+        self.sendEvent(.willReset)
+        
         self.board = .init()
         self.darkPlayer = .manual
         self.lightPlayer = .manual
