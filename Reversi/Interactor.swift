@@ -169,10 +169,8 @@ extension Interactor {
 private extension Interactor {
     func player(for side: Side) -> Player {
         switch side {
-        case .dark:
-            return self.darkPlayer
-        case .light:
-            return self.lightPlayer
+        case .dark: return self.darkPlayer
+        case .light: return self.lightPlayer
         }
     }
     
