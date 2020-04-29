@@ -99,6 +99,14 @@ class InteractorTests: XCTestCase {
         }
     }
     
+    func testBeginGame() {
+        #warning("todo")
+    }
+    
+    func testBeginPass() {
+        #warning("todo")
+    }
+    
     func testLoadResultTied() {
         let dataStore = DataStoreMock()
         
@@ -190,5 +198,21 @@ class InteractorTests: XCTestCase {
             XCTFail()
             return
         }
+    }
+    
+    func testResetFromManualWaiting() {
+        #warning("todo")
+    }
+    
+    func testResetFromComputerWaiting() {
+        #warning("todo")
+    }
+    
+    func testResetFromPassing() {
+        #warning("todo")
+    }
+    
+    func testResetFromResult() {
+        #warning("todo")
     }
 }
