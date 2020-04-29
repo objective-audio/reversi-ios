@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.presenter.begin()
+        self.presenter.viewDidAppear()
     }
 }
 

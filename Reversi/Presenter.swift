@@ -35,7 +35,7 @@ class Presenter {
         return self.interactor.board.diskCount(of: side)
     }
     
-    func begin() {
+    func viewDidAppear() {
         self.interactor.doAction(.begin)
     }
     
