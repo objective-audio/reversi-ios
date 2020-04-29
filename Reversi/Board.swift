@@ -52,7 +52,7 @@ extension Board {
             (x: -1, y:  1),
         ]
         
-        guard self.diskAt(position) == nil else {
+        guard self.safeDiskAt(position) == nil else {
             return []
         }
         
@@ -66,7 +66,7 @@ extension Board {
                 position.x += direction.x
                 position.y += direction.y
                 
-                switch (disk, self.diskAt(position)) { // Uses tuples to make patterns exhaustive
+                switch (disk, self.safeDiskAt(position)) { // Uses tuples to make patterns exhaustive
                 case (.dark, .some(.dark)), (.light, .some(.light)):
                     diskCoordinates.append(contentsOf: diskCoordinatesInLine)
                     break flipping
@@ -120,7 +120,7 @@ extension Board {
 }
 
 private extension Board {
-    func diskAt(_ position: Position) -> Disk? {
+    func safeDiskAt(_ position: Position) -> Disk? {
         guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
         return self.disks[position.y][position.x]
     }
