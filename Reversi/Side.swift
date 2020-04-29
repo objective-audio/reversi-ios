@@ -14,9 +14,7 @@ extension Side {
         case .light: return .dark
         }
     }
-}
 
-extension Side {
     var disk: Disk {
         switch self {
         case .dark: return .dark
