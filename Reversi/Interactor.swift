@@ -19,8 +19,7 @@ class Interactor {
     
     private let dataStore: InteractorDataStore
     private let computerThinking: (Computer) -> Void
-    
-    private var playerCanceller: Canceller?
+    private var computerID: Identifier?
     
     init(dataStore: InteractorDataStore = DataStore(),
          computerThinking: @escaping (Computer) -> Void = defaultComputerThinking) {
@@ -62,7 +61,7 @@ class Interactor {
             switch self.state {
             case .waiting(let side, let player):
                 if case .computer = player {
-                    self.playerCanceller?.cancel()
+                    self.computerID = nil
                     self.sendEvent(.didEndComputerWaiting(side: side))
                 }
             default:
@@ -202,17 +201,13 @@ private extension Interactor {
     
     func playTurnOfComputer(side: Side) {
         let positions = self.board.validMoves(for: side)
+        let computerID = Identifier()
         
-        let canceller = Canceller { [weak self] in
-            self?.playerCanceller = nil
-        }
-        
-        self.playerCanceller = canceller
+        self.computerID = computerID
         
         let computer = Computer(positions: positions, completion: { [weak self] position in
             guard let self = self else { return }
-            guard !canceller.isCancelled else { return }
-            self.playerCanceller = nil
+            guard self.computerID == computerID else { return }
             
             self.state = self.placeDisk(side: side, at: position)
         })
