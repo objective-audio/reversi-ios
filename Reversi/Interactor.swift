@@ -18,13 +18,14 @@ class Interactor {
     private(set) var board: Board
     
     private let dataStore: InteractorDataStore
-    private let computerWaiting: (@escaping () -> Void) -> Void
+    private let computerThinking: (Computer) -> Void
+    
     private var playerCanceller: Canceller?
     
     init(dataStore: InteractorDataStore = DataStore(),
-         computerWaiting: @escaping (@escaping () -> Void) -> Void = defaultComputerWaiting) {
+         computerThinking: @escaping (Computer) -> Void = defaultComputerThinking) {
         self.dataStore = dataStore
-        self.computerWaiting = computerWaiting
+        self.computerThinking = computerThinking
         
         do {
             let parameters = try self.dataStore.load()
@@ -164,8 +165,13 @@ extension Interactor {
 }
 
 private extension Interactor {
-    static var defaultComputerWaiting: (@escaping () -> Void) -> Void {
-        return { DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: $0) }
+    static var defaultComputerThinking: (Computer) -> Void {
+        return { computer in
+            guard let position = computer.positions.randomElement() else { fatalError() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                computer.completion(position)
+            }
+        }
     }
     
     func save() {
@@ -195,7 +201,7 @@ private extension Interactor {
     }
     
     func playTurnOfComputer(side: Side) {
-        guard let position = self.board.validMoves(for: side).randomElement() else { fatalError() }
+        let positions = self.board.validMoves(for: side)
         
         let canceller = Canceller { [weak self] in
             self?.playerCanceller = nil
@@ -203,13 +209,15 @@ private extension Interactor {
         
         self.playerCanceller = canceller
         
-        self.computerWaiting { [weak self] in
+        let computer = Computer(positions: positions, completion: { [weak self] position in
             guard let self = self else { return }
             guard !canceller.isCancelled else { return }
             self.playerCanceller = nil
             
             self.state = self.placeDisk(side: side, at: position)
-        }
+        })
+        
+        self.computerThinking(computer)
     }
     
     func placeDisk(side: Side, at position: Board.Position) -> State {
