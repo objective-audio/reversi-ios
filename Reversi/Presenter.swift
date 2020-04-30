@@ -19,7 +19,7 @@ class Presenter {
     
     weak var displayer: Displayable?
     
-    private var animationCanceller: Canceller?
+    private var animationID: Identifier?
     
     init(interactor: Interactor = .init()) {
         self.interactor = interactor
@@ -76,12 +76,28 @@ extension Presenter: InteractorEventReceiver {
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)
         case .willReset:
-            self.animationCanceller?.cancel()
+            self.animationID = nil
         }
     }
 }
 
 private extension Presenter {
+    func didPlaceDisks(side: Side, positions: [Board.Position]) {
+        let animationID = Identifier()
+        
+        self.animationID = animationID
+        
+        self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
+            guard let self = self else { return }
+            guard self.animationID == animationID else { return }
+            self.animationID = nil
+
+            self.displayer?.updateCountLabels()
+            
+            self.interactor.doAction(.endPlaceDisks)
+        }
+    }
+    
     /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
     /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
     /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
@@ -94,11 +110,12 @@ private extension Presenter {
             return
         }
         
-        let animationCanceller = self.animationCanceller!
+        guard let animationID = self.animationID else { return }
         
         self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
             guard let self = self else { return }
-            if animationCanceller.isCancelled { return }
+            guard self.animationID == animationID else { return }
+            
             if isFinished {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
@@ -107,24 +124,6 @@ private extension Presenter {
                 }
                 completion()
             }
-        }
-    }
-    
-    func didPlaceDisks(side: Side, positions: [Board.Position]) {
-        self.animationCanceller = Canceller { [weak self] in
-            self?.animationCanceller = nil
-        }
-        
-        self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
-            guard let self = self else { return }
-            
-            guard let canceller = self.animationCanceller else { return }
-            guard !canceller.isCancelled else { return }
-            self.animationCanceller = nil
-
-            self.displayer?.updateCountLabels()
-            
-            self.interactor.doAction(.endPlaceDisks)
         }
     }
 }
