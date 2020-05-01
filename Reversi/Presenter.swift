@@ -17,7 +17,11 @@ protocol Displayable: class {
 class Presenter {
     private let interactor: Interactor
     
-    weak var displayer: Displayable?
+    weak var displayer: Displayable? {
+        didSet {
+            if self.displayer != nil { self.updateAllView() }
+        }
+    }
     
     private var animationID: Identifier?
     
@@ -61,10 +65,7 @@ extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
         case .didReset:
-            self.displayer?.updateBoardView()
-            self.displayer?.updatePlayerControls()
-            self.displayer?.updateMessageViews()
-            self.displayer?.updateCountLabels()
+            self.updateAllView()
         case .didChangeTurn:
             self.displayer?.updateMessageViews()
         case .willBeginComputerWaiting(let side):
@@ -82,6 +83,13 @@ extension Presenter: InteractorEventReceiver {
 }
 
 private extension Presenter {
+    func updateAllView() {
+        self.displayer?.updateBoardView()
+        self.displayer?.updatePlayerControls()
+        self.displayer?.updateMessageViews()
+        self.displayer?.updateCountLabels()
+    }
+    
     func didPlaceDisks(side: Side, positions: [Board.Position]) {
         let animationID = Identifier()
         

@@ -23,12 +23,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.presenter.displayer = self
-        
         self.boardView.delegate = self
         self.messageDiskSize = self.messageDiskSizeConstraint.constant
-        
-        self.updateAll()
+        self.presenter.displayer = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
