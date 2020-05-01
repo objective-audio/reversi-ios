@@ -29,5 +29,6 @@ extension State {
     }
 }
 
+extension State: Equatable {}
 extension Result: Equatable {}
 extension Status: Equatable {}
