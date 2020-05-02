@@ -14,18 +14,30 @@ protocol Displayable: class {
     func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
 }
 
+protocol Interactable: class {
+    var eventReceiver: InteractorEventReceiver? { get set }
+    
+    var state: State { get }
+    var board: Board { get }
+    func player(for side: Side) -> Player
+    
+    func doAction(_ action: Interactor.Action)
+}
+
 class Presenter {
-    private let interactor: Interactor
+    private let interactor: Interactable
     
     weak var displayer: Displayable? {
         didSet {
-            if self.displayer != nil { self.updateViewsForInitial() }
+            if self.displayer != nil {
+                self.updateViewsForInitial()
+            }
         }
     }
     
     private var animationID: Identifier?
     
-    init(interactor: Interactor = .init()) {
+    init(interactor: Interactable) {
         self.interactor = interactor
         interactor.eventReceiver = self
     }
@@ -141,3 +153,5 @@ private extension Presenter {
         }
     }
 }
+
+extension Interactor: Interactable {}

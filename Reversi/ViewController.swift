@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet private var countLabels: [UILabel]!
     @IBOutlet private var playerActivityIndicators: [UIActivityIndicatorView]!
     
-    private let presenter: Presenter = .init(interactor: .shared)
+    private let presenter: Presenter = .init(interactor: Interactor.shared)
     
     override func viewDidLoad() {
         super.viewDidLoad()
