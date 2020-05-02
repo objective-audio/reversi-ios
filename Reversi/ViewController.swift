@@ -128,13 +128,6 @@ extension ViewController: Displayable {
 }
 
 private extension ViewController {
-    func updateAll() {
-        self.updateBoardView()
-        self.updatePlayerControls()
-        self.updateMessageViews()
-        self.updateCountLabels()
-    }
-    
     /// アラートを表示して、ゲームを初期化して良いか確認し、
     /// "OK" が選択された場合ゲームを初期化します。
     func presentConfirmationView() {
