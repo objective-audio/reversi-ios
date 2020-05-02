@@ -31,7 +31,7 @@ extension Presenter {
 }
 
 class Presenter {
-    private let interactor: Interactable
+    private weak var interactor: Interactable?
     
     weak var eventReceiver: PresenterEventReceiver? {
         didSet {
@@ -48,34 +48,34 @@ class Presenter {
         interactor.eventReceiver = self
     }
     
-    func player(for side: Side) -> Player { self.interactor.player(for: side) }
+    func player(for side: Side) -> Player? { self.interactor?.player(for: side) }
     
-    var disks: [[Disk?]] { self.interactor.board.disks }
+    var disks: [[Disk?]]? { self.interactor?.board.disks }
     
-    var status: Status { self.interactor.state.status }
+    var status: Status? { self.interactor?.state.status }
     
-    func diskCount(of side: Side) -> Int {
-        return self.interactor.board.diskCount(of: side)
+    func diskCount(of side: Side) -> Int? {
+        return self.interactor?.board.diskCount(of: side)
     }
     
     func viewDidAppear() {
-        self.interactor.doAction(.begin)
+        self.interactor?.doAction(.begin)
     }
     
     func changePlayer(_ player: Player, side: Side) {
-        self.interactor.doAction(.changePlayer(player, side: side))
+        self.interactor?.doAction(.changePlayer(player, side: side))
     }
     
     func selectBoard(at position: Board.Position) {
-        self.interactor.doAction(.placeDisk(position: position))
+        self.interactor?.doAction(.placeDisk(position: position))
     }
     
     func reset() {
-        self.interactor.doAction(.reset)
+        self.interactor?.doAction(.reset)
     }
     
     func pass() {
-        self.interactor.doAction(.pass)
+        self.interactor?.doAction(.pass)
     }
 }
 
@@ -126,7 +126,7 @@ private extension Presenter {
 
             self.sendEvent(.updateCountLabels)
             
-            self.interactor.doAction(.endPlaceDisks)
+            self.interactor?.doAction(.endPlaceDisks)
         }
     }
     

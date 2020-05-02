@@ -88,7 +88,8 @@ extension ViewController: PresenterEventReceiver {
 
 private extension ViewController {
     func updateBoardView() {
-        for (y, boardLine) in self.presenter.disks.enumerated() {
+        guard let disks = self.presenter.disks else { return }
+        for (y, boardLine) in disks.enumerated() {
             for (x, disk) in boardLine.enumerated() {
                 self.boardView.setDisk(disk, atX: x, y: y, animated: false)
             }
@@ -97,20 +98,24 @@ private extension ViewController {
     
     func updatePlayerControls() {
         for side in Side.allCases {
-            self.playerControls[side.rawValue].selectedSegmentIndex = self.presenter.player(for: side).rawValue
+            guard let player = self.presenter.player(for: side) else { continue }
+            self.playerControls[side.rawValue].selectedSegmentIndex = player.rawValue
         }
     }
     
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels() {
         for side in Side.allCases {
-            self.countLabels[side.rawValue].text = "\(self.presenter.diskCount(of: side))"
+            guard let diskCount = self.presenter.diskCount(of: side) else { continue }
+            self.countLabels[side.rawValue].text = "\(diskCount)"
         }
     }
     
     /// 現在の状況に応じてメッセージを表示します。
     func updateMessageViews() {
-        switch self.presenter.status {
+        guard let status = self.presenter.status else { return }
+        
+        switch status {
         case .turn(let side):
             self.messageDiskSizeConstraint.constant = self.messageDiskSize
             self.messageDiskView.disk = side.disk
