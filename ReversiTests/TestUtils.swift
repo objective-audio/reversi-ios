@@ -54,6 +54,45 @@ struct TestUtils {
         ]
     }
     
+    static var tiedDisks: [[Disk?]] {
+        return [
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
+    static var lightWonDisks: [[Disk?]] {
+        return [
+            [.light, .light, .light, .light, .light, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
+    static var darkWonDisks: [[Disk?]] {
+        return [
+            [.light, .light, .light, .dark, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
     static var url: URL {
         guard let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first?.appendingPathComponent("Game") else { fatalError() }
         return url
