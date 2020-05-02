@@ -41,6 +41,19 @@ struct TestUtils {
         ]
     }
     
+    static var preLightPassDisks: [[Disk?]] {
+        return [
+            [nil, nil, .light, .dark, .dark, .dark, .dark, .dark],
+            [.light, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
+            [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
     static var darkPlacedDisks: [[Disk?]] {
         return [
             [nil, nil, nil, nil, nil, nil, nil, nil],
