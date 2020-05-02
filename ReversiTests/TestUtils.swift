@@ -93,6 +93,32 @@ struct TestUtils {
         ]
     }
     
+    static var preTiedDisks: [[Disk?]] {
+        return [
+            [.light, .light, .light, .light, .dark, .light, nil, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
+    static var preDarkWonDisks: [[Disk?]] {
+        return [
+            [.light, .light, .light, .dark, .dark, .light, nil, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
+            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
+        ]
+    }
+    
     static var url: URL {
         guard let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first?.appendingPathComponent("Game") else { fatalError() }
         return url
