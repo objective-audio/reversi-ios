@@ -131,16 +131,22 @@ extension Interactor {
                 break
             }
         case .endPlaceDisks:
-            if case .placing(let side, _) = self.state {
+            switch self.state {
+            case .placing(let side, _):
                 self.state = self.nextTurn(from: side)
-            } else {
+            case .launching:
                 fatalError()
+            default:
+                break
             }
         case .pass:
-            if case .passing(let side) = self.state {
+            switch self.state {
+            case .passing(let side):
                 self.state = self.nextTurn(from: side)
-            } else {
+            case .launching:
                 fatalError()
+            default:
+                break
             }
         case .reset:
             switch self.state {
