@@ -77,11 +77,11 @@ extension ViewController: PresenterEventReceiver {
         case .presentPassView:
             self.presentPassView()
         case .startPlayerActivityIndicatorAnimating(let side):
-            self.startPlayerActivityIndicatorAnimating(side: side)
+            self.playerActivityIndicators[side.rawValue].startAnimating()
         case .stopPlayerActivityIndicatorAnimating(let side):
-            self.stopPlayerActivityIndicatorAnimating(side: side)
+            self.playerActivityIndicators[side.rawValue].stopAnimating()
         case .setBoardDisk(let disk, let position, let animated, let completion):
-            self.setBoardDisk(disk, at: position, animated: animated, completion: completion)
+            self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animated, completion: completion)
         }
     }
 }
@@ -123,18 +123,6 @@ private extension ViewController {
             self.messageDiskSizeConstraint.constant = 0
             self.messageLabel.text = "Tied"
         }
-    }
-    
-    func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?) {
-        self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animated, completion: completion)
-    }
-    
-    func startPlayerActivityIndicatorAnimating(side: Side) {
-        self.playerActivityIndicators[side.rawValue].startAnimating()
-    }
-    
-    func stopPlayerActivityIndicatorAnimating(side: Side) {
-        self.playerActivityIndicators[side.rawValue].stopAnimating()
     }
     
     func presentPassView() {
