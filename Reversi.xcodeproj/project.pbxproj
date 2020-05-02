@@ -15,7 +15,6 @@
 		B659DC88245393D600B5CC0B /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC87245393D600B5CC0B /* Presenter.swift */; };
 		B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC89245394D100B5CC0B /* DataStore.swift */; };
 		B659DC8C24539B6700B5CC0B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8B24539B6700B5CC0B /* Player.swift */; };
-		B659DC8E24541AF400B5CC0B /* Canceller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8D24541AF400B5CC0B /* Canceller.swift */; };
 		B659DC9024541EB000B5CC0B /* SideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8F24541EB000B5CC0B /* SideTests.swift */; };
 		B659DC922454316B00B5CC0B /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC912454316B00B5CC0B /* Board.swift */; };
 		B659DC9424544FA400B5CC0B /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC9324544FA400B5CC0B /* BoardTests.swift */; };
@@ -57,7 +56,6 @@
 		B659DC87245393D600B5CC0B /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		B659DC89245394D100B5CC0B /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		B659DC8B24539B6700B5CC0B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		B659DC8D24541AF400B5CC0B /* Canceller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canceller.swift; sourceTree = "<group>"; };
 		B659DC8F24541EB000B5CC0B /* SideTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideTests.swift; sourceTree = "<group>"; };
 		B659DC912454316B00B5CC0B /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		B659DC9324544FA400B5CC0B /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 				B659DC87245393D600B5CC0B /* Presenter.swift */,
 				B6BF4202245330E8008676C9 /* Interactor.swift */,
 				B659DC89245394D100B5CC0B /* DataStore.swift */,
-				B659DC8D24541AF400B5CC0B /* Canceller.swift */,
 				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
@@ -294,7 +291,6 @@
 				B6CB006F2456DB2A00054BA1 /* State.swift in Sources */,
 				B68F37AA245B243600FA905C /* Identifier.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
-				B659DC8E24541AF400B5CC0B /* Canceller.swift in Sources */,
 				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
 				B6BF4203245330E8008676C9 /* Interactor.swift in Sources */,
