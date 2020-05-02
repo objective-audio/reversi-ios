@@ -19,7 +19,7 @@ class Presenter {
     
     weak var displayer: Displayable? {
         didSet {
-            if self.displayer != nil { self.updateAllView() }
+            if self.displayer != nil { self.updateViewsForInitial() }
         }
     }
     
@@ -64,8 +64,6 @@ class Presenter {
 extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
-        case .didReset:
-            self.updateAllView()
         case .didChangeTurn:
             self.displayer?.updateMessageViews()
         case .willBeginComputerWaiting(let side):
@@ -78,15 +76,23 @@ extension Presenter: InteractorEventReceiver {
             self.didPlaceDisks(side: side, positions: positions)
         case .willReset:
             self.animationID = nil
+        case .didReset:
+            self.updateViewsForReset()
         }
     }
 }
 
 private extension Presenter {
-    func updateAllView() {
+    func updateViewsForInitial() {
         self.displayer?.updateBoardView()
         self.displayer?.updatePlayerControls()
         self.displayer?.updateMessageViews()
+        self.displayer?.updateCountLabels()
+    }
+    
+    func updateViewsForReset() {
+        self.displayer?.updateBoardView()
+        self.displayer?.updatePlayerControls()
         self.displayer?.updateCountLabels()
     }
     
