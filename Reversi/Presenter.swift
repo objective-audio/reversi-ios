@@ -67,7 +67,7 @@ class Presenter {
     }
     
     func selectBoard(at position: Board.Position) {
-        self.interactor?.doAction(.placeDisk(position: position))
+        self.interactor?.doAction(.placeDisk(at: position))
     }
     
     func reset() {
