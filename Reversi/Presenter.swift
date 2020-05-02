@@ -1,19 +1,5 @@
 import Foundation
 
-protocol Displayable: class {
-    func updateBoardView()
-    func updatePlayerControls()
-    func updateCountLabels()
-    func updateMessageViews()
-    
-    func startPlayerActivityIndicatorAnimating(side: Side)
-    func stopPlayerActivityIndicatorAnimating(side: Side)
-    
-    func presentPassView()
-    
-    func setBoardDisk(_ disk: Disk?, at position: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
-}
-
 protocol Interactable: class {
     var eventReceiver: InteractorEventReceiver? { get set }
     
@@ -24,12 +10,32 @@ protocol Interactable: class {
     func doAction(_ action: Interactor.Action)
 }
 
+protocol PresenterEventReceiver: class {
+    func receiveEvent(_ event: Presenter.Event)
+}
+
+extension Presenter {
+    enum Event {
+        case updateBoardView
+        case updatePlayerControls
+        case updateCountLabels
+        case updateMessageViews
+        
+        case startPlayerActivityIndicatorAnimating(side: Side)
+        case stopPlayerActivityIndicatorAnimating(side: Side)
+        
+        case presentPassView
+        
+        case setBoardDisk(_ disk: Disk?, at: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
+    }
+}
+
 class Presenter {
     private let interactor: Interactable
     
-    weak var displayer: Displayable? {
+    weak var eventReceiver: PresenterEventReceiver? {
         didSet {
-            if self.displayer != nil {
+            if self.eventReceiver != nil {
                 self.updateViewsForInitial()
             }
         }
@@ -77,13 +83,13 @@ extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
         case .didChangeTurn:
-            self.displayer?.updateMessageViews()
+            self.sendEvent(.updateMessageViews)
         case .willBeginComputerWaiting(let side):
-            self.displayer?.startPlayerActivityIndicatorAnimating(side: side)
+            self.sendEvent(.startPlayerActivityIndicatorAnimating(side: side))
         case .didEndComputerWaiting(let side):
-            self.displayer?.stopPlayerActivityIndicatorAnimating(side: side)
+            self.sendEvent(.stopPlayerActivityIndicatorAnimating(side: side))
         case .didEnterPassing:
-            self.displayer?.presentPassView()
+            self.sendEvent(.presentPassView)
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)
         case .willReset:
@@ -96,16 +102,16 @@ extension Presenter: InteractorEventReceiver {
 
 private extension Presenter {
     func updateViewsForInitial() {
-        self.displayer?.updateBoardView()
-        self.displayer?.updatePlayerControls()
-        self.displayer?.updateMessageViews()
-        self.displayer?.updateCountLabels()
+        self.sendEvent(.updateBoardView)
+        self.sendEvent(.updatePlayerControls)
+        self.sendEvent(.updateCountLabels)
+        self.sendEvent(.updateMessageViews)
     }
     
     func updateViewsForReset() {
-        self.displayer?.updateBoardView()
-        self.displayer?.updatePlayerControls()
-        self.displayer?.updateCountLabels()
+        self.sendEvent(.updateBoardView)
+        self.sendEvent(.updatePlayerControls)
+        self.sendEvent(.updateCountLabels)
     }
     
     func didPlaceDisks(side: Side, positions: [Board.Position]) {
@@ -118,7 +124,7 @@ private extension Presenter {
             guard self.animationID == animationID else { return }
             self.animationID = nil
 
-            self.displayer?.updateCountLabels()
+            self.sendEvent(.updateCountLabels)
             
             self.interactor.doAction(.endPlaceDisks)
         }
@@ -138,7 +144,7 @@ private extension Presenter {
         
         guard let animationID = self.animationID else { return }
         
-        self.displayer?.setBoardDisk(disk, at: position, animated: true) { [weak self] isFinished in
+        self.sendEvent(.setBoardDisk(disk, at: position, animated: true, completion: { [weak self] isFinished in
             guard let self = self else { return }
             guard self.animationID == animationID else { return }
             
@@ -146,11 +152,15 @@ private extension Presenter {
                 self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
             } else {
                 for position in coordinates {
-                    self.displayer?.setBoardDisk(disk, at: position, animated: false, completion: nil)
+                    self.sendEvent(.setBoardDisk(disk, at: position, animated: false, completion: nil))
                 }
                 completion()
             }
-        }
+        }))
+    }
+    
+    func sendEvent(_ event: Event) {
+        self.eventReceiver?.receiveEvent(event)
     }
 }
 

@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         
         self.boardView.delegate = self
         self.messageDiskSize = self.messageDiskSizeConstraint.constant
-        self.presenter.displayer = self
+        self.presenter.eventReceiver = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,7 +63,30 @@ extension ViewController: BoardViewDelegate {
     }
 }
 
-extension ViewController: Displayable {
+extension ViewController: PresenterEventReceiver {
+    func receiveEvent(_ event: Presenter.Event) {
+        switch event {
+        case .updateBoardView:
+            self.updateBoardView()
+        case .updatePlayerControls:
+            self.updatePlayerControls()
+        case .updateCountLabels:
+            self.updateCountLabels()
+        case .updateMessageViews:
+            self.updateMessageViews()
+        case .presentPassView:
+            self.presentPassView()
+        case .startPlayerActivityIndicatorAnimating(let side):
+            self.startPlayerActivityIndicatorAnimating(side: side)
+        case .stopPlayerActivityIndicatorAnimating(let side):
+            self.stopPlayerActivityIndicatorAnimating(side: side)
+        case .setBoardDisk(let disk, let position, let animated, let completion):
+            self.setBoardDisk(disk, at: position, animated: animated, completion: completion)
+        }
+    }
+}
+
+private extension ViewController {
     func updateBoardView() {
         for (y, boardLine) in self.presenter.disks.enumerated() {
             for (x, disk) in boardLine.enumerated() {
@@ -125,9 +148,7 @@ extension ViewController: Displayable {
         })
         present(alertController, animated: true)
     }
-}
-
-private extension ViewController {
+    
     /// アラートを表示して、ゲームを初期化して良いか確認し、
     /// "OK" が選択された場合ゲームを初期化します。
     func presentConfirmationView() {
