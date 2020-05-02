@@ -280,3 +280,4 @@ private extension State {
 
 extension DataStore: InteractorDataStore {}
 extension Interactor.Event: Equatable {}
+extension Interactor.Action: Equatable {}
