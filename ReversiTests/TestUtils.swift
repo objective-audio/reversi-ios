@@ -93,18 +93,7 @@ struct TestUtils {
         ]
     }
     
-    static var darkWonDisks: [[Disk?]] {
-        return [
-            [.light, .light, .light, .dark, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
-            [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
-        ]
-    }
+    static var darkWonDisks: [[Disk?]] { self.lightWonDisks.flipped }
     
     static var preTiedDisks: [[Disk?]] {
         return [
@@ -147,5 +136,21 @@ struct TestUtils {
     
     static func removeFile() {
         try? FileManager.default.removeItem(at: self.url)
+    }
+}
+
+extension Array where Element == [Disk?] {
+    var flipped: Self {
+        return self.map { line in line.map { disk in disk.flipped } }
+    }
+}
+
+private extension Optional where Wrapped == Disk {
+    var flipped: Disk? {
+        switch self {
+        case .dark: return .light
+        case .light: return .dark
+        case .none: return .none
+        }
     }
 }
