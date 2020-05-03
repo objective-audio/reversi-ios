@@ -24,7 +24,7 @@ class BoardTests: XCTestCase {
     func testInit() {
         let board = Board()
         
-        XCTAssertEqual(board.disks, TestUtils.initialDisks)
+        XCTAssertEqual(board, .init(TestUtils.initialDisks))
     }
     
     func testInitWithDisks() {
@@ -41,7 +41,8 @@ class BoardTests: XCTestCase {
         
         let board = Board(disks)
         
-        XCTAssertEqual(board.disks, disks)
+        #warning("ひとつひとつの要素をチェック")
+        XCTAssertEqual(board, .init(disks))
     }
     
     func testDiskCount() {

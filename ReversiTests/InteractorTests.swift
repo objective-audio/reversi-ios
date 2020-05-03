@@ -61,7 +61,7 @@ class InteractorTests: XCTestCase {
     func test_新規に起動した状態() {
         let interactor = Interactor(dataStore: self.dataStore)
         
-        XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks)
+        XCTAssertEqual(interactor.board, .init(TestUtils.initialDisks))
         XCTAssertEqual(interactor.player(for: .dark), .manual)
         XCTAssertEqual(interactor.player(for: .light), .manual)
         XCTAssertEqual(interactor.state, .launching(side: .dark))
@@ -94,7 +94,7 @@ class InteractorTests: XCTestCase {
             
             self.wait(for: [expectation], timeout: 0.0)
             
-            XCTAssertEqual(interactor.board.disks, disks)
+            XCTAssertEqual(interactor.board, .init(disks))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .computer)
             XCTAssertEqual(interactor.state, .launching(side: .light))
@@ -115,7 +115,7 @@ class InteractorTests: XCTestCase {
             
             self.wait(for: [expectation], timeout: 0.0)
             
-            XCTAssertEqual(interactor.board.disks, disks)
+            XCTAssertEqual(interactor.board, .init(disks))
             XCTAssertEqual(interactor.player(for: .dark), .computer)
             XCTAssertEqual(interactor.player(for: .light), .manual)
             XCTAssertEqual(interactor.state, .launching(side: .dark))
@@ -612,7 +612,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
             XCTAssertEqual(self.receivedEvents[2], .didReset)
             
-            XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks)
+            XCTAssertEqual(interactor.board, .init(TestUtils.initialDisks))
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
@@ -647,7 +647,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[3], .didChangeTurn)
             XCTAssertEqual(self.receivedEvents[4], .didReset)
             
-            XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks)
+            XCTAssertEqual(interactor.board, .init(TestUtils.initialDisks))
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
@@ -687,7 +687,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[1], .willReset)
             XCTAssertEqual(self.receivedEvents[2], .didReset)
             
-            XCTAssertEqual(interactor.board.disks, TestUtils.initialDisks)
+            XCTAssertEqual(interactor.board, .init(TestUtils.initialDisks))
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)

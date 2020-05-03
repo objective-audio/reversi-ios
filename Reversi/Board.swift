@@ -22,7 +22,7 @@ struct Board {
         let position: Position
     }
     
-    private(set) var disks: [[Disk?]]
+    private var disks: [[Disk?]]
     
     init(_ disks: [[Disk?]] = Self.initialDisks) {
         precondition(disks.count == Self.height)

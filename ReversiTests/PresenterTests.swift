@@ -64,7 +64,7 @@ class PresenterTests: XCTestCase {
         
         self.interactor.boardHandler = { .init(TestUtils.initialDisks) }
         
-        XCTAssertEqual(presenter.board?.disks, TestUtils.initialDisks)
+        XCTAssertEqual(presenter.board, .init(TestUtils.initialDisks))
     }
     
     func testAction() {
