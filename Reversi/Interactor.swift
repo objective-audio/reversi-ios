@@ -90,7 +90,6 @@ class Interactor {
                     self.playTurnOfComputer(side: side)
                 }
             case .placing(let side, let positions):
-                positions.forEach { self.board[$0] = side.disk }
                 self.sendEvent(.didPlaceDisks(side: side, positions: positions))
             default:
                 break
@@ -130,7 +129,8 @@ extension Interactor {
             }
         case .endPlaceDisks:
             switch self.state {
-            case .placing(let side, _):
+            case .placing(let side, let positions):
+                positions.forEach { self.board[$0] = side.disk }
                 self.state = self.nextTurn(from: side)
             case .launching:
                 fatalError()
