@@ -80,8 +80,11 @@ extension ViewController: PresenterEventReceiver {
             self.playerActivityIndicators[side.rawValue].startAnimating()
         case .stopPlayerActivityIndicatorAnimating(let side):
             self.playerActivityIndicators[side.rawValue].stopAnimating()
-        case .setBoardDisk(let disk, let position, let animated, let completion):
-            self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animated, completion: completion)
+        case .setBoardViewDisk(let disk, let position, let animationID):
+            self.boardView.setDisk(disk, atX: position.x, y: position.y, animated: animationID != nil) { [weak self] isFinished in
+                guard let animationID = animationID else { return }
+                self?.presenter.endSetBoardDisk(animationID: animationID, isFinished: isFinished)
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ extension Presenter {
         
         case presentPassView
         
-        case setBoardDisk(_ disk: Disk?, at: Board.Position, animated: Bool, completion: ((Bool) -> Void)?)
+        case setBoardViewDisk(_ disk: Disk, at: Board.Position, animationID: Identifier?)
     }
 }
 
@@ -41,7 +41,17 @@ class Presenter {
         }
     }
     
-    private var animationID: Identifier?
+    class DiskAnimation {
+        let id: Identifier = .init()
+        let disk: Disk
+        var remainPositions: [Board.Position]
+        
+        init(disk: Disk, positions: [Board.Position]) {
+            self.disk = disk
+            self.remainPositions = positions
+        }
+    }
+    private var animation: DiskAnimation?
     
     init(interactor: Interactable) {
         self.interactor = interactor
@@ -77,6 +87,21 @@ class Presenter {
     func pass() {
         self.interactor?.doAction(.pass)
     }
+    
+    func endSetBoardDisk(animationID: Identifier, isFinished: Bool) {
+        guard let animation = self.animation else { return }
+        
+        if animation.remainPositions.isEmpty {
+            self.endSetBoardViewDisks()
+        } else if isFinished {
+            self.setNextBoardViewDisk(animation: animation)
+        } else {
+            for position in animation.remainPositions {
+                self.sendEvent(.setBoardViewDisk(animation.disk, at: position, animationID: nil))
+            }
+            self.endSetBoardViewDisks()
+        }
+    }
 }
 
 extension Presenter: InteractorEventReceiver {
@@ -84,6 +109,7 @@ extension Presenter: InteractorEventReceiver {
         switch event {
         case .didChangeTurn:
             self.sendEvent(.updateMessageViews)
+            self.sendEvent(.updateCountLabels)
         case .willBeginComputerWaiting(let side):
             self.sendEvent(.startPlayerActivityIndicatorAnimating(side: side))
         case .didEndComputerWaiting(let side):
@@ -93,7 +119,7 @@ extension Presenter: InteractorEventReceiver {
         case .didPlaceDisks(let side, let positions):
             self.didPlaceDisks(side: side, positions: positions)
         case .willReset:
-            self.animationID = nil
+            self.animation = nil
         case .didReset:
             self.updateViewsForReset()
         }
@@ -115,52 +141,33 @@ private extension Presenter {
     }
     
     func didPlaceDisks(side: Side, positions: [Board.Position]) {
-        let animationID = Identifier()
-        
-        self.animationID = animationID
-        
-        self.animateSettingDisks(at: positions, to: side.disk) { [weak self] in
-            guard let self = self else { return }
-            guard self.animationID == animationID else { return }
-            self.animationID = nil
-
-            self.sendEvent(.updateCountLabels)
-            
-            self.interactor?.doAction(.endPlaceDisks)
-        }
+        let animation = DiskAnimation(disk: side.disk, positions: positions)
+        self.animation = animation
+        self.setNextBoardViewDisk(animation: animation)
     }
     
-    /// `coordinates` で指定されたセルに、アニメーションしながら順番に `disk` を置く。
-    /// `coordinates` から先頭の座標を取得してそのセルに `disk` を置き、
-    /// 残りの座標についてこのメソッドを再帰呼び出しすることで処理が行われる。
-    /// すべてのセルに `disk` が置けたら `completion` ハンドラーが呼び出される。
-    func animateSettingDisks<C: Collection>(at coordinates: C,
-                                            to disk: Disk,
-                                            completion: @escaping () -> Void) where C.Element == Board.Position {
-        guard let position = coordinates.first else {
-            completion()
-            return
-        }
-        
-        guard let animationID = self.animationID else { return }
-        
-        self.sendEvent(.setBoardDisk(disk, at: position, animated: true, completion: { [weak self] isFinished in
-            guard let self = self else { return }
-            guard self.animationID == animationID else { return }
-            
-            if isFinished {
-                self.animateSettingDisks(at: coordinates.dropFirst(), to: disk, completion: completion)
-            } else {
-                for position in coordinates {
-                    self.sendEvent(.setBoardDisk(disk, at: position, animated: false, completion: nil))
-                }
-                completion()
-            }
-        }))
+    func setNextBoardViewDisk(animation: DiskAnimation) {
+        guard let position = animation.popPosition() else { fatalError() }
+        self.sendEvent(.setBoardViewDisk(animation.disk, at: position, animationID: animation.id))
+    }
+    
+    func endSetBoardViewDisks() {
+        self.animation = nil
+        self.interactor?.doAction(.endPlaceDisks)
     }
     
     func sendEvent(_ event: Event) {
         self.eventReceiver?.receiveEvent(event)
+    }
+}
+
+private extension Presenter.DiskAnimation {
+    func popPosition() -> Board.Position? {
+        if self.remainPositions.isEmpty {
+            return nil
+        } else {
+            return self.remainPositions.removeFirst()
+        }
     }
 }
 
