@@ -5,8 +5,8 @@ protocol InteractorEventReceiver: class {
 }
 
 protocol DataStorable {
-    func save(_ args: DataStore.Args) throws
-    func load() throws -> DataStore.Args
+    func save(_ args: DataArgs) throws
+    func load() throws -> DataArgs
 }
 
 class Interactor {

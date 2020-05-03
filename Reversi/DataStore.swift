@@ -1,15 +1,15 @@
 import Foundation
 
+struct DataArgs {
+    let turn: Side?
+    let darkPlayer: Player
+    let lightPlayer: Player
+    let board: Board
+}
+
 class DataStore {
-    struct Args {
-        let turn: Side?
-        let darkPlayer: Player
-        let lightPlayer: Player
-        let board: Board
-    }
-    
     /// ゲームの状態をファイルに書き出し、保存します。
-    func save(_ args: Args) throws {
+    func save(_ args: DataArgs) throws {
         var output: String = ""
         output += String(args.turn.symbol.rawValue)
         output += String(args.darkPlayer.rawValue)
@@ -32,7 +32,7 @@ class DataStore {
         }
     }
     
-    func load() throws -> Args {
+    func load() throws -> DataArgs {
         let path = Self.path
         let input = try String(contentsOfFile: path, encoding: .utf8)
         var lines = input.split(separator: "\n")[...]

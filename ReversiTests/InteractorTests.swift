@@ -2,14 +2,14 @@ import XCTest
 @testable import Reversi
 
 private class DataStoreMock: DataStorable {
-    var saveHandler: ((DataStore.Args) throws -> Void)?
-    var loadHandler: (() throws -> DataStore.Args)?
+    var saveHandler: ((DataArgs) throws -> Void)?
+    var loadHandler: (() throws -> DataArgs)?
     
-    func save(_ args: DataStore.Args) throws {
+    func save(_ args: DataArgs) throws {
         try self.saveHandler?(args)
     }
     
-    func load() throws -> DataStore.Args {
+    func load() throws -> DataArgs {
         guard let handler = self.loadHandler else {
             throw TestError.handlerNotFound
         }
@@ -36,7 +36,7 @@ class InteractorTests: XCTestCase {
     private var computerThinking: ((Interactor.Computer) -> Void)!
     private var receivedEvents: [Interactor.Event] = []
     private var receivedComputers: [Interactor.Computer] = []
-    private var savedArgs: [DataStore.Args] = []
+    private var savedArgs: [DataArgs] = []
     
     override func setUp() {
         self.dataStore = .init()
