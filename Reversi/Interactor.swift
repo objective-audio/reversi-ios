@@ -4,7 +4,7 @@ protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: Interactor.Event)
 }
 
-protocol InteractorDataStore {
+protocol DataStorable {
     func save(_ args: DataStore.Args) throws
     func load() throws -> DataStore.Args
 }
@@ -17,11 +17,11 @@ class Interactor {
     
     private(set) var board: Board
     
-    private let dataStore: InteractorDataStore
+    private let dataStore: DataStorable
     private let computerThinking: (Computer) -> Void
     private var computerID: Identifier?
     
-    init(dataStore: InteractorDataStore = DataStore(),
+    init(dataStore: DataStorable = DataStore(),
          computerThinking: @escaping (Computer) -> Void = defaultComputerThinking) {
         self.dataStore = dataStore
         self.computerThinking = computerThinking
@@ -93,15 +93,6 @@ class Interactor {
 }
 
 extension Interactor {
-    enum Action {
-        case begin
-        case placeDisk(at: Board.Position)
-        case endPlaceDisks
-        case changePlayer(_ player: Player, side: Side)
-        case pass
-        case reset
-    }
-    
     func doAction(_ action: Action) {
         switch action {
         case .begin:
@@ -157,16 +148,6 @@ extension Interactor {
             }
         }
     }
-    
-    enum Event {
-        case didChangeTurn
-        case willBeginComputerWaiting(side: Side)
-        case didEndComputerWaiting(side: Side)
-        case didEnterPassing
-        case didPlaceDisks(side: Side, positions: [Board.Position])
-        case willReset
-        case didReset
-    }
 }
 
 private extension Interactor {
@@ -200,7 +181,6 @@ private extension Interactor {
         self.sendEvent(.didReset)
     }
     
-    /// プレイヤーの行動を待ちます。
     func waitForPlayer(side: Side) -> State {
         return .waiting(side: side, player: self.player(for: side))
     }
@@ -230,9 +210,6 @@ private extension Interactor {
         return .placing(side: side, positions: [position] + diskCoordinates)
     }
     
-    /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
-    /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
-    /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     func nextTurn(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
@@ -278,6 +255,4 @@ private extension State {
     }
 }
 
-extension DataStore: InteractorDataStore {}
-extension Interactor.Event: Equatable {}
-extension Interactor.Action: Equatable {}
+extension DataStore: DataStorable {}

@@ -19,6 +19,9 @@
 		B659DC922454316B00B5CC0B /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC912454316B00B5CC0B /* Board.swift */; };
 		B659DC9424544FA400B5CC0B /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC9324544FA400B5CC0B /* BoardTests.swift */; };
 		B659DC962455A2D600B5CC0B /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC952455A2D600B5CC0B /* Side.swift */; };
+		B67BCE40245EF2EA001AE284 /* InteractorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE3F245EF2EA001AE284 /* InteractorAction.swift */; };
+		B67BCE42245EF318001AE284 /* InteractorEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE41245EF318001AE284 /* InteractorEvent.swift */; };
+		B67BCE44245EF521001AE284 /* PresenterEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE43245EF521001AE284 /* PresenterEvent.swift */; };
 		B68F37A8245B1E1500FA905C /* Computer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68F37A7245B1E1500FA905C /* Computer.swift */; };
 		B68F37AA245B243600FA905C /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68F37A9245B243600FA905C /* Identifier.swift */; };
 		B6AA40CF2459741C00BDFABA /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA40CE2459741C00BDFABA /* TestUtils.swift */; };
@@ -60,6 +63,9 @@
 		B659DC912454316B00B5CC0B /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		B659DC9324544FA400B5CC0B /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		B659DC952455A2D600B5CC0B /* Side.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
+		B67BCE3F245EF2EA001AE284 /* InteractorAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractorAction.swift; sourceTree = "<group>"; };
+		B67BCE41245EF318001AE284 /* InteractorEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractorEvent.swift; sourceTree = "<group>"; };
+		B67BCE43245EF521001AE284 /* PresenterEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterEvent.swift; sourceTree = "<group>"; };
 		B68F37A7245B1E1500FA905C /* Computer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Computer.swift; sourceTree = "<group>"; };
 		B68F37A9245B243600FA905C /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		B6AA40CE2459741C00BDFABA /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
@@ -105,14 +111,46 @@
 			children = (
 				B6AA40D02459C6DD00BDFABA /* SharedInteractor.swift */,
 				B6BF4202245330E8008676C9 /* Interactor.swift */,
+				B67BCE3F245EF2EA001AE284 /* InteractorAction.swift */,
+				B67BCE41245EF318001AE284 /* InteractorEvent.swift */,
+				B6CB006E2456DB2A00054BA1 /* State.swift */,
 				B68F37A7245B1E1500FA905C /* Computer.swift */,
+				B659DC952455A2D600B5CC0B /* Side.swift */,
+				B659DC8B24539B6700B5CC0B /* Player.swift */,
 			);
 			name = Interactor;
+			sourceTree = "<group>";
+		};
+		B67BCE3C245EF216001AE284 /* Board */ = {
+			isa = PBXGroup;
+			children = (
+				B659DC912454316B00B5CC0B /* Board.swift */,
+				D642BDD723AA0B5700396732 /* Disk.swift */,
+			);
+			name = Board;
+			sourceTree = "<group>";
+		};
+		B67BCE3D245EF264001AE284 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B659DC87245393D600B5CC0B /* Presenter.swift */,
+				B67BCE43245EF521001AE284 /* PresenterEvent.swift */,
+			);
+			name = Presenter;
+			sourceTree = "<group>";
+		};
+		B67BCE3E245EF2AB001AE284 /* DataStore */ = {
+			isa = PBXGroup;
+			children = (
+				B659DC89245394D100B5CC0B /* DataStore.swift */,
+			);
+			name = DataStore;
 			sourceTree = "<group>";
 		};
 		D636B3A123D43203007F370F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D642BDB723A9FE4500396732 /* ViewController.swift */,
 				D642BDDB23AA137C00396732 /* BoardView.swift */,
 				D642BDD523AA0B3900396732 /* CellView.swift */,
 				D636B39E23D35043007F370F /* DiskView.swift */,
@@ -120,17 +158,12 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		D636B3A423D432D3007F370F /* DataTypes */ = {
+		D636B3A423D432D3007F370F /* CommonTypes */ = {
 			isa = PBXGroup;
 			children = (
-				D642BDD723AA0B5700396732 /* Disk.swift */,
-				B659DC952455A2D600B5CC0B /* Side.swift */,
-				B659DC8B24539B6700B5CC0B /* Player.swift */,
-				B659DC912454316B00B5CC0B /* Board.swift */,
-				B6CB006E2456DB2A00054BA1 /* State.swift */,
 				B68F37A9245B243600FA905C /* Identifier.swift */,
 			);
-			name = DataTypes;
+			name = CommonTypes;
 			sourceTree = "<group>";
 		};
 		D642BDA723A9FE4500396732 = {
@@ -156,16 +189,16 @@
 			children = (
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
-				D642BDB723A9FE4500396732 /* ViewController.swift */,
-				B659DC87245393D600B5CC0B /* Presenter.swift */,
+				D636B3A123D43203007F370F /* Views */,
+				B67BCE3D245EF264001AE284 /* Presenter */,
 				B67BCE3B245EF147001AE284 /* Interactor */,
-				B659DC89245394D100B5CC0B /* DataStore.swift */,
+				B67BCE3C245EF216001AE284 /* Board */,
+				B67BCE3E245EF2AB001AE284 /* DataStore */,
+				D636B3A423D432D3007F370F /* CommonTypes */,
 				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
 				D642BDC123A9FE4700396732 /* Info.plist */,
-				D636B3A123D43203007F370F /* Views */,
-				D636B3A423D432D3007F370F /* DataTypes */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
@@ -287,7 +320,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B67BCE40245EF2EA001AE284 /* InteractorAction.swift in Sources */,
 				B659DC8C24539B6700B5CC0B /* Player.swift in Sources */,
+				B67BCE44245EF521001AE284 /* PresenterEvent.swift in Sources */,
 				B659DC88245393D600B5CC0B /* Presenter.swift in Sources */,
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				B6AA40D12459C6DD00BDFABA /* SharedInteractor.swift in Sources */,
@@ -296,6 +331,7 @@
 				B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				B659DC922454316B00B5CC0B /* Board.swift in Sources */,
+				B67BCE42245EF318001AE284 /* InteractorEvent.swift in Sources */,
 				B6CB006F2456DB2A00054BA1 /* State.swift in Sources */,
 				B68F37AA245B243600FA905C /* Identifier.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,

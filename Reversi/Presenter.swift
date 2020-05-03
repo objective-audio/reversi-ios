@@ -14,22 +14,6 @@ protocol PresenterEventReceiver: class {
     func receiveEvent(_ event: Presenter.Event)
 }
 
-extension Presenter {
-    enum Event {
-        case updateBoardView
-        case updatePlayerControls
-        case updateCountLabels
-        case updateMessageViews
-        
-        case startPlayerActivityIndicatorAnimating(side: Side)
-        case stopPlayerActivityIndicatorAnimating(side: Side)
-        
-        case presentPassView
-        
-        case setBoardViewDisk(_ disk: Disk, at: Board.Position, animationID: Identifier?)
-    }
-}
-
 class Presenter {
     private weak var interactor: Interactable?
     
@@ -174,7 +158,5 @@ private extension Presenter.DiskAnimation {
         }
     }
 }
-
-extension Presenter.Event: Equatable {}
 
 extension Interactor: Interactable {}

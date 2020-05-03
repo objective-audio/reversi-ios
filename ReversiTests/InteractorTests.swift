@@ -1,7 +1,7 @@
 import XCTest
 @testable import Reversi
 
-private class DataStoreMock: InteractorDataStore {
+private class DataStoreMock: DataStorable {
     var saveHandler: ((DataStore.Args) throws -> Void)?
     var loadHandler: (() throws -> DataStore.Args)?
     
