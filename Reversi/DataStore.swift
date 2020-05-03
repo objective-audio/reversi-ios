@@ -1,12 +1,5 @@
 import Foundation
 
-struct DataArgs {
-    let turn: Side?
-    let darkPlayer: Player
-    let lightPlayer: Player
-    let board: Board
-}
-
 class DataStore {
     /// ゲームの状態をファイルに書き出し、保存します。
     func save(_ args: DataArgs) throws {
