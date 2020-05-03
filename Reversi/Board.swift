@@ -35,6 +35,10 @@ extension Board {
         set { self.disks[position.y][position.x] = newValue }
     }
     
+    var all: [(disk: Disk?, position: Position)] {
+        return Self.allPositions.map { (disk: self[$0], position: $0) }
+    }
+    
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
