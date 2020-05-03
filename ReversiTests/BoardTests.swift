@@ -5,7 +5,7 @@ class BoardTests: XCTestCase {
     func testInitialDisks() {
         let disks = Board.initialDisks
         
-        XCTAssertEqual(disks, TestUtils.initialDisks)
+        XCTAssertEqual(.init(disks), TestUtils.initialBoard)
     }
     
     func testAllPositions() {
@@ -24,7 +24,7 @@ class BoardTests: XCTestCase {
     func testInit() {
         let board = Board()
         
-        XCTAssertEqual(board, .init(TestUtils.initialDisks))
+        XCTAssertEqual(board, TestUtils.initialBoard)
     }
     
     func testInitWithDisks() {
@@ -64,7 +64,7 @@ class BoardTests: XCTestCase {
     }
     
     func testSetDisk() {
-        var board = Board(TestUtils.emptyDisks)
+        var board = TestUtils.emptyBoard
         
         let position = Board.Position(x: 2, y: 3)
         
@@ -167,7 +167,7 @@ class BoardTests: XCTestCase {
     
     func testResult() {
         XCTContext.runActivity(named: "lightとdarkが同じ数なら引き分け") { _ in
-            var board = Board(TestUtils.emptyDisks)
+            var board = TestUtils.emptyBoard
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 0, y: 1)] = .dark
@@ -176,7 +176,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "lightが多ければlightの勝ち") { _ in
-            var board = Board(TestUtils.emptyDisks)
+            var board = TestUtils.emptyBoard
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 1, y: 0)] = .light
@@ -186,7 +186,7 @@ class BoardTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "darkが多ければdarkの勝ち") { _ in
-            var board = Board(TestUtils.emptyDisks)
+            var board = TestUtils.emptyBoard
             
             board[.init(x: 0, y: 0)] = .light
             board[.init(x: 0, y: 1)] = .dark

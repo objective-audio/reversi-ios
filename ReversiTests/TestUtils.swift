@@ -2,8 +2,8 @@ import Foundation
 @testable import Reversi
 
 struct TestUtils {
-    static var initialDisks: [[Disk?]] {
-        return [
+    static var initialBoard: Board {
+        return .init([
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -12,11 +12,11 @@ struct TestUtils {
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
+        ])
     }
     
-    static var emptyDisks: [[Disk?]] {
-        return [
+    static var emptyBoard: Board {
+        return .init([
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -25,11 +25,11 @@ struct TestUtils {
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
+        ])
     }
     
-    static var darkPassDisks: [[Disk?]] {
-        return [
+    static var darkPassBoard: Board {
+        return .init([
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -38,11 +38,11 @@ struct TestUtils {
             [nil, nil, nil, .dark, .dark, .dark, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
+        ])
     }
     
-    static var preLightPassDisks: [[Disk?]] {
-        return [
+    static var preLightPassBoard: Board {
+        return .init([
             [nil, nil, .light, .dark, .dark, .dark, .dark, .dark],
             [.light, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
             [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
@@ -51,11 +51,11 @@ struct TestUtils {
             [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
             [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark],
             [.dark, .dark, .dark, .dark, .dark, .dark, .dark, .dark]
-        ]
+        ])
     }
     
-    static var darkPlacedDisks: [[Disk?]] {
-        return [
+    static var darkPlacedBoard: Board {
+        return .init([
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -64,11 +64,11 @@ struct TestUtils {
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil],
             [nil, nil, nil, nil, nil, nil, nil, nil]
-        ]
+        ])
     }
     
-    static var tiedDisks: [[Disk?]] {
-        return [
+    static var tiedBoard: Board {
+        return .init([
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
@@ -77,11 +77,11 @@ struct TestUtils {
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
-        ]
+        ])
     }
     
-    static var lightWonDisks: [[Disk?]] {
-        return [
+    static var lightWonBoard: Board {
+        return .init([
             [.light, .light, .light, .light, .light, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
@@ -90,13 +90,15 @@ struct TestUtils {
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
-        ]
+        ])
     }
     
-    static var darkWonDisks: [[Disk?]] { self.lightWonDisks.flipped }
+    static var darkWonBoard: Board {
+        return self.lightWonBoard.flipped
+    }
     
-    static var preTiedDisks: [[Disk?]] {
-        return [
+    static var preTiedBoard: Board {
+        return .init([
             [.light, .light, .light, .light, .dark, .light, nil, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
@@ -105,11 +107,11 @@ struct TestUtils {
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
-        ]
+        ])
     }
     
-    static var preDarkWonDisks: [[Disk?]] {
-        return [
+    static var preDarkWonBoard: Board {
+        return .init([
             [.light, .light, .light, .dark, .dark, .light, nil, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
@@ -118,7 +120,7 @@ struct TestUtils {
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark],
             [.light, .light, .light, .light, .dark, .dark, .dark, .dark]
-        ]
+        ])
     }
     
     static var url: URL {
@@ -139,9 +141,9 @@ struct TestUtils {
     }
 }
 
-extension Array where Element == [Disk?] {
-    var flipped: Self {
-        return self.map { line in line.map { disk in disk.flipped } }
+private extension Board {
+    var flipped: Board {
+        return .init(Board.yRange.map { y in Board.xRange.map { x in self[.init(x: x, y: y)].flipped } })
     }
 }
 

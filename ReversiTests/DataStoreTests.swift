@@ -145,7 +145,7 @@ class DataStoreTests: XCTestCase {
         
         XCTContext.runActivity(named: "turn:light, darkPlayer:computer, lightPlayer:manual") { _ in
             do {
-                try DataStore().save(.init(turn: .light, darkPlayer: .computer, lightPlayer: .manual, board: .init(TestUtils.emptyDisks)))
+                try DataStore().save(.init(turn: .light, darkPlayer: .computer, lightPlayer: .manual, board: TestUtils.emptyBoard))
             } catch {
                 XCTFail()
                 return
@@ -170,7 +170,7 @@ class DataStoreTests: XCTestCase {
         
         XCTContext.runActivity(named: "turn:none") { _ in
             do {
-                try DataStore().save(.init(turn: nil, darkPlayer: .manual, lightPlayer: .manual, board: .init(TestUtils.emptyDisks)))
+                try DataStore().save(.init(turn: nil, darkPlayer: .manual, lightPlayer: .manual, board: TestUtils.emptyBoard))
             } catch {
                 XCTFail()
                 return
