@@ -5,7 +5,7 @@ class DataStore {
         let turn: Side?
         let darkPlayer: Player
         let lightPlayer: Player
-        let board: [[Disk?]]
+        let board: Board
     }
     
     /// ゲームの状態をファイルに書き出し、保存します。
@@ -16,9 +16,9 @@ class DataStore {
         output += String(args.lightPlayer.rawValue)
         output += "\n"
         
-        for line in args.board {
-            for disk in line {
-                output += String(disk.symbol.rawValue)
+        for y in Board.yRange {
+            for x in Board.yRange {
+                output += String(args.board[.init(x: x, y: y)].symbol.rawValue)
             }
             output += "\n"
         }
@@ -67,7 +67,7 @@ class DataStore {
             }
         }
         
-        var board: [[Disk?]] = []
+        var disks: [[Disk?]] = []
         do { // board
             guard lines.count == Board.height else {
                 throw FileIOError.read(path: path, cause: nil)
@@ -84,15 +84,15 @@ class DataStore {
                 guard boardLine.count == Board.width else {
                     throw FileIOError.read(path: path, cause: nil)
                 }
-                board.append(boardLine)
+                disks.append(boardLine)
             }
             
-            guard board.count == Board.height else {
+            guard disks.count == Board.height else {
                 throw FileIOError.read(path: path, cause: nil)
             }
         }
 
-        return .init(turn: turn, darkPlayer: players[0], lightPlayer: players[1], board: board)
+        return .init(turn: turn, darkPlayer: players[0], lightPlayer: players[1], board: .init(disks))
     }
 }
 

@@ -32,7 +32,7 @@ class Interactor {
             self.darkPlayer = loadedArgs.darkPlayer
             self.lightPlayer = loadedArgs.lightPlayer
             
-            let board = Board(loadedArgs.board)
+            let board = loadedArgs.board
             self.board = board
             
             switch loadedArgs.turn {
@@ -183,7 +183,7 @@ private extension Interactor {
         try? self.dataStore.save(.init(turn: self.state.turn,
                                        darkPlayer: self.darkPlayer,
                                        lightPlayer: self.lightPlayer,
-                                       board: self.board.disks))
+                                       board: self.board))
     }
     
     func reset() {

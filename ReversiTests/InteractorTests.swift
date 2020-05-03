@@ -87,7 +87,7 @@ class InteractorTests: XCTestCase {
                 return .init(turn: .light,
                              darkPlayer: .manual,
                              lightPlayer: .computer,
-                             board: disks)
+                             board: .init(disks))
             }
             
             let interactor = Interactor(dataStore: self.dataStore)
@@ -108,7 +108,7 @@ class InteractorTests: XCTestCase {
                 return .init(turn: .dark,
                              darkPlayer: .computer,
                              lightPlayer: .manual,
-                             board: disks)
+                             board: .init(disks))
             }
             
             let interactor = Interactor(dataStore: self.dataStore)
@@ -130,7 +130,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: nil,
                          darkPlayer: .computer,
                          lightPlayer: .manual,
-                         board: TestUtils.tiedDisks)
+                         board: .init(TestUtils.tiedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -148,7 +148,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: nil,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.lightWonDisks)
+                         board: .init(TestUtils.lightWonDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -166,7 +166,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: nil,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.darkWonDisks)
+                         board: .init(TestUtils.darkWonDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -192,7 +192,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .light,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.darkPlacedDisks)
+                         board: .init(TestUtils.darkPlacedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -209,7 +209,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .light,
                          darkPlayer: .manual,
                          lightPlayer: .computer,
-                         board: TestUtils.darkPlacedDisks)
+                         board: .init(TestUtils.darkPlacedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -227,7 +227,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.darkPassDisks)
+                         board: .init(TestUtils.darkPassDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -288,7 +288,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .computer,
                          lightPlayer: .computer,
-                         board: TestUtils.initialDisks)
+                         board: .init(TestUtils.initialDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -359,7 +359,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.preLightPassDisks)
+                         board: .init(TestUtils.preLightPassDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -403,7 +403,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .computer,
-                         board: TestUtils.preLightPassDisks)
+                         board: .init(TestUtils.preLightPassDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -480,7 +480,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .computer,
                          lightPlayer: .computer,
-                         board: TestUtils.initialDisks)
+                         board: .init(TestUtils.initialDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -529,7 +529,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.preTiedDisks)
+                         board: .init(TestUtils.preTiedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -560,7 +560,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.preDarkWonDisks)
+                         board: .init(TestUtils.preDarkWonDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -591,7 +591,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .light,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.darkPlacedDisks)
+                         board: .init(TestUtils.darkPlacedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -624,7 +624,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .light,
                          darkPlayer: .manual,
                          lightPlayer: .computer,
-                         board: TestUtils.darkPlacedDisks)
+                         board: .init(TestUtils.darkPlacedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -666,7 +666,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .dark,
                          darkPlayer: .manual,
                          lightPlayer: .manual,
-                         board: TestUtils.darkPassDisks)
+                         board: .init(TestUtils.darkPassDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -705,7 +705,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: nil,
                          darkPlayer: .manual,
                          lightPlayer: .computer,
-                         board: TestUtils.tiedDisks)
+                         board: .init(TestUtils.tiedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore, computerThinking: self.computerThinking)
@@ -750,7 +750,7 @@ class InteractorTests: XCTestCase {
             XCTAssertTrue(self.receivedEvents.contains(.didChangeTurn))
             
             XCTAssertEqual(self.savedArgs.count, 1)
-            XCTAssertEqual(self.savedArgs.last?.board, interactor.board.disks)
+            XCTAssertEqual(self.savedArgs.last?.board, interactor.board)
             XCTAssertEqual(self.savedArgs.last?.darkPlayer, .manual)
             XCTAssertEqual(self.savedArgs.last?.lightPlayer, .manual)
             XCTAssertEqual(self.savedArgs.last?.turn, .light)
@@ -789,7 +789,7 @@ class InteractorTests: XCTestCase {
             return .init(turn: .light,
                          darkPlayer: .computer,
                          lightPlayer: .computer,
-                         board: TestUtils.darkPlacedDisks)
+                         board: .init(TestUtils.darkPlacedDisks))
         }
         
         let interactor = Interactor(dataStore: self.dataStore)
@@ -809,7 +809,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.savedArgs.last?.turn, .dark)
             XCTAssertEqual(self.savedArgs.last?.darkPlayer, .manual)
             XCTAssertEqual(self.savedArgs.last?.lightPlayer, .manual)
-            XCTAssertEqual(self.savedArgs.last?.board, TestUtils.initialDisks)
+            XCTAssertEqual(self.savedArgs.last?.board, .init(TestUtils.initialDisks))
         }
     }
 }

@@ -50,7 +50,7 @@ class DataStoreTests: XCTestCase {
                 [.light, nil, nil, nil, nil, nil, nil, .dark],
             ]
             
-            XCTAssertEqual(loaded.board, expectedBoard)
+            XCTAssertEqual(loaded.board, .init(expectedBoard))
         }
         
         XCTContext.runActivity(named: "turn:light, darkPlayer:computer, lightPlayer:manual") { _ in
@@ -109,7 +109,7 @@ class DataStoreTests: XCTestCase {
     func testSave() {
         XCTContext.runActivity(named: "turn:dark, darkPlayer:manual, lightPlayer:computer") { _ in
             do {
-                let board: [[Disk?]] = [
+                let disks: [[Disk?]] = [
                     [.dark, nil, nil, nil, nil, nil, nil, .light],
                     [nil, .dark, nil, nil, nil, nil, .light, nil],
                     [nil, nil, .dark, nil, nil, .light, nil, nil],
@@ -120,7 +120,7 @@ class DataStoreTests: XCTestCase {
                     [.light, nil, nil, nil, nil, nil, nil, .dark],
                 ]
                 
-                try DataStore().save(.init(turn: .dark, darkPlayer: .manual, lightPlayer: .computer, board: board))
+                try DataStore().save(.init(turn: .dark, darkPlayer: .manual, lightPlayer: .computer, board: .init(disks)))
             } catch {
                 XCTFail()
                 return
@@ -145,18 +145,7 @@ class DataStoreTests: XCTestCase {
         
         XCTContext.runActivity(named: "turn:light, darkPlayer:computer, lightPlayer:manual") { _ in
             do {
-                let board: [[Disk?]] = [
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                ]
-                
-                try DataStore().save(.init(turn: .light, darkPlayer: .computer, lightPlayer: .manual, board: board))
+                try DataStore().save(.init(turn: .light, darkPlayer: .computer, lightPlayer: .manual, board: .init(TestUtils.emptyDisks)))
             } catch {
                 XCTFail()
                 return
@@ -181,18 +170,7 @@ class DataStoreTests: XCTestCase {
         
         XCTContext.runActivity(named: "turn:none") { _ in
             do {
-                let board: [[Disk?]] = [
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                    [nil, nil, nil, nil, nil, nil, nil, nil],
-                ]
-                
-                try DataStore().save(.init(turn: nil, darkPlayer: .manual, lightPlayer: .manual, board: board))
+                try DataStore().save(.init(turn: nil, darkPlayer: .manual, lightPlayer: .manual, board: .init(TestUtils.emptyDisks)))
             } catch {
                 XCTFail()
                 return
