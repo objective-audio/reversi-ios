@@ -35,7 +35,7 @@ class Presenter {
     
     weak var eventReceiver: PresenterEventReceiver? {
         didSet {
-            if self.eventReceiver != nil {
+            if self.eventReceiver != nil && oldValue == nil {
                 self.updateViewsForInitial()
             }
         }
