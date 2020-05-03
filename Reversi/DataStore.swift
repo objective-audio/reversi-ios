@@ -116,23 +116,17 @@ private enum Symbol: Character {
 private extension Optional where Wrapped == Side {
     init(symbol: Symbol) {
         switch symbol {
-        case .dark:
-            self = .dark
-        case .light:
-            self = .light
-        case .none:
-            self = .none
+        case .dark: self = .dark
+        case .light: self = .light
+        case .none: self = .none
         }
     }
     
     var symbol: Symbol {
         switch self {
-        case .dark:
-            return .dark
-        case .light:
-            return .light
-        case .none:
-            return .none
+        case .dark: return .dark
+        case .light: return .light
+        case .none: return .none
         }
     }
 }
@@ -140,23 +134,17 @@ private extension Optional where Wrapped == Side {
 private extension Optional where Wrapped == Disk {
     init(symbol: Symbol) {
         switch symbol {
-        case .dark:
-            self = .dark
-        case .light:
-            self = .light
-        case .none:
-            self = .none
+        case .dark: self = .dark
+        case .light: self = .light
+        case .none: self = .none
         }
     }
     
     var symbol: Symbol {
         switch self {
-        case .dark:
-            return .dark
-        case .light:
-            return .light
-        case .none:
-            return .none
+        case .dark: return .dark
+        case .light: return .light
+        case .none: return .none
         }
     }
 }
