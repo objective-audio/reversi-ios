@@ -41,8 +41,11 @@ class BoardTests: XCTestCase {
         
         let board = Board(disks)
         
-        #warning("ひとつひとつの要素をチェック")
-        XCTAssertEqual(board, .init(disks))
+        for (y, diskLine) in disks.enumerated() {
+            for (x, disk) in diskLine.enumerated() {
+                XCTAssertEqual(board[.init(x: x, y: y)], disk)
+            }
+        }
     }
     
     func testDiskCount() {
