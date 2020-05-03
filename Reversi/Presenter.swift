@@ -60,7 +60,7 @@ class Presenter {
     
     func player(for side: Side) -> Player? { self.interactor?.player(for: side) }
     
-    var disks: [[Disk?]]? { self.interactor?.board.disks }
+    var board: Board? { self.interactor?.board }
     
     var status: Status? { self.interactor?.state.status }
     

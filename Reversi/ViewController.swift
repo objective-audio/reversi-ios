@@ -91,11 +91,10 @@ extension ViewController: PresenterEventReceiver {
 
 private extension ViewController {
     func updateBoardView() {
-        guard let disks = self.presenter.disks else { return }
-        for (y, boardLine) in disks.enumerated() {
-            for (x, disk) in boardLine.enumerated() {
-                self.boardView.setDisk(disk, atX: x, y: y, animated: false)
-            }
+        guard let board = self.presenter.board else { return }
+        
+        board.all.forEach {
+            self.boardView.setDisk($0.disk, atX: $0.position.x, y: $0.position.y, animated: false)
         }
     }
     
