@@ -164,7 +164,35 @@ class PresenterTests: XCTestCase {
         
         self.interactor.sendEvent(.didEnterPassing)
         
-        #warning("todo")
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        XCTAssertTrue(self.receivedEvents.contains(.presentPassView))
+    }
+    
+    func testReceiveWillReset() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.willReset)
+        
+        XCTAssertEqual(self.receivedEvents.count, 0)
+    }
+    
+    func testReceiveDidReset() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didReset)
+        
+        XCTAssertEqual(self.receivedEvents.count, 3)
+        XCTAssertTrue(self.receivedEvents.contains(.updateBoardView))
+        XCTAssertTrue(self.receivedEvents.contains(.updatePlayerControls))
+        XCTAssertTrue(self.receivedEvents.contains(.updateCountLabels))
     }
     
     func testReceiveDidPlaceDisk() {
@@ -179,38 +207,4 @@ class PresenterTests: XCTestCase {
         
         #warning("todo")
     }
-    
-    func testReceiveWillReset() {
-        let presenter = Presenter(interactor: self.interactor)
-        presenter.eventReceiver = self.eventReceiver
-        self.interactor.eventReceiver = presenter
-        
-        self.receivedEvents.removeAll()
-        
-        self.interactor.sendEvent(.willReset)
-        
-        #warning("todo")
-    }
-    
-    func testReceiveDidReset() {
-        let presenter = Presenter(interactor: self.interactor)
-        presenter.eventReceiver = self.eventReceiver
-        self.interactor.eventReceiver = presenter
-        
-        self.receivedEvents.removeAll()
-        
-        self.interactor.sendEvent(.didReset)
-        
-        #warning("todo")
-    }
 }
-
-/*
- case didChangeTurn
- case willBeginComputerWaiting(side: Side)
- case didEndComputerWaiting(side: Side)
- case didEnterPassing
- case didPlaceDisks(side: Side, positions: [Board.Position])
- case willReset
- case didReset
- */
