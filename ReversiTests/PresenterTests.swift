@@ -67,6 +67,22 @@ class PresenterTests: XCTestCase {
         XCTAssertEqual(presenter.board, TestUtils.initialBoard)
     }
     
+    func testPlayerForSide() {
+        let presenter = Presenter(interactor: self.interactor)
+        
+        self.interactor.playerHandler = {
+            switch $0 {
+            case .dark:
+                return .manual
+            case .light:
+                return .computer
+            }
+        }
+        
+        XCTAssertEqual(presenter.player(for: .dark), .manual)
+        XCTAssertEqual(presenter.player(for: .light), .computer)
+    }
+    
     func testAction() {
         let presenter = Presenter(interactor: self.interactor)
         
