@@ -33,9 +33,9 @@ private class EventReceiverMock: InteractorEventReceiver {
 class InteractorTests: XCTestCase {
     private var dataStore: DataStoreMock!
     private var eventReceiver: EventReceiverMock!
-    private var computerThinking: ((Computer) -> Void)!
+    private var computerThinking: ((Interactor.Computer) -> Void)!
     private var receivedEvents: [Interactor.Event] = []
-    private var receivedComputers: [Computer] = []
+    private var receivedComputers: [Interactor.Computer] = []
     private var savedArgs: [DataStore.Args] = []
     
     override func setUp() {

@@ -100,6 +100,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B67BCE3B245EF147001AE284 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				B6AA40D02459C6DD00BDFABA /* SharedInteractor.swift */,
+				B6BF4202245330E8008676C9 /* Interactor.swift */,
+				B68F37A7245B1E1500FA905C /* Computer.swift */,
+			);
+			name = Interactor;
+			sourceTree = "<group>";
+		};
 		D636B3A123D43203007F370F /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,7 +128,6 @@
 				B659DC8B24539B6700B5CC0B /* Player.swift */,
 				B659DC912454316B00B5CC0B /* Board.swift */,
 				B6CB006E2456DB2A00054BA1 /* State.swift */,
-				B68F37A7245B1E1500FA905C /* Computer.swift */,
 				B68F37A9245B243600FA905C /* Identifier.swift */,
 			);
 			name = DataTypes;
@@ -147,10 +156,9 @@
 			children = (
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
-				B6AA40D02459C6DD00BDFABA /* SharedInteractor.swift */,
 				D642BDB723A9FE4500396732 /* ViewController.swift */,
 				B659DC87245393D600B5CC0B /* Presenter.swift */,
-				B6BF4202245330E8008676C9 /* Interactor.swift */,
+				B67BCE3B245EF147001AE284 /* Interactor */,
 				B659DC89245394D100B5CC0B /* DataStore.swift */,
 				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,

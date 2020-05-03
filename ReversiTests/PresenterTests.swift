@@ -117,17 +117,21 @@ class PresenterTests: XCTestCase {
         XCTAssertEqual(self.receivedActions[4], .pass)
     }
     
-    func testInitial() {
+    func testEventReceiver() {
         let presenter = Presenter(interactor: self.interactor)
         presenter.eventReceiver = self.eventReceiver
-        
-        self.interactor.eventReceiver = presenter
         
         XCTAssertEqual(self.receivedEvents.count, 4)
         XCTAssertTrue(self.receivedEvents.contains(.updateBoardView))
         XCTAssertTrue(self.receivedEvents.contains(.updatePlayerControls))
         XCTAssertTrue(self.receivedEvents.contains(.updateCountLabels))
         XCTAssertTrue(self.receivedEvents.contains(.updateMessageViews))
+        
+        self.receivedEvents.removeAll()
+        
+        presenter.eventReceiver = nil
+        
+        XCTAssertEqual(self.receivedEvents.count, 0)
     }
     
     func testReceiveDidChangeTurn() {
