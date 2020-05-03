@@ -257,26 +257,32 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents.last, .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "ディスクの配置が終わり、白のターン") { _ in
             interactor.doAction(.endPlaceDisks)
             
-            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents.last, .didChangeTurn)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .light))
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "白のディスクを置く") { _ in
             interactor.doAction(.placeDisk(at: .init(x: 4, y: 2)))
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
+            XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents.last, .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
         }
+        
+        self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "ディスクの配置が終わり、黒のターン") { _ in
             interactor.doAction(.endPlaceDisks)
             
-            XCTAssertEqual(self.receivedEvents.count, 4)
+            XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents.last, .didChangeTurn)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .dark))
@@ -305,6 +311,8 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "コンピュータの思考が終わり、黒のディスクが置かれる") { _ in
             let position = Board.Position(x: 3, y: 2)
             let computer = self.receivedComputers[0]
@@ -313,22 +321,26 @@ class InteractorTests: XCTestCase {
             
             computer.completion(position)
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[1], .didEndComputerWaiting(side: .dark))
-            XCTAssertEqual(self.receivedEvents[2], .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .didEndComputerWaiting(side: .dark))
+            XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
         }
+        
+        self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "ディスクの配置が終わり、白のターン") { _ in
             interactor.doAction(.endPlaceDisks)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .light))
 
-            XCTAssertEqual(self.receivedEvents.count, 5)
-            XCTAssertEqual(self.receivedEvents[3], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[4], .willBeginComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[1], .willBeginComputerWaiting(side: .light))
             
             XCTAssertEqual(self.receivedComputers.count, 2)
         }
+        
+        self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "コンピュータの思考が終わり、白のディスクを置かれる") { _ in
             let position = Board.Position(x: 4, y: 2)
@@ -338,19 +350,21 @@ class InteractorTests: XCTestCase {
             
             computer.completion(position)
             
-            XCTAssertEqual(self.receivedEvents.count, 7)
-            XCTAssertEqual(self.receivedEvents[5], .didEndComputerWaiting(side: .light))
-            XCTAssertEqual(self.receivedEvents[6], .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .didEndComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
         }
+        
+        self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "ディスクの配置が終わり、黒のターン") { _ in
             interactor.doAction(.endPlaceDisks)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .dark))
             
-            XCTAssertEqual(self.receivedEvents.count, 9)
-            XCTAssertEqual(self.receivedEvents[7], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[8], .willBeginComputerWaiting(side: .dark))
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[1], .willBeginComputerWaiting(side: .dark))
         }
     }
     
@@ -388,11 +402,13 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.state, .passing(side: .light))
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "パスして黒のターン") { _ in
             interactor.doAction(.pass)
             
-            XCTAssertEqual(self.receivedEvents.count, 4)
-            XCTAssertEqual(self.receivedEvents[3], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents.count, 1)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .dark))
         }
@@ -432,11 +448,13 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedComputers.count, 0)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "パスして黒のターン") { _ in
             interactor.doAction(.pass)
             
-            XCTAssertEqual(self.receivedEvents.count, 4)
-            XCTAssertEqual(self.receivedEvents[3], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents.count, 1)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
             
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
         }
@@ -514,13 +532,13 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "コンピュータの思考が完了しても何も起きない") { _ in
-            XCTAssertEqual(self.receivedEvents.count, 2)
-            
             let computer = self.receivedComputers[0]
             computer.completion(computer.positions[0])
             
-            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents.count, 0)
         }
     }
     
@@ -638,14 +656,16 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.state, .waiting(side: .light, player: .computer))
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.receivedEvents.count, 5)
-            XCTAssertEqual(self.receivedEvents[1], .willReset)
-            XCTAssertEqual(self.receivedEvents[2], .didEndComputerWaiting(side: .light))
-            XCTAssertEqual(self.receivedEvents[3], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[4], .didReset)
+            XCTAssertEqual(self.receivedEvents.count, 4)
+            XCTAssertEqual(self.receivedEvents[0], .willReset)
+            XCTAssertEqual(self.receivedEvents[1], .didEndComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[2], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[3], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
@@ -653,11 +673,13 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.player(for: .light), .manual)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "コンピュータの思考を完了させても何も起きない") { _ in
             let computer = self.receivedComputers[0]
             computer.completion(computer.positions[0])
             
-            XCTAssertEqual(self.receivedEvents.count, 5)
+            XCTAssertEqual(self.receivedEvents.count, 0)
         }
     }
     
@@ -680,12 +702,14 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.state, .passing(side: .dark))
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[1], .willReset)
-            XCTAssertEqual(self.receivedEvents[2], .didReset)
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .willReset)
+            XCTAssertEqual(self.receivedEvents[1], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
             XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
@@ -693,10 +717,12 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.player(for: .light), .manual)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "パスしても無視される") { ＿ in
             interactor.doAction(.pass)
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
+            XCTAssertEqual(self.receivedEvents.count, 0)
         }
     }
     
@@ -736,6 +762,8 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
         }
         
+        self.receivedEvents.removeAll()
+        
         XCTContext.runActivity(named: "ディスクを置いた時点では保存されない") { _ in
             interactor.doAction(.placeDisk(at: .init(x: 3, y: 2)))
             
@@ -743,6 +771,8 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.savedArgs.count, 0)
         }
+        
+        self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "ディスクが置き終わったら保存される") { _ in
             interactor.doAction(.endPlaceDisks)
@@ -775,10 +805,12 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.savedArgs.last?.lightPlayer, .computer)
         }
         
+        self.savedArgs.removeAll()
+        
         XCTContext.runActivity(named: "黒のプレイヤーを変更したら保存される") { _ in
             interactor.doAction(.changePlayer(.computer, side: .dark))
             
-            XCTAssertEqual(self.savedArgs.count, 2)
+            XCTAssertEqual(self.savedArgs.count, 1)
             XCTAssertEqual(self.savedArgs.last?.darkPlayer, .computer)
             XCTAssertEqual(self.savedArgs.last?.lightPlayer, .computer)
         }
