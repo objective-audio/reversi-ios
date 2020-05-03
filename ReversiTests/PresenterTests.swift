@@ -6,6 +6,7 @@ private class InteractorMock: Interactable {
     var boardHandler: () -> Board = { fatalError() }
     var playerHandler: (Side) -> Player = { _ in fatalError() }
     var actionHandler: ((Interactor.Action) -> Void)?
+    func sendEvent(_ event: Interactor.Event) { self.eventReceiver?.receiveEvent(event) }
     
     var eventReceiver: InteractorEventReceiver?
     
@@ -31,12 +32,18 @@ private class EventReceiverMock: PresenterEventReceiver {
 
 class PresenterTests: XCTestCase {
     private var interactor: InteractorMock!
+    private var eventReceiver: EventReceiverMock!
+    private var receivedEvents: [Presenter.Event] = []
     
     override func setUp() {
         self.interactor = .init()
+        self.eventReceiver = .init()
+        
+        self.eventReceiver.receiveHandler = { self.receivedEvents.append($0) }
     }
     
     override func tearDown() {
+        self.eventReceiver = nil
         self.interactor = nil
     }
     
@@ -94,4 +101,110 @@ class PresenterTests: XCTestCase {
         XCTAssertEqual(actions.count, 5)
         XCTAssertEqual(actions[4], .pass)
     }
+    
+    func testInitial() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        
+        self.interactor.eventReceiver = presenter
+        
+        XCTAssertEqual(receivedEvents.count, 4)
+        
+        #warning("todo")
+    }
+    
+    func testReceiveDidChangeTurn() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didChangeTurn)
+        
+        #warning("todo")
+    }
+    
+    func testReceiveWillBeginComputerWaiting() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.willBeginComputerWaiting(side: .dark))
+        
+        #warning("todo")
+    }
+    
+    func testReceiveDidEndComputerWaiting() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didEndComputerWaiting(side: .light))
+        
+        #warning("todo")
+    }
+    
+    func testReceiveDidEnterPassing() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didEnterPassing)
+        
+        #warning("todo")
+    }
+    
+    func testReceiveDidPlaceDisk() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didPlaceDisks(side: .light,
+                                                 positions: [.init(x: 0, y: 0), .init(x: 0, y: 1)]))
+        
+        #warning("todo")
+    }
+    
+    func testReceiveWillReset() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.willReset)
+        
+        #warning("todo")
+    }
+    
+    func testReceiveDidReset() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        self.interactor.sendEvent(.didReset)
+        
+        #warning("todo")
+    }
 }
+
+/*
+ case didChangeTurn
+ case willBeginComputerWaiting(side: Side)
+ case didEndComputerWaiting(side: Side)
+ case didEnterPassing
+ case didPlaceDisks(side: Side, positions: [Board.Position])
+ case willReset
+ case didReset
+ */
