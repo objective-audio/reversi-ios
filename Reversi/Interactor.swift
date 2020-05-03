@@ -5,8 +5,8 @@ protocol InteractorEventReceiver: class {
 }
 
 protocol InteractorDataStore {
-    func save(_ parameters: DataStore.Parameters) throws
-    func load() throws -> DataStore.Parameters
+    func save(_ args: DataStore.Args) throws
+    func load() throws -> DataStore.Args
 }
 
 class Interactor {
@@ -27,15 +27,15 @@ class Interactor {
         self.computerThinking = computerThinking
         
         do {
-            let parameters = try self.dataStore.load()
+            let loadedArgs = try self.dataStore.load()
             
-            self.darkPlayer = parameters.darkPlayer
-            self.lightPlayer = parameters.lightPlayer
+            self.darkPlayer = loadedArgs.darkPlayer
+            self.lightPlayer = loadedArgs.lightPlayer
             
-            let board = Board(parameters.board)
+            let board = Board(loadedArgs.board)
             self.board = board
             
-            switch parameters.turn {
+            switch loadedArgs.turn {
             case .some(let side):
                 self.state = .launching(side: side)
             case .none:

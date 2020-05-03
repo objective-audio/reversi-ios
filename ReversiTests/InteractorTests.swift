@@ -2,14 +2,14 @@ import XCTest
 @testable import Reversi
 
 private class DataStoreMock: InteractorDataStore {
-    var saveHandler: ((DataStore.Parameters) throws -> Void)?
-    var loadHandler: (() throws -> DataStore.Parameters)?
+    var saveHandler: ((DataStore.Args) throws -> Void)?
+    var loadHandler: (() throws -> DataStore.Args)?
     
-    func save(_ parameters: DataStore.Parameters) throws {
-        try self.saveHandler?(parameters)
+    func save(_ args: DataStore.Args) throws {
+        try self.saveHandler?(args)
     }
     
-    func load() throws -> DataStore.Parameters {
+    func load() throws -> DataStore.Args {
         guard let handler = self.loadHandler else {
             throw TestError.handlerNotFound
         }
@@ -36,7 +36,7 @@ class InteractorTests: XCTestCase {
     private var computerThinking: ((Computer) -> Void)!
     private var receivedEvents: [Interactor.Event] = []
     private var receivedComputers: [Computer] = []
-    private var savedParameters: [DataStore.Parameters] = []
+    private var savedArgs: [DataStore.Args] = []
     
     override func setUp() {
         self.dataStore = .init()
@@ -44,11 +44,11 @@ class InteractorTests: XCTestCase {
         
         self.eventReceiver.receiveHandler = { self.receivedEvents.append($0) }
         self.computerThinking = { self.receivedComputers.append($0) }
-        self.dataStore.saveHandler = { self.savedParameters.append($0) }
+        self.dataStore.saveHandler = { self.savedArgs.append($0) }
     }
     
     override func tearDown() {
-        self.savedParameters.removeAll()
+        self.savedArgs.removeAll()
         self.receivedComputers.removeAll()
         self.receivedEvents.removeAll()
         
@@ -741,7 +741,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertFalse(self.receivedEvents.contains(.didChangeTurn))
             
-            XCTAssertEqual(self.savedParameters.count, 0)
+            XCTAssertEqual(self.savedArgs.count, 0)
         }
         
         XCTContext.runActivity(named: "ディスクが置き終わったら保存される") { _ in
@@ -749,11 +749,11 @@ class InteractorTests: XCTestCase {
             
             XCTAssertTrue(self.receivedEvents.contains(.didChangeTurn))
             
-            XCTAssertEqual(self.savedParameters.count, 1)
-            XCTAssertEqual(self.savedParameters.last?.board, interactor.board.disks)
-            XCTAssertEqual(self.savedParameters.last?.darkPlayer, .manual)
-            XCTAssertEqual(self.savedParameters.last?.lightPlayer, .manual)
-            XCTAssertEqual(self.savedParameters.last?.turn, .light)
+            XCTAssertEqual(self.savedArgs.count, 1)
+            XCTAssertEqual(self.savedArgs.last?.board, interactor.board.disks)
+            XCTAssertEqual(self.savedArgs.last?.darkPlayer, .manual)
+            XCTAssertEqual(self.savedArgs.last?.lightPlayer, .manual)
+            XCTAssertEqual(self.savedArgs.last?.turn, .light)
         }
     }
     
@@ -764,23 +764,23 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .dark))
-            XCTAssertEqual(self.savedParameters.count, 0)
+            XCTAssertEqual(self.savedArgs.count, 0)
         }
         
         XCTContext.runActivity(named: "白のプレイヤーを変更したら保存される") { _ in
             interactor.doAction(.changePlayer(.computer, side: .light))
             
-            XCTAssertEqual(self.savedParameters.count, 1)
-            XCTAssertEqual(self.savedParameters.last?.darkPlayer, .manual)
-            XCTAssertEqual(self.savedParameters.last?.lightPlayer, .computer)
+            XCTAssertEqual(self.savedArgs.count, 1)
+            XCTAssertEqual(self.savedArgs.last?.darkPlayer, .manual)
+            XCTAssertEqual(self.savedArgs.last?.lightPlayer, .computer)
         }
         
         XCTContext.runActivity(named: "黒のプレイヤーを変更したら保存される") { _ in
             interactor.doAction(.changePlayer(.computer, side: .dark))
             
-            XCTAssertEqual(self.savedParameters.count, 2)
-            XCTAssertEqual(self.savedParameters.last?.darkPlayer, .computer)
-            XCTAssertEqual(self.savedParameters.last?.lightPlayer, .computer)
+            XCTAssertEqual(self.savedArgs.count, 2)
+            XCTAssertEqual(self.savedArgs.last?.darkPlayer, .computer)
+            XCTAssertEqual(self.savedArgs.last?.lightPlayer, .computer)
         }
     }
     
@@ -798,18 +798,18 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
             
             XCTAssertEqual(interactor.state.status, .turn(side: .light))
-            XCTAssertEqual(self.savedParameters.count, 0)
+            XCTAssertEqual(self.savedArgs.count, 0)
         }
         
         XCTContext.runActivity(named: "リセットしたら保存される") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.savedParameters.count, 2) // turn変更のsaveが1回入っている
+            XCTAssertEqual(self.savedArgs.count, 2) // turn変更のsaveが1回入っている
             
-            XCTAssertEqual(self.savedParameters.last?.turn, .dark)
-            XCTAssertEqual(self.savedParameters.last?.darkPlayer, .manual)
-            XCTAssertEqual(self.savedParameters.last?.lightPlayer, .manual)
-            XCTAssertEqual(self.savedParameters.last?.board, TestUtils.initialDisks)
+            XCTAssertEqual(self.savedArgs.last?.turn, .dark)
+            XCTAssertEqual(self.savedArgs.last?.darkPlayer, .manual)
+            XCTAssertEqual(self.savedArgs.last?.lightPlayer, .manual)
+            XCTAssertEqual(self.savedArgs.last?.board, TestUtils.initialDisks)
         }
     }
 }

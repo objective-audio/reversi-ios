@@ -1,7 +1,7 @@
 import Foundation
 
 class DataStore {
-    struct Parameters {
+    struct Args {
         let turn: Side?
         let darkPlayer: Player
         let lightPlayer: Player
@@ -9,14 +9,14 @@ class DataStore {
     }
     
     /// ゲームの状態をファイルに書き出し、保存します。
-    func save(_ parameters: Parameters) throws {
+    func save(_ args: Args) throws {
         var output: String = ""
-        output += String(parameters.turn.symbol.rawValue)
-        output += String(parameters.darkPlayer.rawValue)
-        output += String(parameters.lightPlayer.rawValue)
+        output += String(args.turn.symbol.rawValue)
+        output += String(args.darkPlayer.rawValue)
+        output += String(args.lightPlayer.rawValue)
         output += "\n"
         
-        for line in parameters.board {
+        for line in args.board {
             for disk in line {
                 output += String(disk.symbol.rawValue)
             }
@@ -32,7 +32,7 @@ class DataStore {
         }
     }
     
-    func load() throws -> Parameters {
+    func load() throws -> Args {
         let path = Self.path
         let input = try String(contentsOfFile: path, encoding: .utf8)
         var lines = input.split(separator: "\n")[...]
