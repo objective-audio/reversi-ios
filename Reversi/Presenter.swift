@@ -108,8 +108,7 @@ extension Presenter: InteractorEventReceiver {
     func receiveEvent(_ event: Interactor.Event) {
         switch event {
         case .didChangeTurn:
-            self.sendEvent(.updateMessageViews)
-            self.sendEvent(.updateCountLabels)
+            self.updateViewsForDidChangeTurn()
         case .willBeginComputerWaiting(let side):
             self.sendEvent(.startPlayerActivityIndicatorAnimating(side: side))
         case .didEndComputerWaiting(let side):
@@ -137,6 +136,11 @@ private extension Presenter {
     func updateViewsForReset() {
         self.sendEvent(.updateBoardView)
         self.sendEvent(.updatePlayerControls)
+        self.sendEvent(.updateCountLabels)
+    }
+    
+    func updateViewsForDidChangeTurn() {
+        self.sendEvent(.updateMessageViews)
         self.sendEvent(.updateCountLabels)
     }
     
