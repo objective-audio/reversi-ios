@@ -105,19 +105,7 @@ extension Board {
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
     func validMoves(for side: Side) -> [Position] {
-        var coordinates: [Position] = []
-        let disk = side.disk
-        
-        for y in Board.yRange {
-            for x in Board.xRange {
-                let position = Position(x: x, y: y)
-                if self.canPlaceDisk(disk, at: position) {
-                    coordinates.append(position)
-                }
-            }
-        }
-        
-        return coordinates
+        return Self.allPositions.filter { self.canPlaceDisk(side.disk, at: $0) }
     }
 }
 
