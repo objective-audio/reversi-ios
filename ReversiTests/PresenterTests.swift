@@ -108,9 +108,11 @@ class PresenterTests: XCTestCase {
         
         self.interactor.eventReceiver = presenter
         
-        XCTAssertEqual(receivedEvents.count, 4)
-        
-        #warning("todo")
+        XCTAssertEqual(self.receivedEvents.count, 4)
+        XCTAssertTrue(self.receivedEvents.contains(.updateBoardView))
+        XCTAssertTrue(self.receivedEvents.contains(.updatePlayerControls))
+        XCTAssertTrue(self.receivedEvents.contains(.updateCountLabels))
+        XCTAssertTrue(self.receivedEvents.contains(.updateMessageViews))
     }
     
     func testReceiveDidChangeTurn() {
@@ -122,7 +124,9 @@ class PresenterTests: XCTestCase {
         
         self.interactor.sendEvent(.didChangeTurn)
         
-        #warning("todo")
+        XCTAssertEqual(self.receivedEvents.count, 2)
+        XCTAssertTrue(self.receivedEvents.contains(.updateCountLabels))
+        XCTAssertTrue(self.receivedEvents.contains(.updateMessageViews))
     }
     
     func testReceiveWillBeginComputerWaiting() {
@@ -134,7 +138,8 @@ class PresenterTests: XCTestCase {
         
         self.interactor.sendEvent(.willBeginComputerWaiting(side: .dark))
         
-        #warning("todo")
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        XCTAssertTrue(self.receivedEvents.contains(.startPlayerActivityIndicatorAnimating(side: .dark)))
     }
     
     func testReceiveDidEndComputerWaiting() {
@@ -146,7 +151,8 @@ class PresenterTests: XCTestCase {
         
         self.interactor.sendEvent(.didEndComputerWaiting(side: .light))
         
-        #warning("todo")
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        XCTAssertTrue(self.receivedEvents.contains(.stopPlayerActivityIndicatorAnimating(side: .light)))
     }
     
     func testReceiveDidEnterPassing() {
