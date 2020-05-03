@@ -41,7 +41,7 @@ class Presenter {
         }
     }
     
-    class DiskAnimation {
+    fileprivate class DiskAnimation {
         let id: Identifier = .init()
         let disk: Disk
         var remainPositions: [Board.Position]
