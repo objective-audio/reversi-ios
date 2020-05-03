@@ -171,4 +171,6 @@ private extension Presenter.DiskAnimation {
     }
 }
 
+extension Presenter.Event: Equatable {}
+
 extension Interactor: Interactable {}
