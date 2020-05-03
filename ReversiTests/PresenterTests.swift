@@ -32,6 +32,7 @@ private class EventReceiverMock: PresenterEventReceiver {
 
 class PresenterTests: XCTestCase {
     private var interactor: InteractorMock!
+    private var receivedActions: [Interactor.Action] = []
     private var eventReceiver: EventReceiverMock!
     private var receivedEvents: [Presenter.Event] = []
     
@@ -39,12 +40,16 @@ class PresenterTests: XCTestCase {
         self.interactor = .init()
         self.eventReceiver = .init()
         
+        self.interactor.actionHandler = { self.receivedActions.append($0) }
         self.eventReceiver.receiveHandler = { self.receivedEvents.append($0) }
     }
     
     override func tearDown() {
         self.eventReceiver = nil
         self.interactor = nil
+        
+        self.receivedEvents.removeAll()
+        self.receivedActions.removeAll()
     }
     
     func testStatus() {
@@ -86,36 +91,30 @@ class PresenterTests: XCTestCase {
     func testAction() {
         let presenter = Presenter(interactor: self.interactor)
         
-        var actions: [Interactor.Action] = []
-        
-        self.interactor.actionHandler = { action in
-            actions.append(action)
-        }
-        
         presenter.viewDidAppear()
         
-        XCTAssertEqual(actions.count, 1)
-        XCTAssertEqual(actions[0], .begin)
+        XCTAssertEqual(self.receivedActions.count, 1)
+        XCTAssertEqual(self.receivedActions[0], .begin)
         
         presenter.changePlayer(.computer, side: .light)
         
-        XCTAssertEqual(actions.count, 2)
-        XCTAssertEqual(actions[1], .changePlayer(.computer, side: .light))
+        XCTAssertEqual(self.receivedActions.count, 2)
+        XCTAssertEqual(self.receivedActions[1], .changePlayer(.computer, side: .light))
         
         presenter.selectBoard(at: .init(x: 3, y: 4))
         
-        XCTAssertEqual(actions.count, 3)
-        XCTAssertEqual(actions[2], .placeDisk(at: .init(x: 3, y: 4)))
+        XCTAssertEqual(self.receivedActions.count, 3)
+        XCTAssertEqual(self.receivedActions[2], .placeDisk(at: .init(x: 3, y: 4)))
         
         presenter.reset()
         
-        XCTAssertEqual(actions.count, 4)
-        XCTAssertEqual(actions[3], .reset)
+        XCTAssertEqual(self.receivedActions.count, 4)
+        XCTAssertEqual(self.receivedActions[3], .reset)
         
         presenter.pass()
         
-        XCTAssertEqual(actions.count, 5)
-        XCTAssertEqual(actions[4], .pass)
+        XCTAssertEqual(self.receivedActions.count, 5)
+        XCTAssertEqual(self.receivedActions[4], .pass)
     }
     
     func testInitial() {
@@ -211,16 +210,89 @@ class PresenterTests: XCTestCase {
         XCTAssertTrue(self.receivedEvents.contains(.updateCountLabels))
     }
     
-    func testReceiveDidPlaceDisk() {
+    func testReceiveDidPlaceDisk_最後までアニメーションする() {
         let presenter = Presenter(interactor: self.interactor)
         presenter.eventReceiver = self.eventReceiver
         self.interactor.eventReceiver = presenter
         
         self.receivedEvents.removeAll()
         
-        self.interactor.sendEvent(.didPlaceDisks(side: .light,
-                                                 positions: [.init(x: 0, y: 0), .init(x: 0, y: 1)]))
+        let positions: [Board.Position] = [.init(x: 0, y: 0),
+                                           .init(x: 0, y: 1),
+                                           .init(x: 0, y: 2)]
         
-        #warning("todo")
+        self.interactor.sendEvent(.didPlaceDisks(side: .light,
+                                                 positions: positions))
+        
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        
+        guard case .setBoardViewDisk(_, _, let receivedID) = self.receivedEvents.first, let animationID = receivedID else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertEqual(self.receivedEvents.last, .setBoardViewDisk(.light, at: positions[0], animationID: animationID))
+        
+        self.receivedEvents.removeAll()
+        
+        presenter.endSetBoardDisk(animationID: animationID, isFinished: true)
+        
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        XCTAssertEqual(self.receivedEvents.last, .setBoardViewDisk(.light, at: positions[1], animationID: animationID))
+        
+        self.receivedEvents.removeAll()
+        
+        presenter.endSetBoardDisk(animationID: animationID, isFinished: true)
+        
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        XCTAssertEqual(self.receivedEvents.last, .setBoardViewDisk(.light, at: positions[2], animationID: animationID))
+        
+        self.receivedEvents.removeAll()
+        
+        XCTAssertEqual(self.receivedActions.count, 0)
+        
+        presenter.endSetBoardDisk(animationID: animationID, isFinished: true)
+        
+        XCTAssertEqual(self.receivedEvents.count, 0)
+        XCTAssertEqual(self.receivedActions.count, 1)
+        
+        XCTAssertEqual(self.receivedActions.last, .endPlaceDisks)
+    }
+    
+    func testReceivedDidPlaceDisk_途中でアニメーション中断() {
+        let presenter = Presenter(interactor: self.interactor)
+        presenter.eventReceiver = self.eventReceiver
+        self.interactor.eventReceiver = presenter
+        
+        self.receivedEvents.removeAll()
+        
+        let positions: [Board.Position] = [.init(x: 0, y: 0),
+                                           .init(x: 0, y: 1),
+                                           .init(x: 0, y: 2)]
+        
+        self.interactor.sendEvent(.didPlaceDisks(side: .light,
+                                                 positions: positions))
+        
+        XCTAssertEqual(self.receivedEvents.count, 1)
+        
+        guard case .setBoardViewDisk(_, _, let receivedID) = self.receivedEvents.first, let animationID = receivedID else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertEqual(self.receivedEvents.last, .setBoardViewDisk(.light, at: positions[0], animationID: animationID))
+        
+        self.receivedEvents.removeAll()
+        
+        XCTAssertEqual(self.receivedActions.count, 0)
+        
+        presenter.endSetBoardDisk(animationID: animationID, isFinished: false)
+        
+        XCTAssertEqual(self.receivedEvents.count, 2)
+        XCTAssertEqual(self.receivedEvents[0], .setBoardViewDisk(.light, at: positions[1], animationID: nil))
+        XCTAssertEqual(self.receivedEvents[1], .setBoardViewDisk(.light, at: positions[2], animationID: nil))
+        
+        XCTAssertEqual(self.receivedActions.count, 1)
+        XCTAssertEqual(self.receivedActions.last, .endPlaceDisks)
     }
 }
