@@ -93,7 +93,7 @@ private extension ViewController {
     func updateBoardView() {
         guard let board = self.presenter.board else { return }
         
-        board.all.forEach {
+        board.allElements.forEach {
             self.boardView.setDisk($0.disk, atX: $0.position.x, y: $0.position.y, animated: false)
         }
     }

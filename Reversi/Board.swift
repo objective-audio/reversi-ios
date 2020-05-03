@@ -17,6 +17,11 @@ struct Board {
         var y: Int
     }
     
+    struct Element {
+        let disk: Disk?
+        let position: Position
+    }
+    
     private(set) var disks: [[Disk?]]
     
     init(_ disks: [[Disk?]] = Self.initialDisks) {
@@ -35,8 +40,8 @@ extension Board {
         set { self.disks[position.y][position.x] = newValue }
     }
     
-    var all: [(disk: Disk?, position: Position)] {
-        return Self.allPositions.map { (disk: self[$0], position: $0) }
+    var allElements: [Element] {
+        return Self.allPositions.map { .init(disk: self[$0], position: $0) }
     }
     
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
