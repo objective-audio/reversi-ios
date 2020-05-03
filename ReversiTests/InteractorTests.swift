@@ -844,4 +844,24 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.savedArgs.last?.board, TestUtils.initialBoard)
         }
     }
+    
+    func test_ディスク配置後に位置を反映() {
+        let interactor = Interactor(dataStore: self.dataStore)
+        
+        XCTContext.runActivity(named: "ゲーム開始、黒のターン") { _ in
+            interactor.doAction(.begin)
+        }
+        
+        XCTContext.runActivity(named: "ディスクを配置") { _ in
+            interactor.doAction(.placeDisk(at: .init(x: 5, y: 4)))
+            
+            XCTAssertEqual(interactor.board, TestUtils.initialBoard)
+        }
+        
+        XCTContext.runActivity(named: "ディスクの配置が終了し、位置が反映される") { _ in
+            interactor.doAction(.endPlaceDisks)
+            
+            XCTAssertEqual(interactor.board, TestUtils.darkPlacedBoard)
+        }
+    }
 }
