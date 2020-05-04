@@ -1,5 +1,3 @@
-import Foundation
-
 struct Board {
     /// 盤の幅（ `8` ）を表します。
     static let width = 8

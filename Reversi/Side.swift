@@ -1,5 +1,3 @@
-import Foundation
-
 enum Side: Int, CaseIterable {
     case dark
     case light

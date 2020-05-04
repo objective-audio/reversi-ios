@@ -1,5 +1,3 @@
-import Foundation
-
 extension Interactor {
     enum Event {
         case didChangeTurn

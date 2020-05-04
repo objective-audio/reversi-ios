@@ -1,5 +1,3 @@
-import Foundation
-
 protocol Interactable: class {
     var eventReceiver: InteractorEventReceiver? { get set }
     

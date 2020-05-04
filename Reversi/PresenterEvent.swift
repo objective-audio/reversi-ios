@@ -1,5 +1,3 @@
-import Foundation
-
 extension Presenter {
     enum Event {
         case updateBoardView

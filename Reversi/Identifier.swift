@@ -1,5 +1,3 @@
-import Foundation
-
 class Identifier {}
 
 extension Identifier: Equatable {
