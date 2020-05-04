@@ -63,11 +63,9 @@ class Interactor {
     private(set) var state: State {
         willSet {
             switch self.state {
-            case .waiting(let side, let player):
-                if case .computer = player {
-                    self.computerID = nil
-                    self.sendEvent(.didEndComputerWaiting(side: side))
-                }
+            case .waiting(let side, .computer):
+                self.computerID = nil
+                self.sendEvent(.didEndComputerWaiting(side: side))
             default:
                 break
             }
@@ -81,11 +79,9 @@ class Interactor {
             switch self.state {
             case .passing:
                 self.sendEvent(.didEnterPassing)
-            case .waiting(let side, let player):
-                if case .computer = player {
-                    self.sendEvent(.willBeginComputerWaiting(side: side))
-                    self.playTurnOfComputer(side: side)
-                }
+            case .waiting(let side, .computer):
+                self.sendEvent(.willBeginComputerWaiting(side: side))
+                self.playTurnOfComputer(side: side)
             case .placing(let side, let positions):
                 self.sendEvent(.didPlaceDisks(side: side, positions: positions))
             default:
