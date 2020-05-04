@@ -8,10 +8,7 @@ enum State {
     case result(Result)
 }
 
-enum Result {
-    case won(side: Side)
-    case tied
-}
+
 
 enum Status {
     case turn(side: Side)
@@ -30,5 +27,4 @@ extension State {
 }
 
 extension State: Equatable {}
-extension Result: Equatable {}
 extension Status: Equatable {}
