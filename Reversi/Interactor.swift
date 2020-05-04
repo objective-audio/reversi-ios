@@ -242,6 +242,7 @@ private extension Interactor {
 private struct DefaultComputerThinking: ComputerThinkable {
     func callAsFunction(_ computer: Computer) {
         guard let position = computer.positions.randomElement() else { fatalError() }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             computer.completion(position)
         }
@@ -251,10 +252,8 @@ private struct DefaultComputerThinking: ComputerThinkable {
 private extension State {
     var turn: Side? {
         switch self.status {
-        case .turn(let side):
-            return side
-        case .result:
-            return nil
+        case .turn(let side): return side
+        case .result: return nil
         }
     }
 }

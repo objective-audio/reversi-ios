@@ -77,10 +77,8 @@ class PresenterTests: XCTestCase {
         
         self.interactor.playerHandler = {
             switch $0 {
-            case .dark:
-                return .manual
-            case .light:
-                return .computer
+            case .dark: return .manual
+            case .light: return .computer
             }
         }
         
