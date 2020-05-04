@@ -2,12 +2,6 @@ import XCTest
 @testable import Reversi
 
 class BoardTests: XCTestCase {
-    func testInitialDisks() {
-        let disks = Board.initialDisks
-        
-        XCTAssertEqual(.init(disks), TestUtils.initialBoard)
-    }
-    
     func testAllPositions() {
         XCTAssertEqual(Board.allPositions.count, 64)
         

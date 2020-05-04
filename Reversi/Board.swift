@@ -116,9 +116,7 @@ private extension Board {
         guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
         return self.disks[position.y][position.x]
     }
-}
-
-extension Board {
+    
     static var initialDisks: [[Disk?]] {
         let line = [Disk?](repeating: nil, count: Self.width)
         var disks = [[Disk?]](repeating: line, count: Self.height)
