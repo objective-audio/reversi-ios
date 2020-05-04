@@ -10,11 +10,6 @@ struct Board {
     
     static let allPositions: [Board.Position] = Board.yRange.flatMap { y in Board.xRange.map { x in .init(x: x, y: y) } }
     
-    struct Position {
-        var x: Int
-        var y: Int
-    }
-    
     struct Element {
         let disk: Disk?
         let position: Position
@@ -143,5 +138,3 @@ extension Board {
 }
 
 extension Board: Equatable {}
-extension Board.Position: Equatable {}
-extension Board.Position: Hashable {}
