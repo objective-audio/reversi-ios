@@ -10,7 +10,7 @@ protocol DataStorable {
 }
 
 protocol ComputerThinkable {
-    func callAsFunction(_ computer: Interactor.Computer)
+    func callAsFunction(_ computer: Computer)
 }
 
 class Interactor {
@@ -240,7 +240,7 @@ private extension Interactor {
 }
 
 private struct DefaultComputerThinking: ComputerThinkable {
-    func callAsFunction(_ computer: Interactor.Computer) {
+    func callAsFunction(_ computer: Computer) {
         guard let position = computer.positions.randomElement() else { fatalError() }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             computer.completion(position)

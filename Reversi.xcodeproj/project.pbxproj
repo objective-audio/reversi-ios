@@ -25,7 +25,7 @@
 		B67BCE44245EF521001AE284 /* PresenterEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE43245EF521001AE284 /* PresenterEvent.swift */; };
 		B67BCE4A245F9E06001AE284 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE49245F9E06001AE284 /* Result.swift */; };
 		B67BCE4C245F9E40001AE284 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BCE4B245F9E40001AE284 /* Status.swift */; };
-		B68F37A8245B1E1500FA905C /* InteractorComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68F37A7245B1E1500FA905C /* InteractorComputer.swift */; };
+		B68F37A8245B1E1500FA905C /* Computer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68F37A7245B1E1500FA905C /* Computer.swift */; };
 		B68F37AA245B243600FA905C /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68F37A9245B243600FA905C /* Identifier.swift */; };
 		B6AA40CF2459741C00BDFABA /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA40CE2459741C00BDFABA /* TestUtils.swift */; };
 		B6AA40D12459C6DD00BDFABA /* SharedInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA40D02459C6DD00BDFABA /* SharedInteractor.swift */; };
@@ -72,7 +72,7 @@
 		B67BCE43245EF521001AE284 /* PresenterEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterEvent.swift; sourceTree = "<group>"; };
 		B67BCE49245F9E06001AE284 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B67BCE4B245F9E40001AE284 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		B68F37A7245B1E1500FA905C /* InteractorComputer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractorComputer.swift; sourceTree = "<group>"; };
+		B68F37A7245B1E1500FA905C /* Computer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Computer.swift; sourceTree = "<group>"; };
 		B68F37A9245B243600FA905C /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		B6AA40CE2459741C00BDFABA /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		B6AA40D02459C6DD00BDFABA /* SharedInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedInteractor.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 				B6BF4202245330E8008676C9 /* Interactor.swift */,
 				B67BCE3F245EF2EA001AE284 /* InteractorAction.swift */,
 				B67BCE41245EF318001AE284 /* InteractorEvent.swift */,
-				B68F37A7245B1E1500FA905C /* InteractorComputer.swift */,
+				B68F37A7245B1E1500FA905C /* Computer.swift */,
 				B6CB006E2456DB2A00054BA1 /* State.swift */,
 				B67BCE4B245F9E40001AE284 /* Status.swift */,
 				B67BCE49245F9E06001AE284 /* Result.swift */,
@@ -350,7 +350,7 @@
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
 				B6BF4203245330E8008676C9 /* Interactor.swift in Sources */,
 				B67BCE4A245F9E06001AE284 /* Result.swift in Sources */,
-				B68F37A8245B1E1500FA905C /* InteractorComputer.swift in Sources */,
+				B68F37A8245B1E1500FA905C /* Computer.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

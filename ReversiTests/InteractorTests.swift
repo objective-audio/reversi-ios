@@ -31,9 +31,9 @@ private class EventReceiverMock: InteractorEventReceiver {
 }
 
 private struct ComputerThinkingMock: ComputerThinkable {
-    var handler: (Interactor.Computer) -> Void
+    var handler: (Computer) -> Void
     
-    func callAsFunction(_ computer: Interactor.Computer) {
+    func callAsFunction(_ computer: Computer) {
         self.handler(computer)
     }
 }
@@ -43,7 +43,7 @@ class InteractorTests: XCTestCase {
     private var eventReceiver: EventReceiverMock!
     private var computerThinking: ComputerThinkable!
     private var receivedEvents: [Interactor.Event] = []
-    private var receivedComputers: [Interactor.Computer] = []
+    private var receivedComputers: [Computer] = []
     private var savedData: [GameData] = []
     
     override func setUp() {
