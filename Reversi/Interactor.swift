@@ -9,6 +9,10 @@ protocol DataStorable {
     func load() throws -> GameData
 }
 
+protocol ComputerThinkable {
+    func callAsFunction(_ computer: Interactor.Computer)
+}
+
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
@@ -18,11 +22,11 @@ class Interactor {
     private(set) var board: Board
     
     private let dataStore: DataStorable
-    private let computerThinking: (Computer) -> Void
+    private let computerThinking: ComputerThinkable
     private var computerID: Identifier?
     
     init(dataStore: DataStorable = DataStore(),
-         computerThinking: @escaping (Computer) -> Void = defaultComputerThinking) {
+         computerThinking: ComputerThinkable = DefaultComputerThinking()) {
         self.dataStore = dataStore
         self.computerThinking = computerThinking
         
@@ -151,15 +155,6 @@ extension Interactor {
 }
 
 private extension Interactor {
-    static var defaultComputerThinking: (Computer) -> Void {
-        return { computer in
-            guard let position = computer.positions.randomElement() else { fatalError() }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                computer.completion(position)
-            }
-        }
-    }
-    
     func save() {
         try? self.dataStore.save(.init(turn: self.state.turn,
                                        darkPlayer: self.darkPlayer,
@@ -241,6 +236,15 @@ private extension Interactor {
     
     func sendEvent(_ event: Event) {
         self.eventReceiver?.receiveEvent(event)
+    }
+}
+
+private struct DefaultComputerThinking: ComputerThinkable {
+    func callAsFunction(_ computer: Interactor.Computer) {
+        guard let position = computer.positions.randomElement() else { fatalError() }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            computer.completion(position)
+        }
     }
 }
 

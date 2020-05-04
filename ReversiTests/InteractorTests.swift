@@ -30,10 +30,18 @@ private class EventReceiverMock: InteractorEventReceiver {
     }
 }
 
+private struct ComputerThinkingMock: ComputerThinkable {
+    var handler: (Interactor.Computer) -> Void
+    
+    func callAsFunction(_ computer: Interactor.Computer) {
+        self.handler(computer)
+    }
+}
+
 class InteractorTests: XCTestCase {
     private var dataStore: DataStoreMock!
     private var eventReceiver: EventReceiverMock!
-    private var computerThinking: ((Interactor.Computer) -> Void)!
+    private var computerThinking: ComputerThinkable!
     private var receivedEvents: [Interactor.Event] = []
     private var receivedComputers: [Interactor.Computer] = []
     private var savedData: [GameData] = []
@@ -43,7 +51,7 @@ class InteractorTests: XCTestCase {
         self.eventReceiver = .init()
         
         self.eventReceiver.receiveHandler = { self.receivedEvents.append($0) }
-        self.computerThinking = { self.receivedComputers.append($0) }
+        self.computerThinking = ComputerThinkingMock(handler: { self.receivedComputers.append($0) })
         self.dataStore.saveHandler = { self.savedData.append($0) }
     }
     
