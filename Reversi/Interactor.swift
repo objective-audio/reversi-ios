@@ -65,7 +65,7 @@ class Interactor {
             switch self.state {
             case .operating(let side, .computer):
                 self.computerID = nil
-                self.sendEvent(.didEndComputerWaiting(side: side))
+                self.sendEvent(.willExitComputerOperating(side: side))
             default:
                 break
             }
@@ -80,7 +80,7 @@ class Interactor {
             case .passing:
                 self.sendEvent(.didEnterPassing)
             case .operating(let side, .computer):
-                self.sendEvent(.willBeginComputerWaiting(side: side))
+                self.sendEvent(.didEnterComputerOperating(side: side))
                 self.playTurnOfComputer(side: side)
             case .placing(let side, let positions):
                 self.sendEvent(.didPlaceDisks(side: side, positions: positions))

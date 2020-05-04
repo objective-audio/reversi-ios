@@ -227,7 +227,7 @@ class InteractorTests: XCTestCase {
         
         XCTAssertEqual(interactor.state, .operating(side: .light, player: .computer))
         XCTAssertEqual(self.receivedEvents.count, 1)
-        XCTAssertEqual(self.receivedEvents[0], .willBeginComputerWaiting(side: .light))
+        XCTAssertEqual(self.receivedEvents[0], .didEnterComputerOperating(side: .light))
     }
     
     func test_ロードしてゲームを開始してパスになる() {
@@ -314,7 +314,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(interactor.state.status, .turn(side: .dark))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents[0], .willBeginComputerWaiting(side: .dark))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterComputerOperating(side: .dark))
             
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
@@ -330,7 +330,7 @@ class InteractorTests: XCTestCase {
             computer.completion(position)
             
             XCTAssertEqual(self.receivedEvents.count, 2)
-            XCTAssertEqual(self.receivedEvents[0], .didEndComputerWaiting(side: .dark))
+            XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .dark))
             XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
         }
         
@@ -343,7 +343,7 @@ class InteractorTests: XCTestCase {
 
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[1], .willBeginComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[1], .didEnterComputerOperating(side: .light))
             
             XCTAssertEqual(self.receivedComputers.count, 2)
         }
@@ -359,7 +359,7 @@ class InteractorTests: XCTestCase {
             computer.completion(position)
             
             XCTAssertEqual(self.receivedEvents.count, 2)
-            XCTAssertEqual(self.receivedEvents[0], .didEndComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .light))
             XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
         }
         
@@ -372,7 +372,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[1], .willBeginComputerWaiting(side: .dark))
+            XCTAssertEqual(self.receivedEvents[1], .didEnterComputerOperating(side: .dark))
         }
     }
     
@@ -660,7 +660,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents[0], .willBeginComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterComputerOperating(side: .light))
             XCTAssertEqual(interactor.state, .operating(side: .light, player: .computer))
         }
         
@@ -671,7 +671,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 4)
             XCTAssertEqual(self.receivedEvents[0], .willReset)
-            XCTAssertEqual(self.receivedEvents[1], .didEndComputerWaiting(side: .light))
+            XCTAssertEqual(self.receivedEvents[1], .willExitComputerOperating(side: .light))
             XCTAssertEqual(self.receivedEvents[2], .didChangeTurn)
             XCTAssertEqual(self.receivedEvents[3], .didReset)
             

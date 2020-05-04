@@ -1,8 +1,8 @@
 extension Interactor {
     enum Event {
         case didChangeTurn
-        case willBeginComputerWaiting(side: Side)
-        case didEndComputerWaiting(side: Side)
+        case didEnterComputerOperating(side: Side)
+        case willExitComputerOperating(side: Side)
         case didEnterPassing
         case didPlaceDisks(side: Side, positions: [Position])
         case willReset

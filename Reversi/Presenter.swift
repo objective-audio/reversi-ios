@@ -91,9 +91,9 @@ extension Presenter: InteractorEventReceiver {
         switch event {
         case .didChangeTurn:
             self.updateViewsForDidChangeTurn()
-        case .willBeginComputerWaiting(let side):
+        case .didEnterComputerOperating(let side):
             self.sendEvent(.startPlayerActivityIndicatorAnimating(side: side))
-        case .didEndComputerWaiting(let side):
+        case .willExitComputerOperating(let side):
             self.sendEvent(.stopPlayerActivityIndicatorAnimating(side: side))
         case .didEnterPassing:
             self.sendEvent(.presentPassView)

@@ -146,27 +146,27 @@ class PresenterTests: XCTestCase {
         XCTAssertTrue(self.receivedEvents.contains(.updateMessageViews))
     }
     
-    func testReceiveWillBeginComputerWaiting() {
+    func testReceiveDidEnterComputerOperating() {
         let presenter = Presenter(interactor: self.interactor)
         presenter.eventReceiver = self.eventReceiver
         self.interactor.eventReceiver = presenter
         
         self.receivedEvents.removeAll()
         
-        self.interactor.sendEvent(.willBeginComputerWaiting(side: .dark))
+        self.interactor.sendEvent(.didEnterComputerOperating(side: .dark))
         
         XCTAssertEqual(self.receivedEvents.count, 1)
         XCTAssertTrue(self.receivedEvents.contains(.startPlayerActivityIndicatorAnimating(side: .dark)))
     }
     
-    func testReceiveDidEndComputerWaiting() {
+    func testReceiveWillExitComputerOperating() {
         let presenter = Presenter(interactor: self.interactor)
         presenter.eventReceiver = self.eventReceiver
         self.interactor.eventReceiver = presenter
         
         self.receivedEvents.removeAll()
         
-        self.interactor.sendEvent(.didEndComputerWaiting(side: .light))
+        self.interactor.sendEvent(.willExitComputerOperating(side: .light))
         
         XCTAssertEqual(self.receivedEvents.count, 1)
         XCTAssertTrue(self.receivedEvents.contains(.stopPlayerActivityIndicatorAnimating(side: .light)))
