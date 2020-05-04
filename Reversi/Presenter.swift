@@ -26,9 +26,9 @@ class Presenter {
     fileprivate class DiskAnimation {
         let id: Identifier = .init()
         let disk: Disk
-        var remainPositions: [Board.Position]
+        var remainPositions: [Position]
         
-        init(disk: Disk, positions: [Board.Position]) {
+        init(disk: Disk, positions: [Position]) {
             self.disk = disk
             self.remainPositions = positions
         }
@@ -58,7 +58,7 @@ class Presenter {
         self.interactor?.doAction(.changePlayer(player, side: side))
     }
     
-    func selectBoard(at position: Board.Position) {
+    func selectBoard(at position: Position) {
         self.interactor?.doAction(.placeDisk(at: position))
     }
     
@@ -126,7 +126,7 @@ private extension Presenter {
         self.sendEvent(.updateCountLabels)
     }
     
-    func didPlaceDisks(side: Side, positions: [Board.Position]) {
+    func didPlaceDisks(side: Side, positions: [Position]) {
         let animation = DiskAnimation(disk: side.disk, positions: positions)
         self.animation = animation
         self.setNextBoardViewDisk(animation: animation)
@@ -148,7 +148,7 @@ private extension Presenter {
 }
 
 private extension Presenter.DiskAnimation {
-    func popPosition() -> Board.Position? {
+    func popPosition() -> Position? {
         if self.remainPositions.isEmpty {
             return nil
         } else {

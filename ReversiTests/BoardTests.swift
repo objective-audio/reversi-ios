@@ -11,7 +11,7 @@ class BoardTests: XCTestCase {
     func testAllPositions() {
         XCTAssertEqual(Board.allPositions.count, 64)
         
-        var expected: [Board.Position] = []
+        var expected: [Position] = []
         for y in 0..<8 {
             for x in 0..<8 {
                 expected.append(.init(x: x, y: y))
@@ -69,7 +69,7 @@ class BoardTests: XCTestCase {
     func testSetDisk() {
         var board = TestUtils.emptyBoard
         
-        let position = Board.Position(x: 2, y: 3)
+        let position = Position(x: 2, y: 3)
         
         Board.allPositions.forEach { XCTAssertNil(board[$0]) }
         
@@ -144,7 +144,7 @@ class BoardTests: XCTestCase {
         XCTContext.runActivity(named: "lightを置けるか") { _ in
             let positions = Board.allPositions.filter { board.canPlaceDisk(.light, at: $0) }
             
-            let expected: [Board.Position] = [
+            let expected: [Position] = [
                 .init(x: 4, y: 2),
                 .init(x: 5, y: 3),
                 .init(x: 2, y: 4),
@@ -157,7 +157,7 @@ class BoardTests: XCTestCase {
         XCTContext.runActivity(named: "darkを置けるか") { _ in
             let positions = Board.allPositions.filter { board.canPlaceDisk(.dark, at: $0) }
             
-            let expected: [Board.Position] = [
+            let expected: [Position] = [
                 .init(x: 3, y: 2),
                 .init(x: 2, y: 3),
                 .init(x: 5, y: 4),
@@ -205,7 +205,7 @@ class BoardTests: XCTestCase {
         XCTContext.runActivity(named: "lightの置ける位置") { _ in
             let positions = board.validMoves(for: .light)
             
-            let expected: [Board.Position] = [
+            let expected: [Position] = [
                 .init(x: 4, y: 2),
                 .init(x: 5, y: 3),
                 .init(x: 2, y: 4),
@@ -218,7 +218,7 @@ class BoardTests: XCTestCase {
         XCTContext.runActivity(named: "darkの置ける位置") { _ in
             let positions = board.validMoves(for: .dark)
             
-            let expected: [Board.Position] = [
+            let expected: [Position] = [
                 .init(x: 3, y: 2),
                 .init(x: 2, y: 3),
                 .init(x: 5, y: 4),

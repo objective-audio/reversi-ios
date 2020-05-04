@@ -1,9 +1,7 @@
-extension Board {
-    struct Position {
-        var x: Int
-        var y: Int
-    }
+struct Position {
+    var x: Int
+    var y: Int
 }
 
-extension Board.Position: Equatable {}
-extension Board.Position: Hashable {}
+extension Position: Equatable {}
+extension Position: Hashable {}

@@ -1,7 +1,7 @@
 extension Interactor {
     enum Action {
         case begin
-        case placeDisk(at: Board.Position)
+        case placeDisk(at: Position)
         case endPlaceDisks
         case changePlayer(_ player: Player, side: Side)
         case pass

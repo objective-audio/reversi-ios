@@ -196,7 +196,7 @@ private extension Interactor {
         self.computerThinking(computer)
     }
     
-    func placeDisk(side: Side, at position: Board.Position) -> State {
+    func placeDisk(side: Side, at position: Position) -> State {
         let disk = side.disk
         
         let diskCoordinates = self.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)

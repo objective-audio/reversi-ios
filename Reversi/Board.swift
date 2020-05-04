@@ -8,7 +8,7 @@ struct Board {
     /// 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。
     static let yRange: Range<Int> = 0..<height
     
-    static let allPositions: [Board.Position] = Board.yRange.flatMap { y in Board.xRange.map { x in .init(x: x, y: y) } }
+    static let allPositions: [Position] = Board.yRange.flatMap { y in Board.xRange.map { x in .init(x: x, y: y) } }
     
     struct Element {
         let disk: Disk?

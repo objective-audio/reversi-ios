@@ -10,7 +10,7 @@ extension Presenter {
         
         case presentPassView
         
-        case setBoardViewDisk(_ disk: Disk, at: Board.Position, animationID: Identifier?)
+        case setBoardViewDisk(_ disk: Disk, at: Position, animationID: Identifier?)
     }
 }
 

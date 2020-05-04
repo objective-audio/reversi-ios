@@ -1,4 +1,4 @@
 struct Computer {
-    let positions: [Board.Position]
-    let completion: (Board.Position) -> Void
+    let positions: [Position]
+    let completion: (Position) -> Void
 }

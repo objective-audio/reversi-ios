@@ -322,7 +322,7 @@ class InteractorTests: XCTestCase {
         self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "コンピュータの思考が終わり、黒のディスクが置かれる") { _ in
-            let position = Board.Position(x: 3, y: 2)
+            let position = Position(x: 3, y: 2)
             let computer = self.receivedComputers[0]
             
             XCTAssertTrue(computer.positions.contains(position))
@@ -351,7 +351,7 @@ class InteractorTests: XCTestCase {
         self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "コンピュータの思考が終わり、白のディスクを置かれる") { _ in
-            let position = Board.Position(x: 4, y: 2)
+            let position = Position(x: 4, y: 2)
             let computer = self.receivedComputers[1]
             
             XCTAssertTrue(computer.positions.contains(position))

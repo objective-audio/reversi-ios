@@ -219,9 +219,9 @@ class PresenterTests: XCTestCase {
         
         self.receivedEvents.removeAll()
         
-        let positions: [Board.Position] = [.init(x: 0, y: 0),
-                                           .init(x: 0, y: 1),
-                                           .init(x: 0, y: 2)]
+        let positions: [Position] = [.init(x: 0, y: 0),
+                                     .init(x: 0, y: 1),
+                                     .init(x: 0, y: 2)]
         
         self.interactor.sendEvent(.didPlaceDisks(side: .light,
                                                  positions: positions))
@@ -268,9 +268,9 @@ class PresenterTests: XCTestCase {
         
         self.receivedEvents.removeAll()
         
-        let positions: [Board.Position] = [.init(x: 0, y: 0),
-                                           .init(x: 0, y: 1),
-                                           .init(x: 0, y: 2)]
+        let positions: [Position] = [.init(x: 0, y: 0),
+                                     .init(x: 0, y: 1),
+                                     .init(x: 0, y: 2)]
         
         self.interactor.sendEvent(.didPlaceDisks(side: .light,
                                                  positions: positions))
