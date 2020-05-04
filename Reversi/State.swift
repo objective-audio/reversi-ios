@@ -8,13 +8,6 @@ enum State {
     case result(Result)
 }
 
-
-
-enum Status {
-    case turn(side: Side)
-    case result(Result)
-}
-
 extension State {
     var status: Status {
         switch self {
@@ -27,4 +20,3 @@ extension State {
 }
 
 extension State: Equatable {}
-extension Status: Equatable {}
