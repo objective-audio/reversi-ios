@@ -12,6 +12,7 @@
 		B62A8F362458D6D20071D455 /* PresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A8F352458D6D20071D455 /* PresenterTests.swift */; };
 		B62A8F382458D6FE0071D455 /* PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A8F372458D6FE0071D455 /* PlayerTests.swift */; };
 		B62A8F3A2458D70C0071D455 /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A8F392458D70C0071D455 /* StateTests.swift */; };
+		B6495599245FB5D100DCB087 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6495598245FB5D100DCB087 /* GameData.swift */; };
 		B659DC88245393D600B5CC0B /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC87245393D600B5CC0B /* Presenter.swift */; };
 		B659DC8A245394D100B5CC0B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC89245394D100B5CC0B /* DataStore.swift */; };
 		B659DC8C24539B6700B5CC0B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B659DC8B24539B6700B5CC0B /* Player.swift */; };
@@ -58,6 +59,7 @@
 		B62A8F352458D6D20071D455 /* PresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterTests.swift; sourceTree = "<group>"; };
 		B62A8F372458D6FE0071D455 /* PlayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTests.swift; sourceTree = "<group>"; };
 		B62A8F392458D70C0071D455 /* StateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateTests.swift; sourceTree = "<group>"; };
+		B6495598245FB5D100DCB087 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		B659DC87245393D600B5CC0B /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		B659DC89245394D100B5CC0B /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		B659DC8B24539B6700B5CC0B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		B67BCE3E245EF2AB001AE284 /* DataStore */ = {
 			isa = PBXGroup;
 			children = (
+				B6495598245FB5D100DCB087 /* GameData.swift */,
 				B659DC89245394D100B5CC0B /* DataStore.swift */,
 			);
 			name = DataStore;
@@ -329,6 +332,7 @@
 				B67BCE40245EF2EA001AE284 /* InteractorAction.swift in Sources */,
 				B659DC8C24539B6700B5CC0B /* Player.swift in Sources */,
 				B67BCE44245EF521001AE284 /* PresenterEvent.swift in Sources */,
+				B6495599245FB5D100DCB087 /* GameData.swift in Sources */,
 				B659DC88245393D600B5CC0B /* Presenter.swift in Sources */,
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				B6AA40D12459C6DD00BDFABA /* SharedInteractor.swift in Sources */,

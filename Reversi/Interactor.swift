@@ -4,13 +4,6 @@ protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: Interactor.Event)
 }
 
-struct GameData {
-    let turn: Side?
-    let darkPlayer: Player
-    let lightPlayer: Player
-    let board: Board
-}
-
 protocol DataStorable {
     func save(_ data: GameData) throws
     func load() throws -> GameData
