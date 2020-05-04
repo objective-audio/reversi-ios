@@ -2,16 +2,16 @@ import Foundation
 
 class DataStore {
     /// ゲームの状態をファイルに書き出し、保存します。
-    func save(_ args: DataArgs) throws {
+    func save(_ data: GameData) throws {
         var output: String = ""
-        output += String(args.turn.symbol.rawValue)
-        output += String(args.darkPlayer.rawValue)
-        output += String(args.lightPlayer.rawValue)
+        output += String(data.turn.symbol.rawValue)
+        output += String(data.darkPlayer.rawValue)
+        output += String(data.lightPlayer.rawValue)
         output += "\n"
         
         for y in Board.yRange {
             for x in Board.yRange {
-                output += String(args.board[.init(x: x, y: y)].symbol.rawValue)
+                output += String(data.board[.init(x: x, y: y)].symbol.rawValue)
             }
             output += "\n"
         }
@@ -25,7 +25,7 @@ class DataStore {
         }
     }
     
-    func load() throws -> DataArgs {
+    func load() throws -> GameData {
         let path = Self.path
         let input = try String(contentsOfFile: path, encoding: .utf8)
         var lines = input.split(separator: "\n")[...]

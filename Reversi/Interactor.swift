@@ -4,7 +4,7 @@ protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: Interactor.Event)
 }
 
-struct DataArgs {
+struct GameData {
     let turn: Side?
     let darkPlayer: Player
     let lightPlayer: Player
@@ -12,8 +12,8 @@ struct DataArgs {
 }
 
 protocol DataStorable {
-    func save(_ args: DataArgs) throws
-    func load() throws -> DataArgs
+    func save(_ data: GameData) throws
+    func load() throws -> GameData
 }
 
 class Interactor {
@@ -34,15 +34,15 @@ class Interactor {
         self.computerThinking = computerThinking
         
         do {
-            let loadedArgs = try self.dataStore.load()
+            let loadedData = try self.dataStore.load()
             
-            self.darkPlayer = loadedArgs.darkPlayer
-            self.lightPlayer = loadedArgs.lightPlayer
+            self.darkPlayer = loadedData.darkPlayer
+            self.lightPlayer = loadedData.lightPlayer
             
-            let board = loadedArgs.board
+            let board = loadedData.board
             self.board = board
             
-            switch loadedArgs.turn {
+            switch loadedData.turn {
             case .some(let side):
                 self.state = .launching(side: side)
             case .none:
