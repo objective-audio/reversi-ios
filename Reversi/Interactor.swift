@@ -63,7 +63,7 @@ class Interactor {
     private(set) var state: State {
         willSet {
             switch self.state {
-            case .waiting(let side, .computer):
+            case .operating(let side, .computer):
                 self.computerID = nil
                 self.sendEvent(.didEndComputerWaiting(side: side))
             default:
@@ -79,7 +79,7 @@ class Interactor {
             switch self.state {
             case .passing:
                 self.sendEvent(.didEnterPassing)
-            case .waiting(let side, .computer):
+            case .operating(let side, .computer):
                 self.sendEvent(.willBeginComputerWaiting(side: side))
                 self.playTurnOfComputer(side: side)
             case .placing(let side, let positions):
@@ -111,7 +111,7 @@ extension Interactor {
             }
         case .placeDisk(let position):
             switch self.state {
-            case .waiting(let side, player: .manual):
+            case .operating(let side, player: .manual):
                 if self.board.canPlaceDisk(side.disk, at: position) {
                     self.state = self.placeDisk(side: side, at: position)
                 }
@@ -167,13 +167,13 @@ private extension Interactor {
         
         self.save()
         
-        self.state = .waiting(side: .dark, player: .manual)
+        self.state = .operating(side: .dark, player: .manual)
         
         self.sendEvent(.didReset)
     }
     
     func waitForPlayer(side: Side) -> State {
-        return .waiting(side: side, player: self.player(for: side))
+        return .operating(side: side, player: self.player(for: side))
     }
     
     func playTurnOfComputer(side: Side) {
@@ -225,8 +225,8 @@ private extension Interactor {
         
         self.save()
         
-        if case .waiting(side, player.flipped) = self.state {
-            self.state = .waiting(side: side, player: player)
+        if case .operating(side, player.flipped) = self.state {
+            self.state = .operating(side: side, player: player)
         }
     }
     

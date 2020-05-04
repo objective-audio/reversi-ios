@@ -191,7 +191,7 @@ class InteractorTests: XCTestCase {
         
         interactor.doAction(.begin)
         
-        XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+        XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
         XCTAssertEqual(self.receivedEvents.count, 0)
     }
     
@@ -208,7 +208,7 @@ class InteractorTests: XCTestCase {
         
         interactor.doAction(.begin)
         
-        XCTAssertEqual(interactor.state, .waiting(side: .light, player: .manual))
+        XCTAssertEqual(interactor.state, .operating(side: .light, player: .manual))
         XCTAssertEqual(self.receivedEvents.count, 0)
     }
     
@@ -225,7 +225,7 @@ class InteractorTests: XCTestCase {
         
         interactor.doAction(.begin)
         
-        XCTAssertEqual(interactor.state, .waiting(side: .light, player: .computer))
+        XCTAssertEqual(interactor.state, .operating(side: .light, player: .computer))
         XCTAssertEqual(self.receivedEvents.count, 1)
         XCTAssertEqual(self.receivedEvents[0], .willBeginComputerWaiting(side: .light))
     }
@@ -464,7 +464,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
             
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
         }
     }
     
@@ -477,7 +477,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
         }
         
         XCTContext.runActivity(named: "白のプレイヤーをコンピュータに変更、状態に影響なし") { _ in
@@ -485,7 +485,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .computer)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
         }
         
         XCTContext.runActivity(named: "黒のプレイヤーをコンピュータに変更、状態が変更され、コンピュータの思考開始") { _ in
@@ -495,7 +495,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .computer)
             XCTAssertEqual(interactor.player(for: .light), .computer)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .computer))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .computer))
             
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
@@ -517,7 +517,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .computer)
             XCTAssertEqual(interactor.player(for: .light), .computer)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .computer))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .computer))
             
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
@@ -527,7 +527,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .computer)
             XCTAssertEqual(interactor.player(for: .light), .manual)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .computer))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .computer))
         }
         
         XCTContext.runActivity(named: "黒のプレーヤーをマニュアルに変更、状態が変更され、コンピュータの思考停止") { _ in
@@ -535,7 +535,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
             
             XCTAssertEqual(self.receivedComputers.count, 1)
         }
@@ -627,7 +627,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
             
             XCTAssertEqual(self.receivedEvents.count, 0)
-            XCTAssertEqual(interactor.state, .waiting(side: .light, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .light, player: .manual))
         }
         
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
@@ -639,7 +639,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[2], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
         }
@@ -661,7 +661,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents[0], .willBeginComputerWaiting(side: .light))
-            XCTAssertEqual(interactor.state, .waiting(side: .light, player: .computer))
+            XCTAssertEqual(interactor.state, .operating(side: .light, player: .computer))
         }
         
         self.receivedEvents.removeAll()
@@ -676,7 +676,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[3], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
         }
@@ -720,7 +720,7 @@ class InteractorTests: XCTestCase {
             XCTAssertEqual(self.receivedEvents[1], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
-            XCTAssertEqual(interactor.state, .waiting(side: .dark, player: .manual))
+            XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
             XCTAssertEqual(interactor.player(for: .dark), .manual)
             XCTAssertEqual(interactor.player(for: .light), .manual)
         }

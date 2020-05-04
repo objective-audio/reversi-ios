@@ -1,6 +1,6 @@
 enum State {
     case launching(side: Side)
-    case waiting(side: Side, player: Player)
+    case operating(side: Side, player: Player)
     case passing(side: Side)
     case placing(side: Side, positions: [Position])
     case result(Result)
@@ -9,7 +9,7 @@ enum State {
 extension State {
     var status: Status {
         switch self {
-        case .launching(let side), .waiting(let side, _), .placing(let side, _), .passing(let side):
+        case .launching(let side), .operating(let side, _), .placing(let side, _), .passing(let side):
             return .turn(side: side)
         case .result(let result):
             return .result(result)

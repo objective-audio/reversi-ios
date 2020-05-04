@@ -55,7 +55,7 @@ class PresenterTests: XCTestCase {
     func testStatus() {
         let presenter = Presenter(interactor: self.interactor)
         
-        self.interactor.stateHandler = { .waiting(side: .dark, player: .manual) }
+        self.interactor.stateHandler = { .operating(side: .dark, player: .manual) }
         
         XCTAssertEqual(presenter.status, .turn(side: .dark))
         
