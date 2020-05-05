@@ -93,58 +93,62 @@ class Interactor {
 
 extension Interactor {
     func doAction(_ action: Action) {
-        switch action {
-        case .begin:
-            if case .launching(let side) = self.state {
+        switch self.state {
+        case .launching(let side):
+            switch action {
+            case .begin:
                 if self.board.validMoves(for: side).isEmpty {
                     self.state = .passing(side: side)
                 } else {
                     self.state = self.waitForPlayer(side: side)
                 }
-            }
-        case .changePlayer(let player, let side):
-            switch self.state {
-            case .launching:
-                fatalError()
             default:
-                self.changePlayer(player, side: side)
+                fatalError()
             }
-        case .placeDisk(let position):
-            switch self.state {
-            case .operating(let side, player: .manual):
-                if self.board.canPlaceDisk(side.disk, at: position) {
+        case .operating(let side, let player):
+            switch action {
+            case .changePlayer(let player, let side):
+                self.changePlayer(player, side: side)
+            case .reset:
+                self.reset()
+            case .placeDisk(let position):
+                if player == .manual, self.board.canPlaceDisk(side.disk, at: position) {
                     self.state = self.placeDisk(side: side, at: position)
                 }
-            case .launching:
-                fatalError()
             default:
                 break
             }
-        case .endPlaceDisks:
-            switch self.state {
-            case .placing(let side, let positions):
+        case .placing(let side, let positions):
+            switch action {
+            case .changePlayer(let player, let side):
+                self.changePlayer(player, side: side)
+            case .reset:
+                self.reset()
+            case .endPlaceDisks:
                 positions.forEach { self.board[$0] = side.disk }
                 self.state = self.nextTurn(from: side)
-            case .launching:
-                fatalError()
             default:
                 break
             }
-        case .pass:
-            switch self.state {
-            case .passing(let side):
-                self.state = self.nextTurn(from: side)
-            case .launching:
-                fatalError()
-            default:
-                break
-            }
-        case .reset:
-            switch self.state {
-            case .launching:
-                fatalError()
-            default:
+        case .passing(let side):
+            switch action {
+            case .changePlayer(let player, let side):
+                self.changePlayer(player, side: side)
+            case .reset:
                 self.reset()
+            case .pass:
+                self.state = self.nextTurn(from: side)
+            default:
+                break
+            }
+        case .result:
+            switch action {
+            case .changePlayer(let player, let side):
+                self.changePlayer(player, side: side)
+            case .reset:
+                self.reset()
+            default:
+                break
             }
         }
     }
