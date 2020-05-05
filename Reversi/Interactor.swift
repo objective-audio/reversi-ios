@@ -107,7 +107,7 @@ extension Interactor {
                 if self.board.validMoves(for: side).isEmpty {
                     self.state = .passing(side: side)
                 } else {
-                    self.state = self.waitForPlayer(side: side)
+                    self.state = self.operatingState(side: side)
                 }
             default:
                 fatalError()
@@ -120,7 +120,7 @@ extension Interactor {
                 self.reset()
             case .placeDisk(let position):
                 if player == .manual, self.board.canPlaceDisk(side.disk, at: position) {
-                    self.state = self.placeDisk(side: side, at: position)
+                    self.state = self.placingState(side: side, at: position)
                 }
             default:
                 break
@@ -133,7 +133,7 @@ extension Interactor {
                 self.reset()
             case .endPlaceDisks:
                 positions.forEach { self.board[$0] = side.disk }
-                self.state = self.nextTurn(from: side)
+                self.state = self.nextTurnState(from: side)
             default:
                 break
             }
@@ -144,7 +144,7 @@ extension Interactor {
             case .reset:
                 self.reset()
             case .pass:
-                self.state = self.nextTurn(from: side)
+                self.state = self.nextTurnState(from: side)
             default:
                 break
             }
@@ -185,8 +185,8 @@ private extension Interactor {
         self.sendEvent(.didReset)
     }
     
-    func waitForPlayer(side: Side) -> State {
     /// 現在のプレイヤーの種類のまま番手に応じた操作ステートを返す
+    func operatingState(side: Side) -> State {
         return .operating(side: side, player: self.player(for: side))
     }
     
@@ -201,14 +201,14 @@ private extension Interactor {
             guard let self = self else { return }
             guard self.computerID == computerID else { return }
             
-            self.state = self.placeDisk(side: side, at: position)
+            self.state = self.placingState(side: side, at: position)
         })
         
         self.computerThinking(computer)
     }
     
     /// ディスクを配置するステートを返す
-    func placeDisk(side: Side, at position: Position) -> State {
+    func placingState(side: Side, at position: Position) -> State {
         let disk = side.disk
         
         let diskCoordinates = self.board.flippedDiskCoordinatesByPlacingDisk(disk, at: position)
@@ -218,7 +218,7 @@ private extension Interactor {
     }
     
     /// 次にターンのステートを返す
-    func nextTurn(from currentSide: Side) -> State {
+    func nextTurnState(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
         if self.board.validMoves(for: nextSide).isEmpty {
@@ -228,7 +228,7 @@ private extension Interactor {
                 return .passing(side: nextSide)
             }
         } else {
-            return self.waitForPlayer(side: nextSide)
+            return self.operatingState(side: nextSide)
         }
     }
     
