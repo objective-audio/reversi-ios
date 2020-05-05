@@ -36,7 +36,7 @@ class Presenter {
             self.remainPositions = positions
         }
     }
-    private var animation: DiskAnimation?
+    private var diskAnimation: DiskAnimation?
     
     init(interactor: Interactable) {
         self.interactor = interactor
@@ -84,7 +84,7 @@ class Presenter {
     
     /// ディスクを配置するアニメーションが終わった
     func endSetBoardDisk(animationID: Identifier, isFinished: Bool) {
-        guard let animation = self.animation else { return }
+        guard let animation = self.diskAnimation else { return }
         
         if animation.remainPositions.isEmpty {
             self.endSetBoardViewDisks()
@@ -114,7 +114,7 @@ extension Presenter: InteractorEventReceiver {
         case .didEnterPlacing(let side, let positions):
             self.didEnterPlacing(side: side, positions: positions)
         case .willReset:
-            self.animation = nil
+            self.diskAnimation = nil
         case .didReset:
             self.updateViewsForReset()
         }
@@ -146,7 +146,7 @@ private extension Presenter {
     /// ディスクが置かれた時の処理
     func didEnterPlacing(side: Side, positions: [Position]) {
         let animation = DiskAnimation(disk: side.disk, positions: positions)
-        self.animation = animation
+        self.diskAnimation = animation
         self.setNextBoardViewDisk(animation: animation)
     }
     
@@ -158,7 +158,7 @@ private extension Presenter {
     
     /// ディスクを配置するアニメーションが全て終わった時の処理
     func endSetBoardViewDisks() {
-        self.animation = nil
+        self.diskAnimation = nil
         self.interactor?.doAction(.endPlaceDisks)
     }
     
