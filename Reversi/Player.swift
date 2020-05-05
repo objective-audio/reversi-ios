@@ -1,3 +1,4 @@
+/// プレイヤーの操作する種類
 enum Player: Int {
     case manual = 0
     case computer = 1

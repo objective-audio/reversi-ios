@@ -1,3 +1,4 @@
+/// 番手
 enum Side: Int, CaseIterable {
     case dark
     case light

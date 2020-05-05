@@ -1,18 +1,22 @@
 import Foundation
 
+/// Interactorのイベントを受け取るインターフェースを定義
 protocol InteractorEventReceiver: class {
     func receiveEvent(_ event: Interactor.Event)
 }
 
+/// データを保存するインターフェースを定義
 protocol DataStorable {
     func save(_ data: GameData) throws
     func load() throws -> GameData
 }
 
+/// コンピュータの処理を行うインターフェースを定義
 protocol ComputerThinkable {
     func callAsFunction(_ computer: Computer)
 }
 
+/// ゲーム全体の状態を管理する
 class Interactor {
     weak var eventReceiver: InteractorEventReceiver?
     
@@ -53,6 +57,7 @@ class Interactor {
         }
     }
     
+    /// 番手に応じてプレイヤーを返す
     func player(for side: Side) -> Player {
         switch side {
         case .dark: return self.darkPlayer
@@ -60,6 +65,7 @@ class Interactor {
         }
     }
     
+    /// ゲームの状態
     private(set) var state: State {
         willSet {
             switch self.state {
@@ -92,6 +98,7 @@ class Interactor {
 }
 
 extension Interactor {
+    /// アクションを受け取る
     func doAction(_ action: Action) {
         switch self.state {
         case .launching(let side):
@@ -155,6 +162,7 @@ extension Interactor {
 }
 
 private extension Interactor {
+    /// ゲームのデータを保存する
     func save() {
         try? self.dataStore.save(.init(turn: self.state.turn,
                                        darkPlayer: self.darkPlayer,
@@ -162,6 +170,7 @@ private extension Interactor {
                                        board: self.board))
     }
     
+    /// ゲームをリセットする
     func reset() {
         self.sendEvent(.willReset)
         
@@ -177,9 +186,11 @@ private extension Interactor {
     }
     
     func waitForPlayer(side: Side) -> State {
+    /// 現在のプレイヤーの種類のまま番手に応じた操作ステートを返す
         return .operating(side: side, player: self.player(for: side))
     }
     
+    /// コンピュータの処理を開始する
     func playTurnOfComputer(side: Side) {
         let positions = self.board.validMoves(for: side)
         let computerID = Identifier()
@@ -196,6 +207,7 @@ private extension Interactor {
         self.computerThinking(computer)
     }
     
+    /// ディスクを配置するステートを返す
     func placeDisk(side: Side, at position: Position) -> State {
         let disk = side.disk
         
@@ -205,6 +217,7 @@ private extension Interactor {
         return .placing(side: side, positions: [position] + diskCoordinates)
     }
     
+    /// 次にターンのステートを返す
     func nextTurn(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
@@ -219,6 +232,7 @@ private extension Interactor {
         }
     }
     
+    /// プレイヤーの種類を変更する
     func changePlayer(_ player: Player, side: Side) {
         guard player != self.player(for: side) else { return }
         
@@ -239,6 +253,7 @@ private extension Interactor {
     }
 }
 
+/// 実際のゲームで使うコンピュータの処理
 private struct DefaultComputerThinking: ComputerThinkable {
     func callAsFunction(_ computer: Computer) {
         guard let position = computer.positions.randomElement() else { fatalError() }

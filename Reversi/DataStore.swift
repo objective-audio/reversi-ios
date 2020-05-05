@@ -1,7 +1,8 @@
 import Foundation
 
+/// ゲームデータの永続化を行う
 class DataStore {
-    /// ゲームの状態をファイルに書き出し、保存します。
+    /// ゲームのデータをファイルに保存する
     func save(_ data: GameData) throws {
         var output: String = ""
         output += String(data.turn.symbol.rawValue)
@@ -25,6 +26,7 @@ class DataStore {
         }
     }
     
+    /// ゲームのデータをファイルから読み込む
     func load() throws -> GameData {
         let path = Self.path
         let input = try String(contentsOfFile: path, encoding: .utf8)

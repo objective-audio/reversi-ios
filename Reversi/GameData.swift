@@ -1,3 +1,4 @@
+/// ファイルに保存するためのゲームのデータ
 struct GameData {
     let turn: Side?
     let darkPlayer: Player

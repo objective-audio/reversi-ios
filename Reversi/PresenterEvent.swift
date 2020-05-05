@@ -1,4 +1,5 @@
 extension Presenter {
+    /// PresenterからViewControllerに通知するイベント
     enum Event {
         case updateBoardView
         case updatePlayerControls

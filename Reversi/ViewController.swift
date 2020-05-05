@@ -64,6 +64,7 @@ extension ViewController: BoardViewDelegate {
 }
 
 extension ViewController: PresenterEventReceiver {
+    /// Presenterからのイベントを受け取る
     func receiveEvent(_ event: Presenter.Event) {
         switch event {
         case .updateBoardView:
@@ -90,6 +91,7 @@ extension ViewController: PresenterEventReceiver {
 }
 
 private extension ViewController {
+    /// 盤全体を更新する。アニメーションはしない
     func updateBoardView() {
         guard let board = self.presenter.board else { return }
         
@@ -98,6 +100,7 @@ private extension ViewController {
         }
     }
     
+    /// プレイヤーのマニュアル・コンピュータ切り替え表示を更新する
     func updatePlayerControls() {
         for side in Side.allCases {
             guard let player = self.presenter.player(for: side) else { continue }
@@ -113,7 +116,7 @@ private extension ViewController {
         }
     }
     
-    /// 現在の状況に応じてメッセージを表示します。
+    /// ターンや結果のメッセージ表示を更新する
     func updateMessageViews() {
         guard let status = self.presenter.status else { return }
         
@@ -132,6 +135,7 @@ private extension ViewController {
         }
     }
     
+    /// パスするためのアラートを表示する
     func presentPassView() {
         let alertController = UIAlertController(
             title: "Pass",
@@ -144,8 +148,7 @@ private extension ViewController {
         present(alertController, animated: true)
     }
     
-    /// アラートを表示して、ゲームを初期化して良いか確認し、
-    /// "OK" が選択された場合ゲームを初期化します。
+    /// ゲームをリセットするアラートを表示する
     func presentConfirmationView() {
         let alertController = UIAlertController(
             title: "Confirmation",

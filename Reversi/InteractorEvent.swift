@@ -1,4 +1,5 @@
 extension Interactor {
+    /// Interactorが送信するイベント
     enum Event {
         case didChangeTurn
         case didEnterComputerOperating(side: Side)
