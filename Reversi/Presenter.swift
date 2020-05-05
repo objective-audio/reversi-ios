@@ -97,8 +97,8 @@ extension Presenter: InteractorEventReceiver {
             self.sendEvent(.stopPlayerActivityIndicatorAnimating(side: side))
         case .didEnterPassing:
             self.sendEvent(.presentPassView)
-        case .didPlaceDisks(let side, let positions):
-            self.didPlaceDisks(side: side, positions: positions)
+        case .didEnterPlacing(let side, let positions):
+            self.didEnterPlacing(side: side, positions: positions)
         case .willReset:
             self.animation = nil
         case .didReset:
@@ -126,7 +126,7 @@ private extension Presenter {
         self.sendEvent(.updateCountLabels)
     }
     
-    func didPlaceDisks(side: Side, positions: [Position]) {
+    func didEnterPlacing(side: Side, positions: [Position]) {
         let animation = DiskAnimation(disk: side.disk, positions: positions)
         self.animation = animation
         self.setNextBoardViewDisk(animation: animation)

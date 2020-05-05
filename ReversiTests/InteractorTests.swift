@@ -262,7 +262,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.placeDisk(at: .init(x: 3, y: 2)))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents.last, .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
+            XCTAssertEqual(self.receivedEvents.last, .didEnterPlacing(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
         }
         
         self.receivedEvents.removeAll()
@@ -282,7 +282,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.placeDisk(at: .init(x: 4, y: 2)))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents.last, .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
+            XCTAssertEqual(self.receivedEvents.last, .didEnterPlacing(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
         }
         
         self.receivedEvents.removeAll()
@@ -331,7 +331,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .dark))
-            XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
+            XCTAssertEqual(self.receivedEvents[1], .didEnterPlacing(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
         }
         
         self.receivedEvents.removeAll()
@@ -360,7 +360,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .light))
-            XCTAssertEqual(self.receivedEvents[1], .didPlaceDisks(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
+            XCTAssertEqual(self.receivedEvents[1], .didEnterPlacing(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
         }
         
         self.receivedEvents.removeAll()
@@ -398,7 +398,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.placeDisk(at: .init(x: 1, y: 0)))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents[0], .didPlaceDisks(side: .dark, positions: [.init(x: 1, y: 0), .init(x: 2, y: 0)]))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 1, y: 0), .init(x: 2, y: 0)]))
             
             interactor.doAction(.endPlaceDisks)
             
@@ -444,7 +444,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.endPlaceDisks)
             
             XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[0], .didPlaceDisks(side: .dark, positions: [.init(x: 1, y: 0), .init(x: 2, y: 0)]))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 1, y: 0), .init(x: 2, y: 0)]))
             XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
             XCTAssertEqual(self.receivedEvents[2], .didEnterPassing)
             
@@ -571,7 +571,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.placeDisk(at: .init(x: 6, y: 0)))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents[0], .didPlaceDisks(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
             
             interactor.doAction(.endPlaceDisks)
             
@@ -602,7 +602,7 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.placeDisk(at: .init(x: 6, y: 0)))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
-            XCTAssertEqual(self.receivedEvents[0], .didPlaceDisks(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
+            XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
             
             interactor.doAction(.endPlaceDisks)
             

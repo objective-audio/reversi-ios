@@ -4,7 +4,7 @@ extension Interactor {
         case didEnterComputerOperating(side: Side)
         case willExitComputerOperating(side: Side)
         case didEnterPassing
-        case didPlaceDisks(side: Side, positions: [Position])
+        case didEnterPlacing(side: Side, positions: [Position])
         case willReset
         case didReset
     }

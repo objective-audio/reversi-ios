@@ -223,7 +223,7 @@ class PresenterTests: XCTestCase {
                                      .init(x: 0, y: 1),
                                      .init(x: 0, y: 2)]
         
-        self.interactor.sendEvent(.didPlaceDisks(side: .light,
+        self.interactor.sendEvent(.didEnterPlacing(side: .light,
                                                  positions: positions))
         
         XCTAssertEqual(self.receivedEvents.count, 1)
@@ -272,7 +272,7 @@ class PresenterTests: XCTestCase {
                                      .init(x: 0, y: 1),
                                      .init(x: 0, y: 2)]
         
-        self.interactor.sendEvent(.didPlaceDisks(side: .light,
+        self.interactor.sendEvent(.didEnterPlacing(side: .light,
                                                  positions: positions))
         
         XCTAssertEqual(self.receivedEvents.count, 1)

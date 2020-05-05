@@ -83,7 +83,7 @@ class Interactor {
                 self.sendEvent(.didEnterComputerOperating(side: side))
                 self.playTurnOfComputer(side: side)
             case .placing(let side, let positions):
-                self.sendEvent(.didPlaceDisks(side: side, positions: positions))
+                self.sendEvent(.didEnterPlacing(side: side, positions: positions))
             default:
                 break
             }
