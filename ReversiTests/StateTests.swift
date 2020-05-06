@@ -15,8 +15,8 @@ class StateTests: XCTestCase {
         XCTAssertEqual(State.passing(side: .light).status, .turn(side: .light))
         XCTAssertEqual(State.placing(side: .light, positions: []).status, .turn(side: .light))
         
-        XCTAssertEqual(State.result(.won(side: .dark)).status, .result(.won(side: .dark)))
-        XCTAssertEqual(State.result(.won(side: .light)).status, .result(.won(side: .light)))
-        XCTAssertEqual(State.result(.tied).status, .result(.tied))
+        XCTAssertEqual(State.resulting(.won(side: .dark)).status, .result(.won(side: .dark)))
+        XCTAssertEqual(State.resulting(.won(side: .light)).status, .result(.won(side: .light)))
+        XCTAssertEqual(State.resulting(.tied).status, .result(.tied))
     }
 }

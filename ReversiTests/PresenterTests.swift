@@ -59,7 +59,7 @@ class PresenterTests: XCTestCase {
         
         XCTAssertEqual(presenter.status, .turn(side: .dark))
         
-        self.interactor.stateHandler = { .result(.won(side: .light)) }
+        self.interactor.stateHandler = { .resulting(.won(side: .light)) }
         
         XCTAssertEqual(presenter.status, .result(.won(side: .light)))
     }

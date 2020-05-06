@@ -47,7 +47,7 @@ class Interactor {
             case .some(let side):
                 self.state = .launching(side: side)
             case .none:
-                self.state = .result(board.result())
+                self.state = .resulting(board.result())
             }
         } catch {
             self.darkPlayer = .manual
@@ -109,7 +109,7 @@ extension Interactor {
                 self.changeState(to: .resetting)
             case .endPlaceDisks:
                 positions.forEach { self.board[$0] = side.disk }
-                self.changeState(to: self.nextTurnState(from: side))
+                self.changeState(to: .branching(fromSide: side))
             default:
                 break
             }
@@ -122,11 +122,11 @@ extension Interactor {
             case .reset:
                 self.changeState(to: .resetting)
             case .pass:
-                self.changeState(to: self.nextTurnState(from: side))
+                self.changeState(to: .branching(fromSide: side))
             default:
                 break
             }
-        case .result:
+        case .resulting:
             switch action {
             case .changePlayer(let player, let side):
                 if let state = self.changePlayer(player, side: side) {
@@ -137,7 +137,7 @@ extension Interactor {
             default:
                 break
             }
-        case .resetting:
+        case .resetting, .branching, .next:
             fatalError()
         }
     }
@@ -146,20 +146,13 @@ extension Interactor {
 private extension Interactor {
     /// ステートを変更する
     func changeState(to toState: State) {
-        let fromState = self.state
-        
         self.willExitState()
         self.state = toState
-        self.didEnterState(from: fromState)
+        self.didEnterState()
     }
     
     /// 現在のステートに入った時の処理
-    func didEnterState(from fromState: State) {
-        if self.state.turn != fromState.turn {
-            self.save()
-            self.sendEvent(.didChangeTurn)
-        }
-        
+    func didEnterState() {
         switch self.state {
         case .passing:
             self.sendEvent(.didEnterPassing)
@@ -171,7 +164,14 @@ private extension Interactor {
         case .resetting:
             self.sendEvent(.willReset)
             self.reset()
+            self.sendEvent(.didReset)
             self.changeState(to: .operating(side: .dark, player: .manual))
+        case .branching(let fromSide):
+            self.changeState(to: .next(toState: self.nextTurnState(from: fromSide)))
+        case .next(let state):
+            self.save()
+            self.sendEvent(.didChangeTurn)
+            self.changeState(to: state)
         default:
             break
         }
@@ -183,8 +183,6 @@ private extension Interactor {
         case .operating(let side, .computer):
             self.computerID = nil
             self.sendEvent(.willExitComputerOperating(side: side))
-        case .resetting:
-            self.sendEvent(.didReset)
         default:
             break
         }
@@ -240,7 +238,7 @@ private extension Interactor {
         
         if self.board.validMoves(for: nextSide).isEmpty {
             if self.board.validMoves(for: currentSide).isEmpty {
-                return .result(self.board.result())
+                return .resulting(self.board.result())
             } else {
                 return .passing(side: nextSide)
             }

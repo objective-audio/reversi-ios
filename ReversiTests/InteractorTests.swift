@@ -52,7 +52,9 @@ class InteractorTests: XCTestCase {
         
         self.eventReceiver.receiveHandler = { self.receivedEvents.append($0) }
         self.computerThinking = ComputerThinkingMock(handler: { self.receivedComputers.append($0) })
-        self.dataStore.saveHandler = { self.savedData.append($0) }
+        self.dataStore.saveHandler = {
+            self.savedData.append($0)
+        }
     }
     
     override func tearDown() {
@@ -145,7 +147,7 @@ class InteractorTests: XCTestCase {
         
         self.wait(for: [expectation], timeout: 0.0)
         
-        XCTAssertEqual(interactor.state, .result(.tied))
+        XCTAssertEqual(interactor.state, .resulting(.tied))
     }
     
     func test_ロードして起動した状態_白の勝ち() {
@@ -163,7 +165,7 @@ class InteractorTests: XCTestCase {
         
         self.wait(for: [expectation], timeout: 0.0)
         
-        XCTAssertEqual(interactor.state, .result(.won(side: .light)))
+        XCTAssertEqual(interactor.state, .resulting(.won(side: .light)))
     }
     
     func test_ロードして起動した状態_黒の勝ち() {
@@ -181,7 +183,7 @@ class InteractorTests: XCTestCase {
         
         self.wait(for: [expectation], timeout: 0.0)
         
-        XCTAssertEqual(interactor.state, .result(.won(side: .dark)))
+        XCTAssertEqual(interactor.state, .resulting(.won(side: .dark)))
     }
     
     func test_新規にゲームを開始して待機する() {
@@ -577,7 +579,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
-            XCTAssertEqual(interactor.state, .result(.tied))
+            XCTAssertEqual(interactor.state, .resulting(.tied))
         }
     }
     
@@ -608,7 +610,7 @@ class InteractorTests: XCTestCase {
             
             XCTAssertEqual(self.receivedEvents.count, 2)
             XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
-            XCTAssertEqual(interactor.state, .result(.won(side: .dark)))
+            XCTAssertEqual(interactor.state, .resulting(.won(side: .dark)))
         }
     }
     
@@ -633,10 +635,9 @@ class InteractorTests: XCTestCase {
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[1], .willReset)
-            XCTAssertEqual(self.receivedEvents[2], .didReset)
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .willReset)
+            XCTAssertEqual(self.receivedEvents[1], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
             XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
@@ -669,11 +670,10 @@ class InteractorTests: XCTestCase {
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.receivedEvents.count, 4)
+            XCTAssertEqual(self.receivedEvents.count, 3)
             XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .light))
-            XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[2], .willReset)
-            XCTAssertEqual(self.receivedEvents[3], .didReset)
+            XCTAssertEqual(self.receivedEvents[1], .willReset)
+            XCTAssertEqual(self.receivedEvents[2], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
             XCTAssertEqual(interactor.state, .operating(side: .dark, player: .manual))
@@ -749,16 +749,15 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.begin)
             
             XCTAssertEqual(self.receivedEvents.count, 0)
-            XCTAssertEqual(interactor.state, .result(.tied))
+            XCTAssertEqual(interactor.state, .resulting(.tied))
         }
         
         XCTContext.runActivity(named: "リセットを呼んで初期状態に戻る") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
-            XCTAssertEqual(self.receivedEvents[1], .willReset)
-            XCTAssertEqual(self.receivedEvents[2], .didReset)
+            XCTAssertEqual(self.receivedEvents.count, 2)
+            XCTAssertEqual(self.receivedEvents[0], .willReset)
+            XCTAssertEqual(self.receivedEvents[1], .didReset)
         }
     }
     
@@ -844,7 +843,7 @@ class InteractorTests: XCTestCase {
         XCTContext.runActivity(named: "リセットしたら保存される") { _ in
             interactor.doAction(.reset)
             
-            XCTAssertEqual(self.savedData.count, 2) // turn変更のsaveが1回入っている
+            XCTAssertEqual(self.savedData.count, 1) // turn変更のsaveが1回入っている
             
             XCTAssertEqual(self.savedData.last?.turn, .dark)
             XCTAssertEqual(self.savedData.last?.darkPlayer, .manual)
