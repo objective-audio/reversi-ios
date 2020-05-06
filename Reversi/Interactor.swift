@@ -115,7 +115,9 @@ extension Interactor {
         case .operating(let side, let player):
             switch action {
             case .changePlayer(let player, let side):
-                self.changePlayer(player, side: side)
+                if let state = self.changePlayer(player, side: side) {
+                    self.state = state
+                }
             case .reset:
                 self.reset()
             case .placeDisk(let position):
@@ -128,7 +130,9 @@ extension Interactor {
         case .placing(let side, let positions):
             switch action {
             case .changePlayer(let player, let side):
-                self.changePlayer(player, side: side)
+                if let state = self.changePlayer(player, side: side) {
+                    self.state = state
+                }
             case .reset:
                 self.reset()
             case .endPlaceDisks:
@@ -140,7 +144,9 @@ extension Interactor {
         case .passing(let side):
             switch action {
             case .changePlayer(let player, let side):
-                self.changePlayer(player, side: side)
+                if let state = self.changePlayer(player, side: side) {
+                    self.state = state
+                }
             case .reset:
                 self.reset()
             case .pass:
@@ -151,7 +157,9 @@ extension Interactor {
         case .result:
             switch action {
             case .changePlayer(let player, let side):
-                self.changePlayer(player, side: side)
+                if let state = self.changePlayer(player, side: side) {
+                    self.state = state
+                }
             case .reset:
                 self.reset()
             default:
@@ -233,8 +241,8 @@ private extension Interactor {
     }
     
     /// プレイヤーの種類を変更する
-    func changePlayer(_ player: Player, side: Side) {
-        guard player != self.player(for: side) else { return }
+    func changePlayer(_ player: Player, side: Side) -> State? {
+        guard player != self.player(for: side) else { return nil }
         
         switch side {
         case .dark: self.darkPlayer = player
@@ -244,7 +252,9 @@ private extension Interactor {
         self.save()
         
         if case .operating(side, player.flipped) = self.state {
-            self.state = .operating(side: side, player: player)
+            return .operating(side: side, player: player)
+        } else {
+            return nil
         }
     }
     
