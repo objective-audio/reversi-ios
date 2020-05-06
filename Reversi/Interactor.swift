@@ -232,7 +232,7 @@ private extension Interactor {
         return .placing(side: side, positions: [position] + diskCoordinates)
     }
     
-    /// 次にターンのステートを返す
+    /// 次のターンのステートを返す
     func nextTurnState(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
