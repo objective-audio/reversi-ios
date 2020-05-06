@@ -105,9 +105,9 @@ extension Interactor {
             switch action {
             case .begin:
                 if self.board.validMoves(for: side).isEmpty {
-                    self.state = .passing(side: side)
+                    self.changeState(to: .passing(side: side))
                 } else {
-                    self.state = self.operatingState(side: side)
+                    self.changeState(to: self.operatingState(side: side))
                 }
             default:
                 fatalError()
@@ -116,13 +116,13 @@ extension Interactor {
             switch action {
             case .changePlayer(let player, let side):
                 if let state = self.changePlayer(player, side: side) {
-                    self.state = state
+                    self.changeState(to: state)
                 }
             case .reset:
                 self.reset()
             case .placeDisk(let position, let placedPlayer):
                 if player == placedPlayer, self.board.canPlaceDisk(side.disk, at: position) {
-                    self.state = self.placingState(side: side, at: position)
+                    self.changeState(to: self.placingState(side: side, at: position))
                 }
             default:
                 break
@@ -131,13 +131,13 @@ extension Interactor {
             switch action {
             case .changePlayer(let player, let side):
                 if let state = self.changePlayer(player, side: side) {
-                    self.state = state
+                    self.changeState(to: state)
                 }
             case .reset:
                 self.reset()
             case .endPlaceDisks:
                 positions.forEach { self.board[$0] = side.disk }
-                self.state = self.nextTurnState(from: side)
+                self.changeState(to: self.nextTurnState(from: side))
             default:
                 break
             }
@@ -145,12 +145,12 @@ extension Interactor {
             switch action {
             case .changePlayer(let player, let side):
                 if let state = self.changePlayer(player, side: side) {
-                    self.state = state
+                    self.changeState(to: state)
                 }
             case .reset:
                 self.reset()
             case .pass:
-                self.state = self.nextTurnState(from: side)
+                self.changeState(to: self.nextTurnState(from: side))
             default:
                 break
             }
@@ -158,7 +158,7 @@ extension Interactor {
             switch action {
             case .changePlayer(let player, let side):
                 if let state = self.changePlayer(player, side: side) {
-                    self.state = state
+                    self.changeState(to: state)
                 }
             case .reset:
                 self.reset()
@@ -170,6 +170,10 @@ extension Interactor {
 }
 
 private extension Interactor {
+    func changeState(to state: State) {
+        self.state = state
+    }
+    
     /// ゲームのデータを保存する
     func save() {
         try? self.dataStore.save(.init(turn: self.state.turn,
@@ -188,7 +192,7 @@ private extension Interactor {
         
         self.save()
         
-        self.state = .operating(side: .dark, player: .manual)
+        self.changeState(to: .operating(side: .dark, player: .manual))
         
         self.sendEvent(.didReset)
     }
