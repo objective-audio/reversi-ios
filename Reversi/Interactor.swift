@@ -66,35 +66,7 @@ class Interactor {
     }
     
     /// ゲームの状態
-    private(set) var state: State {
-        willSet {
-            switch self.state {
-            case .operating(let side, .computer):
-                self.computerID = nil
-                self.sendEvent(.willExitComputerOperating(side: side))
-            default:
-                break
-            }
-        }
-        didSet {
-            if self.state.turn != oldValue.turn {
-                self.save()
-                self.sendEvent(.didChangeTurn)
-            }
-            
-            switch self.state {
-            case .passing:
-                self.sendEvent(.didEnterPassing)
-            case .operating(let side, .computer):
-                self.sendEvent(.didEnterComputerOperating(side: side))
-                self.playTurnOfComputer(side: side)
-            case .placing(let side, let positions):
-                self.sendEvent(.didEnterPlacing(side: side, positions: positions))
-            default:
-                break
-            }
-        }
-    }
+    private(set) var state: State
 }
 
 extension Interactor {
@@ -170,8 +142,44 @@ extension Interactor {
 }
 
 private extension Interactor {
-    func changeState(to state: State) {
-        self.state = state
+    /// ステートを変更する
+    func changeState(to toState: State) {
+        let fromState = self.state
+        
+        self.willExitState()
+        self.state = toState
+        self.didEnterState(from: fromState)
+    }
+    
+    /// 現在のステートに入った時の処理
+    func didEnterState(from fromState: State) {
+        if self.state.turn != fromState.turn {
+            self.save()
+            self.sendEvent(.didChangeTurn)
+        }
+        
+        switch self.state {
+        case .passing:
+            self.sendEvent(.didEnterPassing)
+        case .operating(let side, .computer):
+            self.sendEvent(.didEnterComputerOperating(side: side))
+            self.playTurnOfComputer(side: side)
+        case .placing(let side, let positions):
+            self.sendEvent(.didEnterPlacing(side: side, positions: positions))
+        default:
+            break
+        }
+    }
+    
+    /// 現在のステートから出る時の処理
+    func willExitState() {
+        switch self.state {
+        case .operating(let side, .computer):
+            self.computerID = nil
+            self.sendEvent(.willExitComputerOperating(side: side))
+        default:
+            break
+        }
     }
     
     /// ゲームのデータを保存する
