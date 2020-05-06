@@ -634,8 +634,8 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.reset)
             
             XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[0], .willReset)
-            XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[1], .willReset)
             XCTAssertEqual(self.receivedEvents[2], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
@@ -670,9 +670,9 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.reset)
             
             XCTAssertEqual(self.receivedEvents.count, 4)
-            XCTAssertEqual(self.receivedEvents[0], .willReset)
-            XCTAssertEqual(self.receivedEvents[1], .willExitComputerOperating(side: .light))
-            XCTAssertEqual(self.receivedEvents[2], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[0], .willExitComputerOperating(side: .light))
+            XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[2], .willReset)
             XCTAssertEqual(self.receivedEvents[3], .didReset)
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
@@ -756,8 +756,8 @@ class InteractorTests: XCTestCase {
             interactor.doAction(.reset)
             
             XCTAssertEqual(self.receivedEvents.count, 3)
-            XCTAssertEqual(self.receivedEvents[0], .willReset)
-            XCTAssertEqual(self.receivedEvents[1], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[0], .didChangeTurn)
+            XCTAssertEqual(self.receivedEvents[1], .willReset)
             XCTAssertEqual(self.receivedEvents[2], .didReset)
         }
     }

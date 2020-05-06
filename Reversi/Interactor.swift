@@ -91,7 +91,7 @@ extension Interactor {
                     self.changeState(to: state)
                 }
             case .reset:
-                self.reset()
+                self.changeState(to: .resetting)
             case .placeDisk(let position, let placedPlayer):
                 if player == placedPlayer, self.board.canPlaceDisk(side.disk, at: position) {
                     self.changeState(to: self.placingState(side: side, at: position))
@@ -106,7 +106,7 @@ extension Interactor {
                     self.changeState(to: state)
                 }
             case .reset:
-                self.reset()
+                self.changeState(to: .resetting)
             case .endPlaceDisks:
                 positions.forEach { self.board[$0] = side.disk }
                 self.changeState(to: self.nextTurnState(from: side))
@@ -120,7 +120,7 @@ extension Interactor {
                     self.changeState(to: state)
                 }
             case .reset:
-                self.reset()
+                self.changeState(to: .resetting)
             case .pass:
                 self.changeState(to: self.nextTurnState(from: side))
             default:
@@ -133,10 +133,12 @@ extension Interactor {
                     self.changeState(to: state)
                 }
             case .reset:
-                self.reset()
+                self.changeState(to: .resetting)
             default:
                 break
             }
+        case .resetting:
+            fatalError()
         }
     }
 }
@@ -166,6 +168,10 @@ private extension Interactor {
             self.playTurnOfComputer(side: side)
         case .placing(let side, let positions):
             self.sendEvent(.didEnterPlacing(side: side, positions: positions))
+        case .resetting:
+            self.sendEvent(.willReset)
+            self.reset()
+            self.changeState(to: .operating(side: .dark, player: .manual))
         default:
             break
         }
@@ -177,6 +183,8 @@ private extension Interactor {
         case .operating(let side, .computer):
             self.computerID = nil
             self.sendEvent(.willExitComputerOperating(side: side))
+        case .resetting:
+            self.sendEvent(.didReset)
         default:
             break
         }
@@ -192,17 +200,11 @@ private extension Interactor {
     
     /// ゲームをリセットする
     func reset() {
-        self.sendEvent(.willReset)
-        
         self.board = .init()
         self.darkPlayer = .manual
         self.lightPlayer = .manual
         
         self.save()
-        
-        self.changeState(to: .operating(side: .dark, player: .manual))
-        
-        self.sendEvent(.didReset)
     }
     
     /// 現在のプレイヤーの種類のまま番手に応じた操作ステートを返す

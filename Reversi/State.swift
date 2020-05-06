@@ -10,6 +10,9 @@ enum State {
     case placing(side: Side, positions: [Position])
     /// ゲーム結果
     case result(Result)
+    
+    /// リセット
+    case resetting
 }
 
 extension State {
@@ -17,6 +20,8 @@ extension State {
         switch self {
         case .launching(let side), .operating(let side, _), .placing(let side, _), .passing(let side):
             return .turn(side: side)
+        case .resetting:
+            return .turn(side: .dark)
         case .result(let result):
             return .result(result)
         }
