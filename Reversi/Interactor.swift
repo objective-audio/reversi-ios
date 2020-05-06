@@ -209,7 +209,7 @@ private extension Interactor {
             guard let self = self else { return }
             guard self.computerID == computerID else { return }
             
-            self.state = self.placingState(side: side, at: position)
+            self.doAction(.placeDisk(at: position, player: .computer))
         })
         
         self.computerThinking(computer)
