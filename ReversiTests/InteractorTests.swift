@@ -259,7 +259,7 @@ class InteractorTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "黒のディスクを置く") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 3, y: 2)))
+            interactor.doAction(.placeDisk(at: .init(x: 3, y: 2), player: .manual))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents.last, .didEnterPlacing(side: .dark, positions: [.init(x: 3, y: 2), .init(x: 3, y: 3)]))
@@ -279,7 +279,7 @@ class InteractorTests: XCTestCase {
         self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "白のディスクを置く") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 4, y: 2)))
+            interactor.doAction(.placeDisk(at: .init(x: 4, y: 2), player: .manual))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents.last, .didEnterPlacing(side: .light, positions: [.init(x: 4, y: 2), .init(x: 4, y: 3)]))
@@ -395,7 +395,7 @@ class InteractorTests: XCTestCase {
         
         XCTContext.runActivity(named: "黒のディスクを置いて、白のターン、パスの待機") { _ in
             
-            interactor.doAction(.placeDisk(at: .init(x: 1, y: 0)))
+            interactor.doAction(.placeDisk(at: .init(x: 1, y: 0), player: .manual))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 1, y: 0), .init(x: 2, y: 0)]))
@@ -440,7 +440,7 @@ class InteractorTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "黒のディスクを置いて、白のターン、パスの待機") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 1, y: 0)))
+            interactor.doAction(.placeDisk(at: .init(x: 1, y: 0), player: .manual))
             interactor.doAction(.endPlaceDisks)
             
             XCTAssertEqual(self.receivedEvents.count, 3)
@@ -568,7 +568,7 @@ class InteractorTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "黒の一手を置いて引き分け") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 6, y: 0)))
+            interactor.doAction(.placeDisk(at: .init(x: 6, y: 0), player: .manual))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
@@ -599,7 +599,7 @@ class InteractorTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "黒のディスクを置いて、黒の勝ち") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 6, y: 0)))
+            interactor.doAction(.placeDisk(at: .init(x: 6, y: 0), player: .manual))
             
             XCTAssertEqual(self.receivedEvents.count, 1)
             XCTAssertEqual(self.receivedEvents[0], .didEnterPlacing(side: .dark, positions: [.init(x: 6, y: 0), .init(x: 5, y: 0)]))
@@ -773,7 +773,7 @@ class InteractorTests: XCTestCase {
         self.receivedEvents.removeAll()
         
         XCTContext.runActivity(named: "ディスクを置いた時点では保存されない") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 3, y: 2)))
+            interactor.doAction(.placeDisk(at: .init(x: 3, y: 2), player: .manual))
             
             XCTAssertFalse(self.receivedEvents.contains(.didChangeTurn))
             
@@ -861,7 +861,7 @@ class InteractorTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "ディスクを配置") { _ in
-            interactor.doAction(.placeDisk(at: .init(x: 5, y: 4)))
+            interactor.doAction(.placeDisk(at: .init(x: 5, y: 4), player: .manual))
             
             XCTAssertEqual(interactor.board, TestUtils.initialBoard)
         }

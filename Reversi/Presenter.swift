@@ -69,7 +69,7 @@ class Presenter {
     
     /// ディスクを置く位置を選択する
     func selectBoard(at position: Position) {
-        self.interactor?.doAction(.placeDisk(at: position))
+        self.interactor?.doAction(.placeDisk(at: position, player: .manual))
     }
     
     /// ゲームをリセットする

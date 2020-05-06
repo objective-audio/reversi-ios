@@ -4,7 +4,7 @@ extension Interactor {
         /// ゲーム開始
         case begin
         /// ディスクを置く
-        case placeDisk(at: Position)
+        case placeDisk(at: Position, player: Player)
         /// ディスクの配置終了
         case endPlaceDisks
         /// プレイヤーの種類を変更

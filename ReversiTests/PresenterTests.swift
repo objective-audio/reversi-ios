@@ -102,7 +102,7 @@ class PresenterTests: XCTestCase {
         presenter.selectBoard(at: .init(x: 3, y: 4))
         
         XCTAssertEqual(self.receivedActions.count, 3)
-        XCTAssertEqual(self.receivedActions[2], .placeDisk(at: .init(x: 3, y: 4)))
+        XCTAssertEqual(self.receivedActions[2], .placeDisk(at: .init(x: 3, y: 4), player: .manual))
         
         presenter.reset()
         

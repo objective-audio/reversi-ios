@@ -120,8 +120,8 @@ extension Interactor {
                 }
             case .reset:
                 self.reset()
-            case .placeDisk(let position):
-                if player == .manual, self.board.canPlaceDisk(side.disk, at: position) {
+            case .placeDisk(let position, let placedPlayer):
+                if player == placedPlayer, self.board.canPlaceDisk(side.disk, at: position) {
                     self.state = self.placingState(side: side, at: position)
                 }
             default:
