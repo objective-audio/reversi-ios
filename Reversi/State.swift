@@ -1,5 +1,6 @@
 /// ゲームの状態
 enum State {
+    // MARK: - 待機ステート
     /// 起動してUIの準備待ち
     case launching(side: Side)
     /// 操作待ち
@@ -11,6 +12,7 @@ enum State {
     /// ゲーム結果
     case result(Result)
     
+    // MARK: - 実行ステート
     /// リセット
     case resetting
 }
