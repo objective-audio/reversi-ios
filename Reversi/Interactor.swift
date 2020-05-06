@@ -79,7 +79,7 @@ extension Interactor {
                 if self.board.validMoves(for: side).isEmpty {
                     self.changeState(to: .passing(side: side))
                 } else {
-                    self.changeState(to: self.operatingState(side: side))
+                    self.changeState(to: .operating(side: side, player: self.player(for: side)))
                 }
             default:
                 fatalError()
@@ -207,11 +207,6 @@ private extension Interactor {
         self.save()
     }
     
-    /// 現在のプレイヤーの種類のまま番手に応じた操作ステートを返す
-    func operatingState(side: Side) -> State {
-        return .operating(side: side, player: self.player(for: side))
-    }
-    
     /// コンピュータの処理を開始する
     func playTurnOfComputer(side: Side) {
         let positions = self.board.validMoves(for: side)
@@ -250,11 +245,11 @@ private extension Interactor {
                 return .passing(side: nextSide)
             }
         } else {
-            return self.operatingState(side: nextSide)
+            return .operating(side: nextSide, player: self.player(for: nextSide))
         }
     }
     
-    /// プレイヤーの種類を変更する
+    /// プレイヤーの種類を変更する。ステート変更の必要があればステートを返す
     func changePlayer(_ player: Player, side: Side) -> State? {
         guard player != self.player(for: side) else { return nil }
         
