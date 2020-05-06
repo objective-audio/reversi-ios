@@ -17,6 +17,8 @@ indirect enum State {
     case resetting
     /// 次のターンへ進む分岐
     case branching(fromSide: Side)
+    
+    // MARK: - 遷移
     /// 次のステートに遷移する。statusが次のステートと同じ扱いになる
     case next(toState: State)
 }
