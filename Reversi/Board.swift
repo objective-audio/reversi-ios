@@ -115,7 +115,7 @@ extension Board {
 private extension Board {
     func safeDiskAt(_ position: Position) -> Disk? {
         guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
-        return self.disks[position.y][position.x]
+        return self[position]
     }
     
     static var initialDisks: [[Disk?]] {
