@@ -113,6 +113,7 @@ extension Board {
 }
 
 private extension Board {
+    /// 位置を指定してディスクを返す。処理の便宜上、範囲外の位置ならnilを返す
     func safeDiskAt(_ position: Position) -> Disk? {
         guard Self.xRange.contains(position.x) && Self.yRange.contains(position.y) else { return nil }
         return self[position]
