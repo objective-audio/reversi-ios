@@ -110,6 +110,10 @@ extension Board {
     func validMoves(for side: Side) -> [Position] {
         return Self.allPositions.filter { self.canPlaceDisk(side.disk, at: $0) }
     }
+    
+    func canPlace(for side: Side) -> Bool {
+        return !self.validMoves(for: side).isEmpty
+    }
 }
 
 private extension Board {
