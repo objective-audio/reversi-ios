@@ -236,14 +236,13 @@ private extension Interactor {
     func nextTurnState(from currentSide: Side) -> State {
         let nextSide = currentSide.flipped
         
-        if self.board.validMoves(for: nextSide).isEmpty {
-            if self.board.validMoves(for: currentSide).isEmpty {
-                return .resulting(self.board.result())
-            } else {
-                return .passing(side: nextSide)
-            }
+        if self.board.canPlace(for: nextSide) {
+            return .operating(side: nextSide,
+                              player: self.player(for: nextSide))
+        } else if self.board.canPlace(for: currentSide) {
+            return .passing(side: nextSide)
         } else {
-            return .operating(side: nextSide, player: self.player(for: nextSide))
+            return .resulting(self.board.result())
         }
     }
     
