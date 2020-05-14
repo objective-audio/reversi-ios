@@ -1,7 +1,7 @@
 import Foundation
 
 /// Interactorのイベントを受け取るインターフェースを定義
-protocol InteractorEventReceiver: class {
+protocol InteractorEventReceiver: AnyObject {
     func receiveEvent(_ event: Interactor.Event)
 }
 

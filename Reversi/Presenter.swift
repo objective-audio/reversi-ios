@@ -1,5 +1,5 @@
 /// ゲーム全体を管理するインターフェースを定義
-protocol Interactable: class {
+protocol Interactable: AnyObject {
     var eventReceiver: InteractorEventReceiver? { get set }
     
     var state: State { get }
@@ -10,7 +10,7 @@ protocol Interactable: class {
 }
 
 /// Presenterのイベントを受け取るインターフェースを定義
-protocol PresenterEventReceiver: class {
+protocol PresenterEventReceiver: AnyObject {
     func receiveEvent(_ event: Presenter.Event)
 }
 
